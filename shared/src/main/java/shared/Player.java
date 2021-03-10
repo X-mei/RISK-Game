@@ -48,6 +48,14 @@ public class Player {
       }
     }
   }
+
+  public String getName() {
+    return name;
+  }
+
+  public Integer getInteger() {
+    return code;
+  }
 }                     
 
 
