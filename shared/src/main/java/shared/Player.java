@@ -1,8 +1,6 @@
 package shared;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.HashSet;
 
 /**
@@ -14,44 +12,43 @@ public class Player {
   protected final String name;
   protected final Integer code;
   protected HashSet<Territory> ownedTerritory;
-  protected final BufferedReader inputReader;
-  protected final PrintStream out;
+  protected HashSet<String> actionSet;
   protected String status;
 
   /**
    * This constructor initialize all the field in the player class.
    * @param name of the player,  the place to read input from and the place to dump output to.
    */
-  public Player(String name, Integer code, BufferedReader inputSource, PrintStream out) {
+  public Player(String name, Integer code) {
     this.name = name;
-    this.inputReader = inputSource;
-    this.out = out;
     this.code = code;
     this.status = "In-game";
+    this.ownedTerritory = new HashSet<Territory>();
   }
-
+    
   /**
-   * This function prompt the user for a Action input.
-   * @param things to prompt the user for.
+   * This function generate a action type.
+   * @param the action and the input to parse.
    * @return the Action after the conversion.
    * @throws IOException if the input readline fails, IllegalArgumentException if the input is invalid.
    */
-  public Action formAction(String prompt) throws IOException, IllegalArgumentException{
-    out.println(prompt);
-    String s = inputReader.readLine();
-    if (s == null) {
-      throw new IOException();
+  public Action formAction(String action, String input) throws IOException, IllegalArgumentException{
+    if (action == "D"){
+      return null;
     }
-    return new (name, s);
+    else {
+      if (input == null) {
+        throw new IOException();
+      }
+      if (action == "M") {
+        return new Move(name, input);
+      }
+      else {
+        return new Attack(name, input);
+      }
+    }
   }
-  
-  public void updateTerritoryList(){
-    
-  }
-}
-
-
-
+}                     
 
 
 

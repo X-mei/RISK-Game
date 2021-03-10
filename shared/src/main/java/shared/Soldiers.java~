@@ -1,0 +1,39 @@
+package shared;
+
+public abstract class Soldiers implements Units{
+  protected final String name;
+  protected Integer count;
+  protected final Random randomGenerator;
+  
+  public Soldiers(String name, Integer count){
+    this.name = name;
+    this.count = count
+  }
+
+  @Override
+  public Integer getCount(){
+    return count;
+  }
+  
+  @Override
+  public void modifyCount(Integer modiBy){
+    count += modiBy;
+  }
+
+  public Integer randomNum(){
+    
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
