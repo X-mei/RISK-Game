@@ -35,7 +35,8 @@ public class Territory {
     t.setNeighbour(this);
   }
 
-  public void setUnits(Units units) {
+  public void setBasicSoldiers(int unitsNum) {
+    BasicSoldiers units = new BasicSoldiers(unitsNum);
     this.units.add(units);
   }
 
