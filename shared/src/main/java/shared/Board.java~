@@ -1,0 +1,22 @@
+package shared;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Board {
+  private int playerNum;
+  private HashMap<String, ArrayList<Territory>> gameBoard;
+
+  public Board(int num){
+    this.playerNum 
+  }
+
+}
+
+
+
+
+
+
+
+
