@@ -6,23 +6,23 @@ import java.util.HashMap;
 public class MapFactory {
   public HashMap<String, HashSet<Territory>> getMap(int playerNum){
     if (playerNum == 2) {
-      return Make2pMap();
+      return make2pMap();
     }
     else if (playerNum == 3) {
-      return Make3pMap();
+      return make3pMap();
     }
     else if (playerNum == 4) {
-      return Make4pMap();
+      return make4pMap();
     }
     else if (playerNum == 5) {
-      return Make5pMap();
+      return make5pMap();
     }
     else {
       throw new IllegalArgumentException("Wrong player for the game.");
     }
   }
   
-  public HashMap<String, HashSet<Territory>> Make2pMap(){
+  public HashMap<String, HashSet<Territory>> make2pMap(){
     HashMap<String, HashSet<Territory>> mapForTwo = new HashMap<>();
     HashSet<Territory> mapForTwoP1 = new HashSet<>();
     HashSet<Territory> mapForTwoP2 = new HashSet<>();
@@ -53,7 +53,7 @@ public class MapFactory {
     return mapForTwo;
   }
 
-  public HashMap<String, HashSet<Territory>> Make3pMap() {
+  public HashMap<String, HashSet<Territory>> make3pMap() {
     HashMap<String, HashSet<Territory>> mapForThree = new HashMap<>();
     HashSet<Territory> mapForThreeP1 = new HashSet<>();
     HashSet<Territory> mapForThreeP2 = new HashSet<>();
@@ -101,7 +101,7 @@ public class MapFactory {
     return mapForThree;
   }
   
-  public HashMap<String, HashSet<Territory>> Make4pMap() {
+  public HashMap<String, HashSet<Territory>> make4pMap() {
     HashMap<String, HashSet<Territory>> mapForFour = new HashMap<>();
     HashSet<Territory> mapForFourP1 = new HashSet<>();
     HashSet<Territory> mapForFourP2 = new HashSet<>();
@@ -144,7 +144,7 @@ public class MapFactory {
     return mapForFour;
   }
 
-  public HashMap<String, HashSet<Territory>> Make5pMap() {
+  public HashMap<String, HashSet<Territory>> make5pMap() {
     HashMap<String, HashSet<Territory>> mapForFive = new HashMap<>();
     HashSet<Territory> mapForFiveP1 = new HashSet<>();
     HashSet<Territory> mapForFiveP2 = new HashSet<>();
