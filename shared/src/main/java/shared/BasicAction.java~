@@ -1,0 +1,17 @@
+package shared;
+
+public abstract class BasicAction implements Action{
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
