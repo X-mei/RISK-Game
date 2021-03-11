@@ -13,13 +13,13 @@ public class Territory {
   private final String territoryName;
   private String ownerName;
   private HashSet<Territory> neighbours;
-  private HashMap<String, Integer> units;
+  private HashSet<Units> units;
 
   public Territory(String tname, String oname) {
     this.territoryName = tname;
     this.ownerName = oname;
     this.neighbours = new HashSet<Territory>();
-    this.units = new HashMap<String, Integer>();
+    this.units = new HashSet<Units>();
   }
 
   boolean isNeighbour(Territory t) {
@@ -35,15 +35,31 @@ public class Territory {
     t.setNeighbour(this);
   }
 
+  public void setUnits(Units units) {
+    this.units.add(units);
+  }
+
   public String getTerritoryName() {
     return this.territoryName;
+  }
+
+  public String getOwner() {
+    return ownerName;
   }
 
   public void updateOwner(String oname) {
     this.ownerName = oname;
   }
 
-  public void updateUnit() {
-
+  public HashSet<Territory> neighboursByOneOwner() {
+    HashSet<Territory> neighboursOneOwner = new HashSet<Territory>();
+    for(Territory t: neighbours) {
+      if (t.getOwner().equals(this.ownerName)) {
+        neighboursOneOwner.add(t);
+      }
+    }
+    return neighboursOneOwner;
   }
+
+
 }
