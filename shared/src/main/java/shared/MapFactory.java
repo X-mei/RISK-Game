@@ -1,10 +1,10 @@
 package shared;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.HashMap;
 
 public class MapFactory {
-  public HashMap<String, HashSet<Territory>> getMap(int playerNum){
+  public HashMap<String, LinkedHashSet<Territory>> getMap(int playerNum){
     if (playerNum == 2) {
       return make2pMap();
     }
@@ -22,10 +22,10 @@ public class MapFactory {
     }
   }
   
-  public HashMap<String, HashSet<Territory>> make2pMap(){
-    HashMap<String, HashSet<Territory>> mapForTwo = new HashMap<>();
-    HashSet<Territory> mapForTwoP1 = new HashSet<>();
-    HashSet<Territory> mapForTwoP2 = new HashSet<>();
+  public HashMap<String, LinkedHashSet<Territory>> make2pMap(){
+    HashMap<String, LinkedHashSet<Territory>> mapForTwo = new HashMap<>();
+    LinkedHashSet<Territory> mapForTwoP1 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForTwoP2 = new LinkedHashSet<>();
     Territory[] terriSet = new Territory[6];
     terriSet[0] = new Territory("Dorado", "Player1");
     terriSet[1] = new Territory("Hanamura", "Player1");
@@ -53,11 +53,11 @@ public class MapFactory {
     return mapForTwo;
   }
 
-  public HashMap<String, HashSet<Territory>> make3pMap() {
-    HashMap<String, HashSet<Territory>> mapForThree = new HashMap<>();
-    HashSet<Territory> mapForThreeP1 = new HashSet<>();
-    HashSet<Territory> mapForThreeP2 = new HashSet<>();
-    HashSet<Territory> mapForThreeP3 = new HashSet<>();
+  public HashMap<String, LinkedHashSet<Territory>> make3pMap() {
+    HashMap<String, LinkedHashSet<Territory>> mapForThree = new HashMap<>();
+    LinkedHashSet<Territory> mapForThreeP1 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForThreeP2 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForThreeP3 = new LinkedHashSet<>();
     Territory[] terriSet = new Territory[9];
     terriSet[0] = new Territory("Dorado", "Player1");
     terriSet[1] = new Territory("Hanamura", "Player1");
@@ -101,12 +101,12 @@ public class MapFactory {
     return mapForThree;
   }
   
-  public HashMap<String, HashSet<Territory>> make4pMap() {
-    HashMap<String, HashSet<Territory>> mapForFour = new HashMap<>();
-    HashSet<Territory> mapForFourP1 = new HashSet<>();
-    HashSet<Territory> mapForFourP2 = new HashSet<>();
-    HashSet<Territory> mapForFourP3 = new HashSet<>();
-    HashSet<Territory> mapForFourP4 = new HashSet<>();
+  public HashMap<String, LinkedHashSet<Territory>> make4pMap() {
+    HashMap<String, LinkedHashSet<Territory>> mapForFour = new HashMap<>();
+    LinkedHashSet<Territory> mapForFourP1 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForFourP2 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForFourP3 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForFourP4 = new LinkedHashSet<>();
     Territory[] terriSet = new Territory[8];
     terriSet[0] = new Territory("Dorado", "Player1");
     terriSet[1] = new Territory("Hanamura", "Player1");
@@ -144,13 +144,13 @@ public class MapFactory {
     return mapForFour;
   }
 
-  public HashMap<String, HashSet<Territory>> make5pMap() {
-    HashMap<String, HashSet<Territory>> mapForFive = new HashMap<>();
-    HashSet<Territory> mapForFiveP1 = new HashSet<>();
-    HashSet<Territory> mapForFiveP2 = new HashSet<>();
-    HashSet<Territory> mapForFiveP3 = new HashSet<>();
-    HashSet<Territory> mapForFiveP4 = new HashSet<>();
-    HashSet<Territory> mapForFiveP5 = new HashSet<>();
+  public HashMap<String, LinkedHashSet<Territory>> make5pMap() {
+    HashMap<String, LinkedHashSet<Territory>> mapForFive = new HashMap<>();
+    LinkedHashSet<Territory> mapForFiveP1 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForFiveP2 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForFiveP3 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForFiveP4 = new LinkedHashSet<>();
+    LinkedHashSet<Territory> mapForFiveP5 = new LinkedHashSet<>();
     Territory[] terriSet = new Territory[10];
     terriSet[0] = new Territory("Dorado", "Player1");
     terriSet[1] = new Territory("Hanamura", "Player1");

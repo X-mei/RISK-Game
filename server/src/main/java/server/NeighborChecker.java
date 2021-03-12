@@ -1,14 +1,15 @@
 package server;
 
+import shared.BasicAction;
+import shared.Territory;
+
 public class NeighborChecker extends RuleChecker {
-  NeighborChecker(RuleChecker next){
-    super(next);
+  NeighborChecker(RuleChecker next, Territory src, Territory dest){
+    super(next, src, dest);
   }
   @Override
-  public String checkMyRule(Action thisAct){
-    Territory src = thisAct.getSrc();
-    Territory dest = thisAct.getDest();
-    if(src.isNeighbour(dest)){
+  protected String checkMyRule(BasicAction thisAct, Territory src, Territory dest) {
+    if(src.isNeighbor(dest)){
       return null;
     }
     else{

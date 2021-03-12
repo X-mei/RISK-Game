@@ -1,17 +1,22 @@
 package server;
-
+import shared.BasicAction;
 import shared.Territory;
+
 
 public abstract class RuleChecker {
     private final RuleChecker next;
-    public RuleChecker(RuleChecker next){
+    final Territory src;
+    final Territory dest;
+    public RuleChecker(RuleChecker next, Territory srcInit, Territory destInit){
         this.next = next;
+        this.src = srcInit;
+        this.dest = destInit;
     }
-  protected abstract String checkMyRule(Action thisAct);
+  protected abstract String checkMyRule(BasicAction thisAct, Territory src, Territory dest);
     
     
-    public String checkAction(Action thisAct){
-        String Msg = CheckMyRule(thisAct);
+    public String checkAction(BasicAction thisAct){
+        String Msg = checkMyRule(thisAct, src, dest);
         if(Msg != null){
             return Msg;
         }

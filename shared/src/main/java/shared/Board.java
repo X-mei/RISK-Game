@@ -1,20 +1,33 @@
 package shared;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+
+import com.google.common.base.Function;
+
 import java.util.HashMap;
+import java.io.*; 
+import java.text.*; 
+import java.util.*; 
+import java.net.*;
 
 public class Board {
-  final int playerNum;
-  final HashMap<String, HashSet<Territory>> gameBoard;
-  final MapFactory MapF;
-  
-  public Board(int num){
+  protected int playerNum;
+  protected HashMap<String, LinkedHashSet<Territory>> gameBoard;
+  //final LinkedHashSet<Territory> allTerritories;
+  protected MapFactory mapF;
+  //protected LinkedHashSet<>
+  protected UnitsFactory UnitsF; 
+  protected HashMap<String, Function<Integer, Units>> unitsCreateFunction;
+
+  public Board(int num, MapFactory mapFac, UnitsFactory UnitsFac){
     this.playerNum = num;
-    this.MapF = new MapFactory();
-    this.gameBoard = MapF.getMap(num);
+    this.mapF = mapFac;
+    this.gameBoard = mapF.getMap(num);
+    this.UnitsF = UnitsFac;
+    this.unitsCreateFunction = new HashMap<String, Function<Integer, Units>>();
   }
 
-  public HashMap<String, HashSet<Territory>> getBoard(){
+  public HashMap<String, LinkedHashSet<Territory>> getBoard(){
     return gameBoard;
   }
 
@@ -22,7 +35,28 @@ public class Board {
     return playerNum;
   }
 
+  public String[] askUnitSetup(String playerName){
+    LinkedHashSet<Territory> singlePlayerTerritories = gameBoard.get(playerName);
+    int territoryNumForOnePlayer = singlePlayerTerritories.size();
+    String[] unitSetupStrings = new String[territoryNumForOnePlayer];
+    int i = 0;
+    for(Territory t : singlePlayerTerritories){
+      unitSetupStrings[i] = "You have " + territoryNumForOnePlayer + " territories, how do you want to place units on " + t.getTerritoryName() + " ?\n";
+      i ++;
+    }
+    return unitSetupStrings;
+  }
+
+  public void processUnitSetup(String playerName, int[] count){
+    int ind = 0;
+    for (Territory t : gameBoard.get(playerName)){
+      t.setUnits(new BasicSoldiers(count[ind++]));
+    }
+  }
   
+  public void setUpUnitsCreationMap(){
+    for()
+  }
 }
 
 

@@ -1,28 +1,31 @@
 package server;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
-import javax.swing.Action;
-
+import shared.Action;
+import shared.BasicAction;
 import shared.Territory;
+import shared.Units;
 
 public class UnitChecker extends RuleChecker{
-    UnitChecker(RuleChecker next){
-        super(next);
+    UnitChecker(RuleChecker next, Territory src, Territory dest){
+        super(next, src, dest);
     }
 
-
   @Override
-  public String checkMyRule(Action thisAct){
+  public String checkMyRule (BasicAction thisAct, Territory src, Territory dest){
       Integer num = thisAct.getCount();
-      Territory src = thisAct.getSrc();
-      HashMap<String, Integer> unit = src.getUnit();
-      Integer unitNum = unit.get("Soldier");
-      if(num > unitNum){
+      Integer sumUnits = 0;
+      for(Units un : src.getUnits()){
+        sumUnits = sumUnits + un.getCount();
+      }
+      if(num > sumUnits){
         return "You don't have enough soldiers to move from the source";
         }
       return null;
     }
+
 }
 
 
