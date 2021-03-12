@@ -2,6 +2,8 @@ package shared;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.LinkedHashSet;
+
 import org.junit.jupiter.api.Test;
 
 public class TerritoryTest {
@@ -9,6 +11,41 @@ public class TerritoryTest {
   public void test_getTerritoryName() {
     Territory territory = new Territory("testTerritory", "player1");
     assertEquals("testTerritory", territory.getTerritoryName());
+  }
+
+  @Test
+  public void test_setNeighbor() {
+    Territory territory = new Territory("testTerritory", "player1");
+    Territory territory2 = new Territory("testTerritory2", "player1");
+    territory.setNeighbor(territory2);
+    assertEquals(true, territory.getNeighbours().contains(territory2));
+    assertEquals(true, territory2.getNeighbours().contains(territory));
+    assertEquals(true, territory.isNeighbor(territory2));
+    assertEquals(true, territory2.isNeighbor(territory));
+  }
+
+  @Test
+  public void test_getOwner() {
+    Territory t1 = new Territory("t1", "player1");
+    Territory t2 = new Territory("t2", "player2");
+    assertEquals("player1", t1.getOwner());
+    assertEquals("player2", t2.getOwner());
+  }
+
+  @Test
+  public void test_getNeighbors() {
+    Territory t1 = new Territory("t1", "player1");
+    Territory t2 = new Territory("t2", "player1");
+    Territory t3 = new Territory("t3", "player2");
+    t1.setNeighbor(t2);
+    t2.setNeighbor(t3);
+    LinkedHashSet<Territory> t1Neighbors = new LinkedHashSet<Territory>();
+    t1Neighbors.add(t2);
+    LinkedHashSet<Territory> t2Neighbors = new LinkedHashSet<Territory>();
+    t2Neighbors.add(t1);
+    t2Neighbors.add(t3);
+    assertEquals(t1Neighbors, t1.getNeighbours());
+    assertEquals(t2Neighbors, t2.getNeighbours());
   }
 
 }
