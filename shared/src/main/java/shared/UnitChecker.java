@@ -1,8 +1,5 @@
 package shared;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 
 public class UnitChecker extends RuleChecker{
     UnitChecker(RuleChecker next, Territory src, Territory dest){

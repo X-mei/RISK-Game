@@ -30,8 +30,8 @@ public class ClientHandler extends Thread {
     this.output = out;
     this.player = ply;
     this.socket = s;
-    this.name = ply.getName();
-    this.code = ply.getInteger();
+    this.name = player.getName();
+    this.code = player.getCode();
     this.mapFac = new MapFactory();
     this.UnitsFac = new UnitsFactory();
     this.moveHashSet = new HashSet<>();
