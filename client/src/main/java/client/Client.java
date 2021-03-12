@@ -49,8 +49,24 @@ public class Client {
       int split = line.indexOf(' ');
       this.playerName = line.substring(0, split);
       this.playerSeq = Integer.parseInt(line.substring(split + 1));
+      if (playerSeq == 1) {
+        decidePlayerNum();
+      }
     } catch (IOException e){
       out.println("Receive failed.");
+    }
+  }
+
+  /**
+   * This function indicates that the first Player
+   * should decide how many people in the game.
+   */
+  public void decidePlayerNum() throws IOException {
+    String line = null; 
+    while (!(line = dataIn.readUTF()).equals("ready to start")) {
+      out.println(line);
+      String playerNum = inputReader.readLine();
+      dataOut.writeUTF(playerNum);
     }
   }
 
