@@ -46,7 +46,9 @@ public class ClientHandler extends Thread {
       output.writeUTF(playerInfo);
       Board board = MakeChoice();
       StoreAction(board);
-
+      if(code == 1){
+        MakeChoice();
+      }
       //close connection when game over
       CloseConnection();
     }catch(IOException e){
@@ -55,12 +57,10 @@ public class ClientHandler extends Thread {
     
   }
 
-  Board MakeChoice(){
+  Board MakeChoice() throws IOException{
     String received;
-    while(true){
-      try{
-        if(code == 1){
-          output.writeUTF("How many players do you want to include? (2-5)\n");
+    output.writeUTF("How many players do you want to include? (2-5)");
+        while(true){
           received = input.readUTF();
           char chr =  received.charAt(0);
           if(received.length()>1 || chr <'2' || chr >'5'){
@@ -73,12 +73,8 @@ public class ClientHandler extends Thread {
              output.writeUTF("ready to start");
              return board;
            }
-        }
-      }catch(IOException e){
-        e.printStackTrace();
-      }
+         }
     }
-  }
 
 
   void StoreAction(Board board){
