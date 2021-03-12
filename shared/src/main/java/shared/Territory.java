@@ -14,7 +14,7 @@ public class Territory {
   private final String territoryName;
   private String ownerName;
   private LinkedHashMap<String, Territory> neighbours;
-  private LinkedHashMap<String, Units> allUnits;
+  private LinkedHashMap<String, Soldiers> allUnits;
   /*public Territory(String tname, String oname, LinkedHashSet<Units> units){
     this.territoryName = tname;
     this.ownerName = oname;
@@ -26,7 +26,7 @@ public class Territory {
     this.territoryName = tname;
     this.ownerName = oname;
     this.neighbours = new LinkedHashMap<String, Territory>();
-    this.allUnits = new LinkedHashMap<String, Units>();
+    this.allUnits = new LinkedHashMap<String, Soldiers>();
   }
 
   public boolean isNeighbor(Territory t) {
@@ -46,11 +46,11 @@ public class Territory {
     //t.setNeighbor(this);
   }
 
-  public void setUnits(Units units) {
+  public void setUnits(Soldiers units) {
     this.allUnits.put(units.getName(), units);
   }
 
-  public void changeUnits(Units units, int increaseNum){
+  public void changeUnits(Soldiers units, int increaseNum){
 
   }
 
@@ -62,15 +62,15 @@ public class Territory {
     return ownerName;
   }
 
-  public LinkedHashSet<Units> getUnits() {
-    LinkedHashSet<Units> unitsSet = new LinkedHashSet<Units>();
-    for(HashMap.Entry<String,Units> entry: allUnits.entrySet()) {
+  public LinkedHashSet<Soldiers> getUnits() {
+    LinkedHashSet<Soldiers> unitsSet = new LinkedHashSet<Soldiers>();
+    for(HashMap.Entry<String, Soldiers> entry: allUnits.entrySet()) {
       unitsSet.add(entry.getValue());
     }
     return unitsSet;
   }
 
-  public Units getOneUnits(String name) {
+  public Soldiers getOneUnits(String name) {
     return allUnits.get(name);
   }
   
