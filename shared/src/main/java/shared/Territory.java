@@ -15,7 +15,6 @@ public class Territory {
   private String ownerName;
   private LinkedHashMap<String, Territory> neighbours;
   private LinkedHashMap<String, Units> allUnits;
-
   /*public Territory(String tname, String oname, LinkedHashSet<Units> units){
     this.territoryName = tname;
     this.ownerName = oname;
@@ -67,6 +66,10 @@ public class Territory {
     return unitsSet;
   }
 
+  public Units getOneUnits(String name) {
+    return allUnits.get(name);
+  }
+  
   public void updateOwner(String oname) {
     this.ownerName = oname;
   }

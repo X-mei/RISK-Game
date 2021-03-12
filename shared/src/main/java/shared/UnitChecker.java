@@ -5,12 +5,12 @@ import java.util.HashSet;
 
 
 public class UnitChecker extends RuleChecker{
-    UnitChecker(RuleChecker next, Territory src, Territory dest){
-        super(next, src, dest);
+    public UnitChecker(RuleChecker next){
+        super(next);
     }
 
   @Override
-  public String checkMyRule (BasicAction thisAct, Territory src, Territory dest){
+  public String checkMyRule (BasicAction thisAct, Board theBoard){
       Integer num = thisAct.getCount();
       Integer sumUnits = 0;
       for(Units un : src.getUnits()){

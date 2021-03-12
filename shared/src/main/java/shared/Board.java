@@ -15,10 +15,13 @@ public class Board {
   protected HashMap<String, LinkedHashSet<Territory>> gameBoard;
   //final LinkedHashSet<Territory> allTerritories;
   protected MapFactory mapF; 
-  protected LinkedHashMap<String, Territory> TerritoryList; 
+  protected LinkedHashMap<String, Territory> allTerritory; 
   //protected LinkedHashSet<>
   protected UnitsFactory UnitsF; 
   protected HashMap<String, Function<Integer, Units>> unitsCreateFunction;
+  private final RuleChecker moveRuleChecker;
+  private final RuleChecker attackRuleChecker;
+  private HashMap<String, Integer> tempCount;
 
   public Board(int num, MapFactory mapFac, UnitsFactory UnitsFac){
     this.playerNum = num;
@@ -28,10 +31,12 @@ public class Board {
     this.unitsCreateFunction = new HashMap<String, Function<Integer, Units>>();
     for(String s : gameBoard.keySet()){
       for(Territory t : gameBoard.get(s)){
-        TerritoryList.put(t.getTerritoryName(), t);
+        allTerritory.put(t.getTerritoryName(), t);
       }
     }
     
+    this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
+    this.moveRuleChecker = new 
   }
 
   public HashMap<String, LinkedHashSet<Territory>> getBoard(){
@@ -60,11 +65,30 @@ public class Board {
       t.setUnits(new BasicSoldiers(count[ind++]));
     }
   }
+
+  public Territory getTerritory(String name){
+    return allTerritory.get(name);
+  }
+
+  public void refreshTemp(){
+    for(String s : allTerritory.keySet()){
+      tempCount.put(s, allTerritory.get(s).getOneUnits("Basic Soldiers").getCount());
+    }
+  }
+
+  public Integer getTerritoryUnitsCount(String name){
+    return tempCount.get(name);
+  }
+
+  public void updateTempCount(String name, Integer cnt){
+    tempCount.put(name, tempCount.get(name) - cnt);
+  }
   
   public void setUpUnitsCreationMap(){
     for()
   }
 }
+
 
 
 
