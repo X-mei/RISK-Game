@@ -1,6 +1,7 @@
 package shared;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 /**
@@ -12,8 +13,8 @@ public class Territory {
 
   private final String territoryName;
   private String ownerName;
-  private LinkedHashSet<Territory> neighbours;
-  private LinkedHashSet<Units> allUnits;
+  private LinkedHashMap<String, Territory> neighbours;
+  private LinkedHashMap<String, Units> allUnits;
 
   /*public Territory(String tname, String oname, LinkedHashSet<Units> units){
     this.territoryName = tname;
@@ -25,25 +26,29 @@ public class Territory {
   public Territory(String tname, String oname) {
     this.territoryName = tname;
     this.ownerName = oname;
-    this.neighbours = new LinkedHashSet<Territory>();
-    this.allUnits = new LinkedHashSet<Units>();
+    this.neighbours = new LinkedHashMap<String, Territory>();
+    this.allUnits = new LinkedHashMap<String, Units>();
   }
 
   public boolean isNeighbor(Territory t) {
-    return this.neighbours.contains(t);
+    return this.neighbours.containsValue(t);
   }
 
   public LinkedHashSet<Territory> getNeighbours() {
-    return this.neighbours;
+    LinkedHashSet<Territory> neighborsSet = new LinkedHashSet<Territory>();
+    for(HashMap.Entry<String,Territory> entry: neighbours.entrySet()) {
+      neighborsSet.add(entry.getValue());
+    }
+    return neighborsSet;
   }
 
   public void setNeighbor(Territory t) {
-    neighbours.add(t);
+    neighbours.put(t.getTerritoryName(), t);
     t.setNeighbor(this);
   }
 
   public void setUnits(Units units) {
-    this.allUnits.add(units);
+    this.allUnits.put();
   }
 
   public String getTerritoryName() {
@@ -60,9 +65,9 @@ public class Territory {
 
   public LinkedHashSet<Territory> neighboursByOneOwner() {
     LinkedHashSet<Territory> neighboursOneOwner = new LinkedHashSet<Territory>();
-    for(Territory t: neighbours) {
-      if (t.getOwner().equals(this.ownerName)) {
-        neighboursOneOwner.add(t);
+    for(HashMap.Entry<String,Territory> entry: neighbours.entrySet()) {
+      if (entry.getValue().getOwner().equals((this.ownerName))) {
+        neighboursOneOwner.add(entry.getValue());
       }
     }
     return neighboursOneOwner;
