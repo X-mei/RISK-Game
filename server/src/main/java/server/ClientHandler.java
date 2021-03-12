@@ -4,15 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashSet;
 
-import shared.Action;
-import shared.Attack;
 import shared.BasicAction;
 import shared.Board;
 import shared.MapFactory;
-import shared.Move;
 import shared.Player;
-import shared.Territory;
 import shared.UnitsFactory;
 
 public class ClientHandler extends Thread {
@@ -23,9 +20,10 @@ public class ClientHandler extends Thread {
   final Player player;
   final String name;
   final Integer code;
-  private RuleChecker checker;
   final MapFactory mapFac;
   final UnitsFactory UnitsFac;
+  final HashSet<BasicAction> moveHashSet;
+  final HashSet<BasicAction> attackHashSet;
 
   public ClientHandler(Player ply, Socket s,DataInputStream in, DataOutputStream out ){
     this.input = in;
@@ -36,6 +34,8 @@ public class ClientHandler extends Thread {
     this.code = ply.getInteger();
     this.mapFac = new MapFactory();
     this.UnitsFac = new UnitsFactory();
+    this.moveHashSet = new HashSet<>();
+    this.attackHashSet = new HashSet<>();
   }
 
   @Override
@@ -45,9 +45,8 @@ public class ClientHandler extends Thread {
     try{
       output.writeUTF(playerInfo);
       Board board = MakeChoice();
-      DoAction(board);
-      
-      
+      StoreAction(board);
+
       //close connection when game over
       CloseConnection();
     }catch(IOException e){
@@ -82,7 +81,7 @@ public class ClientHandler extends Thread {
   }
 
 
-  void DoAction(Board board){
+  void StoreAction(Board board){
     while(true){
       try{
         String prompt = "You are the "+ player.getName() + " player, What would you like to do?" + "(M)ove\n" + "(A)ttack\n" + "(D)one";
@@ -99,29 +98,17 @@ public class ClientHandler extends Thread {
           continue;
         }
         else{
-          try{
             String actionInfo = input.readUTF();
             BasicAction act = player.formAction(Choice, actionInfo);
             if(act == null){
               break;
             }
-            Territory src = getTerritory(board, act.getSrc());
-            Territory dest = getTerritory(board, act.getDest());
             if(act.getActionName() == "Move"){
-              this.checker = new RouteChecker(new UnitChecker(null,src,dest),src,dest);
-              if(Check(act,checker,src,dest)){
-
-              }
+              moveHashSet.add(act);
             }
-            if(act.getActionName() == "Attack"){
-              this.checker = new NeighborChecker(new UnitChecker(null,src,dest),src, dest);
-              Check(act,checker,src,dest);
-            }
-  
-          }catch(Exception e){
-            e.printStackTrace();
-          }
-          
+            else{
+              attackHashSet.add(act);
+            }  
         }
       }catch(Exception e){
         e.printStackTrace();
@@ -136,23 +123,6 @@ public class ClientHandler extends Thread {
      this.output.close();
     }catch(IOException e){
       e.printStackTrace();
-    }
-  }
-
-  public Boolean Check(BasicAction act, RuleChecker checker, Territory src, Territory dest) throws IOException {
-    String Msg = checker.checkAction(act);
-    if(Msg != null){
-      output.writeUTF(Msg);
-      return false;
-    }
-    return true;
-  }
-
-  Territory getTerritory(Board board,String terrName){
-    for(Territory terr: board.getTerrList()){
-      if(terr.getTerritoryName() == terrName){
-        return terr;
-      }
     }
   }
 
