@@ -6,6 +6,8 @@ package shared;
 public interface Action {
   
   public String getActionOwner();
+
+  public String getActionName();
 }
 
 
