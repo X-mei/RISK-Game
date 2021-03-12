@@ -1,7 +1,4 @@
-package server;
-import shared.BasicAction;
-import shared.Territory;
-
+package shared;
 
 public abstract class RuleChecker {
     private final RuleChecker next;

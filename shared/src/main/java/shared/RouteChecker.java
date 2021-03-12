@@ -1,9 +1,6 @@
-package server;
+package shared;
 
 import java.util.HashMap;
-
-import shared.BasicAction;
-import shared.Territory;
 
 public class RouteChecker extends RuleChecker{
   RouteChecker(RuleChecker next, Territory srcInit, Territory destInit){
