@@ -17,7 +17,7 @@ public class Player {
   protected HashSet<String> actionSet;
   protected String status;
   protected ActionFactory factory;
-  protected HashMap<String, BiFunction<String, String, Action>> actionCreationFns;
+  protected HashMap<String, BiFunction<String, String, BasicAction>> actionCreationFns;
 
   /**
    * This constructor initialize all the field in the player class.
@@ -28,7 +28,7 @@ public class Player {
     this.code = code;
     this.status = "In-game";
     this.ownedTerritory = new HashSet<Territory>();
-    this.actionCreationFns = new HashMap<String, BiFunction<String, String, Action>>();
+    this.actionCreationFns = new HashMap<String, BiFunction<String, String, BasicAction>>();
     this.factory = factory;
   }
     
@@ -38,7 +38,7 @@ public class Player {
    * @return the Action after the conversion.
    * @throws IOException if the input readline fails, IllegalArgumentException if the input is invalid.
    */
-  public Action formAction(String action, String input) throws IOException, IllegalArgumentException{
+  public BasicAction formAction(String action, String input) throws IOException, IllegalArgumentException{
     if (action == "D"){
       return null;
     }
