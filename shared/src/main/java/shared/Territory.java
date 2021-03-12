@@ -22,7 +22,7 @@ public class Territory {
     this.units = new HashSet<Units>();
   }
 
-  boolean isNeighbour(Territory t) {
+  public boolean isNeighbor(Territory t) {
     return this.neighbours.contains(t);
   }
 
@@ -30,9 +30,9 @@ public class Territory {
     return this.neighbours;
   }
 
-  public void setNeighbour(Territory t) {
+  public void setNeighbor(Territory t) {
     neighbours.add(t);
-    t.setNeighbour(this);
+    t.setNeighbor(this);
   }
 
   public void setBasicSoldiers(int unitsNum) {

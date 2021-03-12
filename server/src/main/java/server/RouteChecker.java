@@ -2,17 +2,16 @@ package server;
 
 import java.util.HashMap;
 
-import javax.swing.Action;
-
+import shared.Action;
 import shared.Territory;
 
 public class RouteChecker extends RuleChecker{
-  RouteChecker(RuleChecker next){
-    super(next);
+  RouteChecker(RuleChecker next, Territory srcInit, Territory destInit){
+    super(next, srcInit, destInit);
   }
   @Override
-  public String checkMyRule(Action thisAct){
-    if(checkRoute(thisAct.getDest,thisAct.getSrc)){
+  public String checkMyRule(Action thisAct, Territory src, Territory dest){
+    if(checkRoute(src,dest)){
       return null;
     }
     else{
@@ -28,7 +27,7 @@ public class RouteChecker extends RuleChecker{
       return true;
     }
     visited.put(src,true);
-    for(Territory neighbor : src.neighbors){
+    for(Territory neighbor : src.neighboursByOneOwner()){
       //src.neighbors:ArrayList for neighbors
       if(!visited.containsKey(neighbor) && checkRoute(neighbor,dest)){
         return true;
