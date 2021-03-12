@@ -1,10 +1,12 @@
 package server;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import shared.Action;
 import shared.BasicAction;
 import shared.Territory;
+import shared.Units;
 
 public class UnitChecker extends RuleChecker{
     UnitChecker(RuleChecker next, Territory src, Territory dest){
@@ -12,11 +14,13 @@ public class UnitChecker extends RuleChecker{
     }
 
   @Override
-  public String checkMyRule (Action thisAct, Territory src, Territory dest){
+  public String checkMyRule (BasicAction thisAct, Territory src, Territory dest){
       Integer num = thisAct.getCount();
-      HashMap<String,Integer> unit = src.getUnit();
-      Integer unitNum = unit.get("Soldier");
-      if(num > unitNum){
+      Integer sumUnits = 0;
+      for(Units un : src.getUnits()){
+        sumUnits = sumUnits + un.getCount();
+      }
+      if(num > sumUnits){
         return "You don't have enough soldiers to move from the source";
         }
       return null;

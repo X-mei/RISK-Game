@@ -94,7 +94,7 @@ public class ClientHandler extends Thread {
         else{
           try{
             String actionInfo = input.readUTF();
-            Action act = player.formAction(Choice, actionInfo);
+            BasicAction act = player.formAction(Choice, actionInfo);
             if(act == null){
               break;
             }
@@ -116,7 +116,9 @@ public class ClientHandler extends Thread {
           }
           
         }
-        
+      }catch(Exception e){
+        e.printStackTrace();
+      }
     }
   } 
 
@@ -130,7 +132,7 @@ public class ClientHandler extends Thread {
     }
   }
 
-  public Boolean Check(Action act, RuleChecker checker, Territory src, Territory dest) throws IOException {
+  public Boolean Check(BasicAction act, RuleChecker checker, Territory src, Territory dest) throws IOException {
     String Msg = checker.checkAction(act);
     if(Msg != null){
       output.writeUTF(Msg);
