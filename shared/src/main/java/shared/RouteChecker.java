@@ -8,7 +8,11 @@ public class RouteChecker extends RuleChecker{
     super(next);
   }
   @Override
-  public String checkMyRule(BasicAction thisAct, Territory src, Territory dest){
+  public String checkMyRule(BasicAction thisAct, Board board){
+    String src_str = thisAct.getSource();
+    String dest_str = thisAct.getDestination();
+    Territory src = board.getTerritory(src_str);
+    Territory dest = board.getTerritory(dest_str);
     if(checkRoute(src,dest)){
       return null;
     }
