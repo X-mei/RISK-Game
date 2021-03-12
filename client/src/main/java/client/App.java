@@ -3,12 +3,21 @@
  */
 package client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+      try {
+        Client client = new Client("dku-vcm-1221.vm.duke.edu", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out);
+        client.connectToServer();
+        client.recvNameAndSeq();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      
     }
 }

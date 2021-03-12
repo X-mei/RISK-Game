@@ -1,6 +1,5 @@
 package shared;
 
-
 public class UnitChecker extends RuleChecker{
     public UnitChecker(RuleChecker next){
         super(next);

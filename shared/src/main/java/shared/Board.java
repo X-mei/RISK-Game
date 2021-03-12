@@ -36,7 +36,7 @@ public class Board {
     }
     
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
-    this.moveRuleChecker = new 
+    this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
   }
 
   public HashMap<String, LinkedHashSet<Territory>> getBoard(){
