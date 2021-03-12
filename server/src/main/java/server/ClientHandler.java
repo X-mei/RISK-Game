@@ -9,9 +9,11 @@ import shared.Action;
 import shared.Attack;
 import shared.BasicAction;
 import shared.Board;
+import shared.MapFactory;
 import shared.Move;
 import shared.Player;
 import shared.Territory;
+import shared.UnitsFactory;
 
 public class ClientHandler extends Thread {
   Boolean isFirst;
@@ -22,6 +24,8 @@ public class ClientHandler extends Thread {
   final String name;
   final Integer code;
   private RuleChecker checker;
+  final MapFactory mapFac;
+  final UnitsFactory UnitsFac;
 
   public ClientHandler(Player ply, Socket s,DataInputStream in, DataOutputStream out ){
     this.input = in;
@@ -30,6 +34,8 @@ public class ClientHandler extends Thread {
     this.socket = s;
     this.name = ply.getName();
     this.code = ply.getInteger();
+    this.mapFac = new MapFactory();
+    this.UnitsFac = new UnitsFactory();
   }
 
   @Override
@@ -63,7 +69,8 @@ public class ClientHandler extends Thread {
             continue;
            }
            else{
-             Board board = new Board(chr);
+             int playerNum = chr - 48;
+             Board board = new Board(playerNum, mapFac, UnitsFac);
              output.writeUTF("ready to start");
              return board;
            }
