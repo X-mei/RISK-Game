@@ -3,8 +3,9 @@ package shared;
 import java.util.HashMap;
 
 public class RouteChecker extends RuleChecker{
-  RouteChecker(RuleChecker next, Territory srcInit, Territory destInit){
-    super(next, srcInit, destInit);
+  HashMap<Territory, Boolean> visited = new HashMap<Territory, Boolean>();
+  RouteChecker(RuleChecker next){
+    super(next);
   }
   @Override
   public String checkMyRule(BasicAction thisAct, Territory src, Territory dest){
@@ -15,7 +16,7 @@ public class RouteChecker extends RuleChecker{
        return "No existing route bet ween source and destination!";
     }
   }
-  HashMap<Territory, Boolean> visited = new HashMap<>();
+  
   private boolean checkRoute(Territory dest, Territory src){
     if(dest == null || src == null){
       return false;
