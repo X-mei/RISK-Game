@@ -44,11 +44,10 @@ public class ClientHandler extends Thread {
     playerInfo = name + " " + code;
     try{
       output.writeUTF(playerInfo);
-      Board board = MakeChoice();
-      StoreAction(board);
       if(code == 1){
-        MakeChoice();
+        Board board = MakeChoice();
       }
+      StoreAction();
       //close connection when game over
       CloseConnection();
     }catch(IOException e){
@@ -77,7 +76,7 @@ public class ClientHandler extends Thread {
     }
 
 
-  void StoreAction(Board board){
+  void StoreAction(){
     while(true){
       try{
         String prompt = "You are the "+ player.getName() + " player, What would you like to do?" + "(M)ove\n" + "(A)ttack\n" + "(D)one";
