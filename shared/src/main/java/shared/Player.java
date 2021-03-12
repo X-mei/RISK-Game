@@ -59,8 +59,12 @@ public class Player {
     return name;
   }
 
-  public Integer getInteger() {
+  public Integer getCode() {
     return code;
+  }
+
+  public String getStatus() {
+    return status;
   }
 }                     
 

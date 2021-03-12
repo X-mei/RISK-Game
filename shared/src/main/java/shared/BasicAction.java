@@ -42,6 +42,19 @@ public abstract class BasicAction implements Action {
   public String getActionName() {
     return actionName;
   }
+
+  public String getSource() {
+    return src;
+  }
+
+  public String getDestination() {
+    return dest;
+  }
+
+  public Integer getCount() {
+    return count;
+  }
+  
 }
 
 

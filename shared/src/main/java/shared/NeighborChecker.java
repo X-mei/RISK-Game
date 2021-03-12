@@ -1,7 +1,4 @@
-package server;
-
-import shared.BasicAction;
-import shared.Territory;
+package shared;
 
 public class NeighborChecker extends RuleChecker {
   NeighborChecker(RuleChecker next, Territory src, Territory dest){
