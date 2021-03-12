@@ -2,7 +2,7 @@ package server;
 
 import java.util.HashMap;
 
-import shared.Action;
+import shared.BasicAction;
 import shared.Territory;
 
 public class RouteChecker extends RuleChecker{
@@ -10,7 +10,7 @@ public class RouteChecker extends RuleChecker{
     super(next, srcInit, destInit);
   }
   @Override
-  public String checkMyRule(Action thisAct, Territory src, Territory dest){
+  public String checkMyRule(BasicAction thisAct, Territory src, Territory dest){
     if(checkRoute(src,dest)){
       return null;
     }

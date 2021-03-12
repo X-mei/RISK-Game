@@ -1,5 +1,5 @@
 package server;
-import shared.Action;
+import shared.BasicAction;
 import shared.Territory;
 
 
@@ -12,10 +12,10 @@ public abstract class RuleChecker {
         this.src = srcInit;
         this.dest = destInit;
     }
-  protected abstract String checkMyRule(Action thisAct, Territory src, Territory dest);
+  protected abstract String checkMyRule(BasicAction thisAct, Territory src, Territory dest);
     
     
-    public String checkAction(Action thisAct){
+    public String checkAction(BasicAction thisAct){
         String Msg = checkMyRule(thisAct, src, dest);
         if(Msg != null){
             return Msg;
