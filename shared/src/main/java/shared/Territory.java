@@ -59,6 +59,14 @@ public class Territory {
     return ownerName;
   }
 
+  public LinkedHashSet<Units> getUnits() {
+    LinkedHashSet<Units> unitsSet = new LinkedHashSet<Units>();
+    for(HashMap.Entry<String,Units> entry: allUnits.entrySet()) {
+      unitsSet.add(entry.getValue());
+    }
+    return unitsSet;
+  }
+
   public void updateOwner(String oname) {
     this.ownerName = oname;
   }
