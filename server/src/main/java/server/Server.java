@@ -1,12 +1,14 @@
 package server;
-import java.io.*; 
+import java.io.*;
 
+import shared.ActionFactory;
 import shared.Player;
 
 import java.net.*;
 
 public class Server {
   private ServerSocket serverSocket ;
+  private ActionFactory actFactory;
   private int port;
   public Server(int portNum) {
     serverSocket = null;
@@ -23,7 +25,7 @@ public class Server {
       if(num == 3){name = "Pink";}
       if(num == 4){name = "Blue";}
       if(num == 5){name = "Green";}
-      Player ply = new Player(name,num);
+      Player ply = new Player(name,num,actFactory);
       num++;
       Socket clientSocket = null;
       try{
