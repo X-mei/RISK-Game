@@ -14,7 +14,8 @@ public class Board {
   protected int playerNum;
   protected HashMap<String, LinkedHashSet<Territory>> gameBoard;
   //final LinkedHashSet<Territory> allTerritories;
-  protected MapFactory mapF;
+  protected MapFactory mapF; 
+  protected LinkedHashMap<String, Territory> TerritoryList; 
   //protected LinkedHashSet<>
   protected UnitsFactory UnitsF; 
   protected HashMap<String, Function<Integer, Units>> unitsCreateFunction;
@@ -25,6 +26,12 @@ public class Board {
     this.gameBoard = mapF.getMap(num);
     this.UnitsF = UnitsFac;
     this.unitsCreateFunction = new HashMap<String, Function<Integer, Units>>();
+    for(String s : gameBoard.keySet()){
+      for(Territory t : gameBoard.get(s)){
+        TerritoryList.put(t.getTerritoryName(), t);
+      }
+    }
+    
   }
 
   public HashMap<String, LinkedHashSet<Territory>> getBoard(){
