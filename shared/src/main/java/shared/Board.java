@@ -138,6 +138,28 @@ public class Board {
     }
   }
 
+  public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
+    for (BasicAction action : actions) {
+      if (type == "Move") {
+        if (moveRuleChecker.checkMyRule(action, this) == null) {
+          continue;
+        }
+        else {
+          return false;
+        }
+      }
+      else {
+        if (attackRuleChecker.checkMyRule(action, this) == null) {
+          continue;
+        }
+        else {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  
   private Soldiers getSoldiers(String UnitsName, String territoryName){
     Territory terr = allTerritory.get(territoryName);
     LinkedHashSet<Soldiers> terrAllUnits = terr.getUnits();
