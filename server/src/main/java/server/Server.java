@@ -1,17 +1,23 @@
 package server;
 import java.io.*; 
-import java.text.*; 
-import java.util.*; 
+
+import shared.Player;
+
 import java.net.*;
 
 public class Server {
-  private ServerSocket serverSocket = null;
-  public void buildserver(int port) throws IOException{
+  private ServerSocket serverSocket ;
+  private int port;
+  public Server(int portNum) {
+    serverSocket = null;
+    port = portNum;
+  }
+  public void buildserver() throws IOException{
     //waits and listen
     serverSocket = new ServerSocket(port);
     int num = 1;
     while (true) {
-      String name;
+      String name = null;
       if(num == 1){name = "King";}
       if(num == 2){name = "Red";}
       if(num == 3){name = "Pink";}
