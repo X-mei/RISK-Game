@@ -23,6 +23,11 @@ public abstract class Soldiers implements Units{
     count += modiBy;
   }
 
+  @Override
+  public String getName(){
+    return this.name;
+  }
+  
   public Integer randomNum(){
     return randomGenerator.nextInt((20 - 1) + 1) + 1;
   }

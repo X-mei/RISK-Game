@@ -48,7 +48,7 @@ public class Territory {
   }
 
   public void setUnits(Units units) {
-    this.allUnits.put();
+    this.allUnits.put(units.getName(), units);
   }
 
   public String getTerritoryName() {
