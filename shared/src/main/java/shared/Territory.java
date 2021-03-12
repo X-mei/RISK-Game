@@ -43,11 +43,15 @@ public class Territory {
 
   public void setNeighbor(Territory t) {
     neighbours.put(t.getTerritoryName(), t);
-    t.setNeighbor(this);
+    //t.setNeighbor(this);
   }
 
   public void setUnits(Units units) {
     this.allUnits.put(units.getName(), units);
+  }
+
+  public void changeUnits(Units units, int increaseNum){
+
   }
 
   public String getTerritoryName() {
