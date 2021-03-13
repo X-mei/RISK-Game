@@ -38,7 +38,8 @@ public class Board {
     this.UnitsF = UnitsFac;
     this.playerSet = createPlayer(gameBoard, new ActionFactory());
     this.unitsCreateFunction = new HashMap<String, Function<Integer, Soldiers>>();
-    //add all territories into the territory map
+    setUpUnitsCreationMap();
+    this.allTerritory = new LinkedHashMap<String, Territory>();
     for(String s : gameBoard.keySet()){
       for(Territory t : gameBoard.get(s)){
         allTerritory.put(t.getTerritoryName(), t);
@@ -48,6 +49,7 @@ public class Board {
     UnitName.add("Basic Soldiers");
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
+    tempCount = new HashMap<String, Integer>();
   }
 
 /**
