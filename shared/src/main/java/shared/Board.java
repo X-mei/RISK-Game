@@ -11,26 +11,32 @@ import java.util.*;
 import java.net.*;
 
 public class Board {
-  protected int playerNum;
-  protected int totalUnitsNum;
-  protected HashMap<String, LinkedHashSet<Territory>> gameBoard;
-  //final LinkedHashSet<Territory> allTerritories;
-  protected MapFactory mapF; 
-  protected LinkedHashMap<String, Territory> allTerritory; 
-  //protected LinkedHashSet<>
-  protected UnitsFactory UnitsF; 
-  protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;
+  protected int playerNum;  //number of player
+  protected int totalUnitsNum;  //number of units for each player; 
+  protected HashMap<String, LinkedHashSet<Territory>> gameBoard;  //the map
+  protected MapFactory mapF;  //map factory to create the map
+  protected LinkedHashMap<String, Territory> allTerritory;  //a map to store all territories on the map, key is it's name
+  protected UnitsFactory UnitsF;  //units factory to create different kinds of units
+  protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;   
   private final RuleChecker moveRuleChecker;
   private final RuleChecker attackRuleChecker;
   private HashMap<String, Integer> tempCount;
   private LinkedHashSet<String> UnitName;
+  private LinkedHashSet<Player> playerSet;
 
+  /**
+   * Constrcut a board
+   * @param num number of players
+   * @param mapFac  map factory
+   * @param UnitsFac  unit factory
+   */
   public Board(int num, MapFactory mapFac, UnitsFactory UnitsFac){
     this.playerNum = num;
     this.totalUnitsNum = 20;
     this.mapF = mapFac;
     this.gameBoard = mapF.getMap(num);
     this.UnitsF = UnitsFac;
+    this.playerSet = createPlayer(gameBoard, new ActionFactory());
     this.unitsCreateFunction = new HashMap<String, Function<Integer, Soldiers>>();
     setUpUnitsCreationMap();
     this.allTerritory = new LinkedHashMap<String, Territory>();
@@ -47,6 +53,24 @@ public class Board {
     
   }
 
+/**
+ * create the player list, used in board conctructor
+ * @param gameBoard
+ * @param actF
+ * @return
+ */
+  private LinkedHashSet<Player> createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF){
+    LinkedHashSet<Player> playerList = new LinkedHashSet<>();
+    int i = 1;
+    for(String s : gameBoard.keySet()){
+      Player p = new Player(s, i, actF);
+      p.addTerritory(gameBoard.get(s));
+      playerList.add(p);
+      i ++;
+    }
+    return playerList;
+  }
+
   public HashMap<String, LinkedHashSet<Territory>> getBoard(){
     return gameBoard;
   }
@@ -55,8 +79,12 @@ public class Board {
     return playerNum;
   }
 
-  
-
+  /**
+   * Ask one player how they want to place his units in each of his territory
+   * For a player with n territories, he will be asked for n times since each question for a territory
+   * @param playerName is the plyaer's name
+   * @return a string array which contains all the unit setup questions for one player
+   */
   public String[] askUnitSetup(String playerName){
     LinkedHashSet<Territory> singlePlayerTerritories = gameBoard.get(playerName);
     int territoryNumForOnePlayer = singlePlayerTerritories.size();
@@ -68,6 +96,7 @@ public class Board {
     }
     return unitSetupStrings;
   }
+
 
   public void setUpUnitsCreationMap(){
     unitsCreateFunction.put("Basic Soldiers", (count) -> UnitsF.createBasicSoldiers(count));
@@ -105,12 +134,23 @@ public class Board {
     }
   }
 
+  /**
+   * identify the kind of one single attack and process it
+   * @param basicAct the attack object
+   */
   public void processSingleBasicAction(BasicAction basicAct){
     if(basicAct.getActionName() == "M"){
       processSingleBasicMove(basicAct);
     }
+    else if(basicAct.getActionName() == "A"){
+      processSingleBasicAttack(basicAct);
+    }
   }
 
+  /**
+   * process single move action
+   * @param basicAct
+   */
   public void processSingleBasicMove(BasicAction basicAct){
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
@@ -121,6 +161,10 @@ public class Board {
     destBasicSoldier.updateCount(destBasicSoldier.getCount() - count);
   }
 
+  /**
+   * process single attack action
+   * @param basicAct
+   */
   public void processSingleBasicAttack(BasicAction basicAct){
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
@@ -128,7 +172,6 @@ public class Board {
     Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);;
     int srcBasicSoldierNum = srcBasicSoldier.getCount();
     int destBasicSoldierNum = destBasicSoldier.getCount();
-    //int count = basicAct.getCount();
     while(srcBasicSoldierNum > 0 && destBasicSoldierNum > 0){
       int srcRandom = srcBasicSoldier.randomNum();
       int destRandom = destBasicSoldier.randomNum();
@@ -166,19 +209,24 @@ public class Board {
     return true;
   }
   
+  /**
+   * get soldier's number on one territory
+   * @param UnitsName the name of the soldier we want 
+   * @param territoryName which territory we want to find
+   * @return the soldier object 
+   */
   private Soldiers getSoldiers(String UnitsName, String territoryName){
     Territory terr = allTerritory.get(territoryName);
     LinkedHashSet<Soldiers> terrAllUnits = terr.getUnits();
     Soldiers terrBasicSoldier = null;
     for(Soldiers u : terrAllUnits){
-      if(u.getName().equals("Basic Soldiers")){
+      if(u.getName().equals(UnitsName)){
         terrBasicSoldier = u;
         break;
       }
     }
     return terrBasicSoldier;
   }
-
 }
 
 
