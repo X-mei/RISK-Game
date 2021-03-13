@@ -3,6 +3,7 @@ package shared;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.function.BiFunction;
 
 /**
@@ -13,7 +14,7 @@ import java.util.function.BiFunction;
 public class Player {
   protected final String name;
   protected final Integer code;
-  protected HashSet<Territory> ownedTerritory;
+  protected LinkedHashSet<Territory> ownedTerritory;
   protected HashSet<String> actionSet;
   protected String status;
   protected ActionFactory factory;
@@ -27,9 +28,11 @@ public class Player {
     this.name = name;
     this.code = code;
     this.status = "In-game";
-    this.ownedTerritory = new HashSet<Territory>();
+    //TODO: add territory
+    this.ownedTerritory = new LinkedHashSet<Territory>();
     this.actionCreationFns = new HashMap<String, BiFunction<String, String, BasicAction>>();
     this.factory = factory;
+    setUpActionCreationMap();
   }
     
   /**
@@ -39,17 +42,26 @@ public class Player {
    * @throws IOException if the input readline fails, IllegalArgumentException if the input is invalid.
    */
   public BasicAction formAction(String action, String input) throws IOException, IllegalArgumentException{
-    if (action == "D"){
+    if (action.equals("D")){
       return null;
     }
     else {
       if (input == null) {
         throw new IOException();
       }
-      return actionCreationFns.get(input).apply(name, input);
+      if (actionCreationFns.get(action) != null) {
+        return actionCreationFns.get(action).apply(name, input);
+      }
+      else {
+        throw new IllegalArgumentException("Not a valid action.");
+      }
     }
   }
-
+  
+  public void addTerritory(LinkedHashSet<Territory> territory) {
+    ownedTerritory = territory;
+  }
+  
   public void setUpActionCreationMap() {
     actionCreationFns.put("M", (n, s)->factory.createMove(n, s));
     actionCreationFns.put("A", (n, s)->factory.createAttack(n, s));
