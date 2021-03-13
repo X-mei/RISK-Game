@@ -27,9 +27,11 @@ public class Player {
     this.name = name;
     this.code = code;
     this.status = "In-game";
+    //TODO: add territory
     this.ownedTerritory = new HashSet<Territory>();
     this.actionCreationFns = new HashMap<String, BiFunction<String, String, BasicAction>>();
     this.factory = factory;
+    setUpActionCreationMap();
   }
     
   /**
@@ -39,7 +41,7 @@ public class Player {
    * @throws IOException if the input readline fails, IllegalArgumentException if the input is invalid.
    */
   public BasicAction formAction(String action, String input) throws IOException, IllegalArgumentException{
-    if (action == "D"){
+    if (action.equals("D")){
       return null;
     }
     else {
