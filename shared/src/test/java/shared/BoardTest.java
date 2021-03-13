@@ -8,6 +8,13 @@ import java.util.LinkedHashSet;
 import org.junit.jupiter.api.Test;
 
 public class BoardTest {
+  private Board getTestBoard(){
+    MapFactory f = new MapFactory();
+    UnitsFactory u = new UnitsFactory();
+    Board b = new Board(2, f, u);
+    return b;
+  }
+
   @Test
   public void test_getBoard() {
     MapFactory f = new MapFactory();
@@ -24,8 +31,6 @@ public class BoardTest {
     Board b = new Board(2, f, u);
     assertEquals(2, b.getPlayerNum());
   }
-
-  
 
 
 }
