@@ -51,7 +51,7 @@ public class Board {
     UnitName.add("Basic Soldiers");
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
-    tempCount = new HashMap<String, Integer>();
+    this.tempCount = new HashMap<String, Integer>();
     
   }
 
@@ -61,14 +61,14 @@ public class Board {
  * @param actF
  * @return
  */
-  private LinkedHashSet<Player> createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF){
-    LinkedHashSet<Player> playerList = new LinkedHashSet<>();
+  private ArrayList<Player> createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF){
+    ArrayList<Player> playerList = new ArrayList<>();
     int i = 1;
     for(String s : gameBoard.keySet()){
       Player p = new Player(s, i, actF);
       p.addTerritory(gameBoard.get(s));
       playerList.add(p);
-      i ++;
+      i++;
     }
     return playerList;
   }
@@ -104,13 +104,18 @@ public class Board {
     unitsCreateFunction.put("Basic Soldiers", (count) -> UnitsF.createBasicSoldiers(count));
   }
 
+  public LinkedHashMap<String, Territory> getAllTerritroy(){
+    return allTerritory;
+  }
+
   public Territory getTerritory(String name){
     return allTerritory.get(name);
   }
 
   public void refreshTemp(){
-    for(String s : allTerritory.keySet()){
-      tempCount.put(s, allTerritory.get(s).getOneUnits("Basic Soldiers").getCount());
+    for(String tN : allTerritory.keySet()){
+      Soldiers sol = allTerritory.get(tN).getOneUnits("Basic Soldiers");
+      tempCount.put(tN, sol.getCount());
     }
   }
 
@@ -127,11 +132,11 @@ public class Board {
    * @param territoryName is the target territory
    * @param count is a array contains all numbers of each kind of unit
    */
-  public void singleTerrotoryUnitSetup(String territoryName, int[] count){
+  public void singleTerritoryUnitSetup(String territoryName, int[] count){
     int ind = 0;
     Territory t = allTerritory.get(territoryName);
     for (String s : UnitName){
-      Soldiers u = unitsCreateFunction.get(s).apply(count[ind ++]); 
+      Soldiers u = unitsCreateFunction.get(s).apply(count[ind++]);
       t.setUnits(u);
     }
   }
@@ -228,6 +233,50 @@ public class Board {
       }
     }
     return terrBasicSoldier;
+  }
+
+  public String displayAllPlayerAllBoard(){
+    String ans = "";
+    for(String s : gameBoard.keySet()){
+      ans += displaySinlgePlayerBoard(s);
+    }
+    return ans;
+  }
+
+
+  private String displaySinlgePlayerBoard(String playerName){
+    LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
+    String s1 = playerName + " player:\n";
+    // Eg: ans = "King player:
+    //            ------------
+    //           "
+    String ans = s1 + createDottedLine(s1.length());
+    String territoryInfo = "";  
+    for(Territory t : terriSet){
+      Soldiers tempS = t.getOneUnits("Basic Soldiers");
+      int SoldierNum = tempS.getCount();
+      //Eg: temp = "10 Basic Soldiers in Numbani (next to:"
+      String temp = SoldierNum + " " + tempS.getName() + " in " + t.getTerritoryName() + " (next to:";
+      String space = " ";
+      String tempNeighbor = ""; 
+      for(Territory tNeighbor : t.getNeighbours()){
+        tempNeighbor += space + tNeighbor.getTerritoryName();
+        space = ", ";
+      }
+      //Eg tempNeihbor = " Elantris, Midkemia"
+      territoryInfo += temp + tempNeighbor + ")\n";
+    }
+    ans += territoryInfo;
+    return ans;
+  }
+
+  private String createDottedLine(int length){
+    String ans = "";
+    for(int i = 0; i < length - 1; i++){
+      ans += "-";
+    }
+    ans += "\n";
+    return ans;
   }
 }
 
