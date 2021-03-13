@@ -25,7 +25,31 @@ public class BoardTest {
     assertEquals(2, b.getPlayerNum());
   }
 
-  
+  @Test
+  public void test_askUnitSetup() {
+    MapFactory f = new MapFactory();
+    UnitsFactory u = new UnitsFactory();
+    Board b = new Board(2, f, u);
+    String[] actual = b.askUnitSetup("King");
+    String[] expected = new String[3];
+    expected[0] = "You have 3 territories, how do you want to place units on Dorado ?\n";
+    expected[1] = "You have 3 territories, how do you want to place units on Hanamura ?\n";
+    expected[2] = "You have 3 territories, how do you want to place units on Hollywood ?\n";
+    assertEquals(expected[0], actual[0]);
+    assertEquals(expected[1], actual[1]);
+    assertEquals(expected[2], actual[2]);
+  }
+
+  @Test
+  public void test_getTerritory() {
+    MapFactory f = new MapFactory();
+    UnitsFactory u = new UnitsFactory();
+    Board b = new Board(2, f, u);
+    Territory t = b.getTerritory("Hollywood");
+    assertEquals("King", t.getOwner());
+    Territory t1 = b.getTerritory("Junkertown");
+    assertEquals("Red", t1.getOwner());
+  }
 
 
 }

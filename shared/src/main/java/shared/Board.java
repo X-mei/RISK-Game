@@ -7,10 +7,7 @@ import com.google.common.base.Function;
 import org.checkerframework.checker.units.qual.s;
 
 import java.util.HashMap;
-import java.io.*; 
-import java.text.*; 
 import java.util.*; 
-import java.net.*;
 
 public class Board {
   protected int playerNum;  //number of player
@@ -24,7 +21,7 @@ public class Board {
   private final RuleChecker attackRuleChecker;
   private HashMap<String, Integer> tempCount;
   private LinkedHashSet<String> UnitName;
-  private LinkedHashSet<Player> playerSet;
+  private ArrayList<Player> playerSet;
 
   /**
    * Constrcut a board
@@ -61,16 +58,20 @@ public class Board {
  * @param actF
  * @return
  */
-  private LinkedHashSet<Player> createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF){
-    LinkedHashSet<Player> playerList = new LinkedHashSet<>();
+  private ArrayList<Player> createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF){
+    ArrayList<Player> playerList = new ArrayList<Player>();
     int i = 1;
     for(String s : gameBoard.keySet()){
       Player p = new Player(s, i, actF);
       p.addTerritory(gameBoard.get(s));
       playerList.add(p);
-      i ++;
+      i++;
     }
     return playerList;
+  }
+
+  public ArrayList<Player> getPlayers() {
+    return playerSet;
   }
 
   public HashMap<String, LinkedHashSet<Territory>> getBoard(){
@@ -94,7 +95,7 @@ public class Board {
     int i = 0;
     for(Territory t : singlePlayerTerritories){
       unitSetupStrings[i] = "You have " + territoryNumForOnePlayer + " territories, how do you want to place units on " + t.getTerritoryName() + " ?\n";
-      i ++;
+      i++;
     }
     return unitSetupStrings;
   }
@@ -131,7 +132,7 @@ public class Board {
     int ind = 0;
     Territory t = allTerritory.get(territoryName);
     for (String s : UnitName){
-      Soldiers u = unitsCreateFunction.get(s).apply(count[ind ++]); 
+      Soldiers u = unitsCreateFunction.get(s).apply(count[ind++]); 
       t.setUnits(u);
     }
   }
