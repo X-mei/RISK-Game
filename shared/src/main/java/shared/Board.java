@@ -50,6 +50,7 @@ public class Board {
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
     tempCount = new HashMap<String, Integer>();
+    
   }
 
 /**
