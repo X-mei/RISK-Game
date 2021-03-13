@@ -51,7 +51,7 @@ public class Board {
     UnitName.add("Basic Soldiers");
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
-    tempCount = new HashMap<String, Integer>();
+    this.tempCount = new HashMap<String, Integer>();
     
   }
 
@@ -109,8 +109,9 @@ public class Board {
   }
 
   public void refreshTemp(){
-    for(String s : allTerritory.keySet()){
-      tempCount.put(s, allTerritory.get(s).getOneUnits("Basic Soldiers").getCount());
+    for(String tN : allTerritory.keySet()){
+      Soldiers sol = allTerritory.get(tN).getOneUnits("Basic Soldiers");
+      tempCount.put(tN, sol.getCount());
     }
   }
 
@@ -127,11 +128,11 @@ public class Board {
    * @param territoryName is the target territory
    * @param count is a array contains all numbers of each kind of unit
    */
-  public void singleTerrotoryUnitSetup(String territoryName, int[] count){
+  public void singleTerritoryUnitSetup(String territoryName, int[] count){
     int ind = 0;
     Territory t = allTerritory.get(territoryName);
     for (String s : UnitName){
-      Soldiers u = unitsCreateFunction.get(s).apply(count[ind ++]); 
+      Soldiers u = unitsCreateFunction.get(s).apply(count[ind++]);
       t.setUnits(u);
     }
   }
