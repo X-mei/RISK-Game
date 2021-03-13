@@ -4,14 +4,29 @@
 package server;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 
 public class App {
     
     public static void main(String[] args) {
       try {
-        Server server = new Server(12345);
+        int playerNum = 0;
+        Scanner scan = new Scanner(System.in);
+        while(true) {
+          System.out.println("how many players do you want to include?");
+          playerNum = Integer.parseInt(scan.nextLine());
+          if (playerNum >= 2 && playerNum <= 5) {
+            break;
+          }
+          System.out.println("Invalid input.");
+        }
+        scan.close();
+        Server server = new Server(12345, playerNum);
         server.buildserver();
       } catch (IOException e) {
+        e.printStackTrace();
+      } catch (NumberFormatException e) {
         e.printStackTrace();
       }
     }
