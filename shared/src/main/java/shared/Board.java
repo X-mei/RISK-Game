@@ -24,7 +24,7 @@ public class Board {
   private final RuleChecker attackRuleChecker;
   private HashMap<String, Integer> tempCount;
   private LinkedHashSet<String> UnitName;
-  private LinkedHashSet<Player> playerSet;
+  private ArrayList<Player> playerSet;
 
   /**
    * Constrcut a board
