@@ -66,7 +66,7 @@ public class Board {
       Player p = new Player(s, i, actF);
       p.addTerritory(gameBoard.get(s));
       playerList.add(p);
-      i ++;
+      i++;
     }
     return playerList;
   }
