@@ -82,6 +82,10 @@ public class Board {
     return playerNum;
   }
 
+  public int getTotalUnits() {
+    return totalUnitsNum;
+  }
+
   /**
    * Ask one player how they want to place his units in each of his territory
    * For a player with n territories, he will be asked for n times since each question for a territory

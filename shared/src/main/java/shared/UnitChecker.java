@@ -16,7 +16,7 @@ public class UnitChecker extends RuleChecker{
       }
       if(num > sumUnits){
         return "You don't have enough soldiers to move from the source";
-        }
+      }
       return null;
     }
 

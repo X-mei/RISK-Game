@@ -61,6 +61,10 @@ public class Player {
   public void addTerritory(LinkedHashSet<Territory> territory) {
     ownedTerritory = territory;
   }
+
+  public LinkedHashSet<Territory> getTerritoryList() {
+    return ownedTerritory;
+  }
   
   public void setUpActionCreationMap() {
     actionCreationFns.put("M", (n, s)->factory.createMove(n, s));

@@ -15,6 +15,7 @@ public class App {
         Client client = new Client(/*"dku-vcm-1221.vm.duke.edu"*/ "127.0.0.1", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out);
         client.connectToServer();
         client.recvNameAndSeq();
+        client.recvAssignTerritory();
         client.recvBoardPromptAndSend();
       } catch (IOException e) {
         e.printStackTrace();
