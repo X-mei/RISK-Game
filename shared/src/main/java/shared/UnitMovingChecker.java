@@ -9,14 +9,14 @@ public class UnitMovingChecker extends RuleChecker{
   public String checkMyRule (BasicAction thisAct, Board theBoard){
     Integer cnt = theBoard.getTerritoryUnitsCount(thisAct.getSource());
     if (cnt == null){
-      return "The source do not exist.";
+      return "The selected source do not exist.";
     }
     if (thisAct.getCount() < cnt) {
       theBoard.updateTempCount(thisAct.getSource(), cnt);
       return null;
     }
     else {
-      return "You don't have enough unit to move.";
+      return "You do not have enough unit to move.";
     }
   }
 

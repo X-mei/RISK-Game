@@ -47,7 +47,7 @@ public class Territory {
   }
 
   public void setUnits(Soldiers units) {
-    this.allUnits.put(units.getName(), units);
+    allUnits.put(units.getName(), units);
   }
 
   public void changeUnits(Soldiers units, int increaseNum){
