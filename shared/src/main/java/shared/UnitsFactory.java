@@ -1,7 +1,7 @@
 package shared;
 
 public class UnitsFactory {
-  public Units createBasicSoldiers(int count) {
+  public Soldiers createBasicSoldiers(int count) {
     return new BasicSoldiers(count);
   }
 }
