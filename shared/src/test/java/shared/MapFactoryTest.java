@@ -14,22 +14,22 @@ public class MapFactoryTest {
     MapFactory f = new MapFactory();
     HashMap<String, LinkedHashSet<Territory>>  map2 = f.getMap(2);
     assertEquals(2, map2.size());
-    LinkedHashSet<Territory> mapForTwoP1 = map2.get("Player1");
+    LinkedHashSet<Territory> mapForTwoP1 = map2.get("King");
     assertEquals(3, mapForTwoP1.size());
 
     HashMap<String, LinkedHashSet<Territory>>  map3 = f.getMap(3);
     assertEquals(3, map3.size());
-    LinkedHashSet<Territory> mapForThreeP1 = map3.get("Player1");
+    LinkedHashSet<Territory> mapForThreeP1 = map3.get("King");
     assertEquals(3, mapForThreeP1.size());
 
     HashMap<String, LinkedHashSet<Territory>>  map4 = f.getMap(4);
     assertEquals(4, map4.size());
-    LinkedHashSet<Territory> mapForFourP1 = map4.get("Player1");
+    LinkedHashSet<Territory> mapForFourP1 = map4.get("King");
     assertEquals(2, mapForFourP1.size()); 
     
     HashMap<String, LinkedHashSet<Territory>>  map5 = f.getMap(5);
     assertEquals(5, map5.size());
-    LinkedHashSet<Territory> mapForFiveP1 = map5.get("Player1");
+    LinkedHashSet<Territory> mapForFiveP1 = map5.get("King");
     assertEquals(2, mapForFiveP1.size()); 
 
     assertThrows(IllegalArgumentException.class, ()->f.getMap(6));
@@ -39,8 +39,8 @@ public class MapFactoryTest {
   public void test_make2pMap() {
     MapFactory f = new MapFactory();
     HashMap<String, LinkedHashSet<Territory>>  map2 = f.make2pMap();
-    LinkedHashSet<Territory> mapForTwoP1 = map2.get("Player1");
-    LinkedHashSet<Territory> mapForTwoP2 = map2.get("Player2");
+    LinkedHashSet<Territory> mapForTwoP1 = map2.get("King");
+    LinkedHashSet<Territory> mapForTwoP2 = map2.get("Red");
     assertEquals(3, mapForTwoP1.size());
     assertEquals(3, mapForTwoP2.size());
 
@@ -71,9 +71,9 @@ public class MapFactoryTest {
     assertEquals(dorado, iter3.next());
     assertEquals(hanamuraNeigh, iter3.next());
 
-    assertEquals("Player1", dorado.getOwner());
-    assertEquals("Player1", hollywood.getOwner());
-    assertEquals("Player1", hanamura.getOwner());
+    assertEquals("King", dorado.getOwner());
+    assertEquals("King", hollywood.getOwner());
+    assertEquals("King", hanamura.getOwner());
 
     iter = mapForTwoP2.iterator();
     Territory volskaya = iter.next();
@@ -99,9 +99,9 @@ public class MapFactoryTest {
   public void test_make3pMap() {
     MapFactory f = new MapFactory();
     HashMap<String, LinkedHashSet<Territory>>  map3 = f.make3pMap();
-    LinkedHashSet<Territory> mapForThreeP1 = map3.get("Player1");
-    LinkedHashSet<Territory> mapForThreeP2 = map3.get("Player2");
-    LinkedHashSet<Territory> mapForThreeP3 = map3.get("Player3");
+    LinkedHashSet<Territory> mapForThreeP1 = map3.get("King");
+    LinkedHashSet<Territory> mapForThreeP2 = map3.get("Red");
+    LinkedHashSet<Territory> mapForThreeP3 = map3.get("Pink");
     assertEquals(3, mapForThreeP1.size());
     assertEquals(3, mapForThreeP2.size());
     assertEquals(3, mapForThreeP3.size());
@@ -159,10 +159,10 @@ public class MapFactoryTest {
   public void test_make4pMap() {
     MapFactory f = new MapFactory();
     HashMap<String, LinkedHashSet<Territory>>  map4 = f.make4pMap();
-    LinkedHashSet<Territory> mapForFourP1 = map4.get("Player1");
-    LinkedHashSet<Territory> mapForFourP2 = map4.get("Player2");
-    LinkedHashSet<Territory> mapForFourP3 = map4.get("Player3");
-    LinkedHashSet<Territory> mapForFourP4 = map4.get("Player4");
+    LinkedHashSet<Territory> mapForFourP1 = map4.get("King");
+    LinkedHashSet<Territory> mapForFourP2 = map4.get("Red");
+    LinkedHashSet<Territory> mapForFourP3 = map4.get("Pink");
+    LinkedHashSet<Territory> mapForFourP4 = map4.get("Blue");
     assertEquals(2, mapForFourP1.size());
     assertEquals(2, mapForFourP2.size());
     assertEquals(2, mapForFourP3.size());
@@ -218,11 +218,11 @@ public class MapFactoryTest {
   public void test_make5pMap() {
     MapFactory f = new MapFactory();
     HashMap<String, LinkedHashSet<Territory>>  map5 = f.make5pMap();
-    LinkedHashSet<Territory> mapForFiveP1 = map5.get("Player1");
-    LinkedHashSet<Territory> mapForFiveP2 = map5.get("Player2");
-    LinkedHashSet<Territory> mapForFiveP3 = map5.get("Player3");
-    LinkedHashSet<Territory> mapForFiveP4 = map5.get("Player4");
-    LinkedHashSet<Territory> mapForFiveP5 = map5.get("Player5");
+    LinkedHashSet<Territory> mapForFiveP1 = map5.get("King");
+    LinkedHashSet<Territory> mapForFiveP2 = map5.get("Red");
+    LinkedHashSet<Territory> mapForFiveP3 = map5.get("Pink");
+    LinkedHashSet<Territory> mapForFiveP4 = map5.get("Blue");
+    LinkedHashSet<Territory> mapForFiveP5 = map5.get("Green");
     assertEquals(2, mapForFiveP1.size());
     assertEquals(2, mapForFiveP2.size());
     assertEquals(2, mapForFiveP3.size());
