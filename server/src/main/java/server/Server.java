@@ -19,6 +19,7 @@ public class Server {
   private int playerNum;
   Board board;
   private ArrayList<String> names;
+  private ArrayList<Thread> threadList;
 
   public Server(int portNum, int playerNum) {
     this.serverSocket = null;
@@ -33,29 +34,33 @@ public class Server {
     names.add("Pink");
     names.add("Blue");
     names.add("Green");
+    this.threadList = new ArrayList<Thread>();
   }
 
   public void buildserver() throws IOException{
     //waits and listen
     serverSocket = new ServerSocket(port);
     int num = 1;
+    Board board = new Board(playerNum, mapFac, UnitsFac);  
     while (num <= playerNum) {
-      Player ply = new Player(names.get(num-1), num, actFactory);
       Socket clientSocket = null;
       try{
         clientSocket = serverSocket.accept();
-        System.out.println("A player is connected");
+        System.out.println("Player " + num + " is connected");
         DataInputStream input = new DataInputStream(clientSocket.getInputStream());
         DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
-        Thread t = new ClientHandler(ply,clientSocket,input,output);
+        String name = names.get(num-1);
+        Thread t = new ClientHandler(clientSocket, input, output, board, name);
         t.start();
+        threadList.add(t);
         num++;
       }
       catch(Exception e){
         clientSocket.close(); 
         e.printStackTrace(); 
       }
-    }  
+    }
+    
   }
 
 
