@@ -48,7 +48,12 @@ public class Player {
       if (input == null) {
         throw new IOException();
       }
-      return actionCreationFns.get(input).apply(name, input);
+      if (actionCreationFns.get(action) != null) {
+        return actionCreationFns.get(action).apply(name, input);
+      }
+      else {
+        throw new IllegalArgumentException("Not a valid action.");
+      }
     }
   }
 
