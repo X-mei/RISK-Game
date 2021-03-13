@@ -29,6 +29,8 @@ public class PlayerTest {
     assertEquals(10, b1.getCount());
     assertEquals("A", b1.getSource());
     assertEquals("B", b1.getDestination());
+
+    assertEquals(null, player.formAction("D", ""));
   }
 
 }
