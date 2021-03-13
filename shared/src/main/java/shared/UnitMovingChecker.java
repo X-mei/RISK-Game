@@ -8,8 +8,6 @@ public class UnitMovingChecker extends RuleChecker{
   @Override
   public String checkMyRule (BasicAction thisAct, Board theBoard){
     Integer cnt = theBoard.getTerritoryUnitsCount(thisAct.getSource());
-    System.out.println(cnt);
-    System.out.println(thisAct.getSource());
     if (cnt == null){
       return "The selected source do not exist.";
     }

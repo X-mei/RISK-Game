@@ -35,6 +35,7 @@ public class Client {
       this.dataIn = new DataInputStream(clientSocket.getInputStream());
       this.dataOut = new DataOutputStream(clientSocket.getOutputStream());
       out.println("Successfully connected to host " + serverIPAddr + " :" + portNum);
+      
     } catch(IOException e) {
       out.println("Cannot connect to host " + serverIPAddr + " :" + portNum);
     }
@@ -46,27 +47,29 @@ public class Client {
   public void recvNameAndSeq() throws IOException {
     try {
       String line = dataIn.readUTF(); 
-      int split = line.indexOf(' ');
-      this.playerName = line.substring(0, split);
-      this.playerSeq = Integer.parseInt(line.substring(split + 1));
-      if (playerSeq == 1) {
-        decidePlayerNum();
-      }
+      out.println(line);
+      this.playerName = line;
     } catch (IOException e){
       out.println("Receive failed.");
     }
   }
 
   /**
-   * This function indicates that the first Player
-   * should decide how many people in the game.
+   * This function receives playerName and playerSeq
    */
-  public void decidePlayerNum() throws IOException {
-    String line = null; 
-    while (!(line = dataIn.readUTF()).equals("ready to start")) {
-      out.println(line);
-      String playerNum = inputReader.readLine();
-      dataOut.writeUTF(playerNum);
+  public void recvBoardPromptAndSend() throws IOException {
+    try {
+      while(true) {
+        String line = dataIn.readUTF(); 
+        out.println(line);
+        if (line.equals("Wait for other players to perform the action...")) {
+          break;
+        }
+        String readIn = inputReader.readLine();
+        dataOut.writeUTF(readIn);
+      }
+    } catch (IOException e){
+      out.println("Receive failed.");
     }
   }
 
