@@ -46,6 +46,7 @@ public class MapFactory {
     setNeighborBoth(terriSet[2], terriSet[4]);
     setNeighborBoth(terriSet[3], terriSet[4]); 
     setNeighborBoth(terriSet[4], terriSet[5]);
+    setNeighborBoth(terriSet[3], terriSet[5]);
     mapForTwoP1.add(terriSet[0]);
     mapForTwoP1.add(terriSet[1]);
     mapForTwoP1.add(terriSet[2]);
