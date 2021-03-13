@@ -14,7 +14,7 @@ public class App {
         int playerNum = 0;
         Scanner scan = new Scanner(System.in);
         while(true) {
-          System.out.println("how many players do you want to include?");
+          System.out.println("How many players do you want to include?");
           playerNum = Integer.parseInt(scan.nextLine());
           if (playerNum >= 2 && playerNum <= 5) {
             break;
@@ -23,6 +23,7 @@ public class App {
         }
         scan.close();
         Server server = new Server(12345, playerNum);
+        System.out.println("Wait for players...");
         server.buildserver();
       } catch (IOException e) {
         e.printStackTrace();
