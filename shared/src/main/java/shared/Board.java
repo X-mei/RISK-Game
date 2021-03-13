@@ -163,7 +163,7 @@ public class Board {
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
     Soldiers srcBasicSoldier = getSoldiers("Basic Soldiers", src);
-    Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);;
+    Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
     int count = basicAct.getCount();
     srcBasicSoldier.updateCount(srcBasicSoldier.getCount() - count);
     destBasicSoldier.updateCount(destBasicSoldier.getCount() - count);

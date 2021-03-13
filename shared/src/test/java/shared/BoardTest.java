@@ -70,4 +70,43 @@ public class BoardTest {
     assertEquals('R', out.charAt(0));
   }
 
+  @Test
+  public void test_getTerritoryUnitsCount(){
+    Board b = getTestBoard();
+    Integer unitsNum = b.getTerritoryUnitsCount("Dorado");
+    assertEquals(null,unitsNum);
+  } 
+
+  @Test
+  public void test_updateTempCount(){
+    Board b = getTestBoard();
+    int[] count = {5};
+    for (String s : b.getAllTerritroy().keySet()) {
+      b.singleTerritoryUnitSetup(s, count);
+    }
+    b.refreshTemp();
+    b.updateTempCount("Hanamura", 1);
+    Integer unitsNum = b.getTerritoryUnitsCount("Hanamura");
+    assertEquals(4,unitsNum);
+  }
+
+
+
+  // @Test
+  // public voido test_refreshTemp(){
+  //   Board b = getTestBoard();
+    
+  // }
 }
+
+
+
+
+
+
+
+
+
+
+
+
