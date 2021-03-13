@@ -44,6 +44,7 @@ public class Board {
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
     tempCount = new HashMap<String, Integer>();
+    
   }
 
   public HashMap<String, LinkedHashSet<Territory>> getBoard(){
@@ -53,6 +54,8 @@ public class Board {
   public int getPlayerNum(){
     return playerNum;
   }
+
+  
 
   public String[] askUnitSetup(String playerName){
     LinkedHashSet<Territory> singlePlayerTerritories = gameBoard.get(playerName);
