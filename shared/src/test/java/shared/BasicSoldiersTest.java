@@ -35,4 +35,12 @@ public class BasicSoldiersTest {
     assert(b.randomNum() >= 1 && b.randomNum() <= 20);
   }
 
+  @Test
+  public void test_updateCount() {
+    Soldiers s = new BasicSoldiers(6);
+    assertEquals(6, s.getCount());
+    s.updateCount(8);
+    assertEquals(8, s.getCount());
+  }
+
 }
