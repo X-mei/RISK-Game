@@ -9,7 +9,13 @@ public class RouteChecker extends RuleChecker{
   @Override
   public String checkMyRule(BasicAction thisAct, Board theBoard){
     Territory src = theBoard.getTerritory(thisAct.getSource());
+    if (src == null){
+      return "The source do not exist";
+    }
     Territory dest = theBoard.getTerritory(thisAct.getDestination());
+    if (dest == null){
+      return "The destination do not exist";
+    }
     HashMap<Territory, Boolean> visited = new HashMap<>();
     if(checkRoute(src, dest, visited)){
       return null;
