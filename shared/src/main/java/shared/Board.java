@@ -4,6 +4,8 @@ import java.util.LinkedHashSet;
 
 import com.google.common.base.Function;
 
+import org.checkerframework.checker.units.qual.s;
+
 import java.util.HashMap;
 import java.io.*; 
 import java.text.*; 
@@ -28,6 +30,7 @@ public class Board {
     this.mapF = mapFac;
     this.gameBoard = mapF.getMap(num);
     this.UnitsF = UnitsFac;
+    this.allTerritory = new LinkedHashMap<>();
     this.unitsCreateFunction = new HashMap<String, Function<Integer, Units>>();
     for(String s : gameBoard.keySet()){
       for(Territory t : gameBoard.get(s)){
@@ -85,7 +88,7 @@ public class Board {
   }
   
   public void setUpUnitsCreationMap(){
-    for()
+ //   for()
   }
 }
 
