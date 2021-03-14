@@ -1,16 +1,12 @@
 package shared;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 import com.google.common.base.Function;
-
-import org.checkerframework.checker.units.qual.s;
-
-import java.util.HashMap;
-import java.io.*; 
-import java.text.*; 
-import java.util.*; 
-import java.net.*;
 
 public class Board {
   protected int playerNum;  //number of player
