@@ -9,10 +9,10 @@ public class NeighborChecker extends RuleChecker {
     String src = thisAct.getSource();
     String dest = thisAct.getDestination();
     if(theBoard.getTerritory(src) == null){
-      return "The source do not exist.";
+      return "The selected source do not exist.";
     }
     if(theBoard.getTerritory(dest) == null){
-      return "The destination do not exist.";
+      return "The selected destination do not exist.";
     }
     if(theBoard.getTerritory(src).isNeighbor(theBoard.getTerritory(dest))){
       return null;

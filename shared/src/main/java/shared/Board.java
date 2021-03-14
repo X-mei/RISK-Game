@@ -7,10 +7,7 @@ import com.google.common.base.Function;
 import org.checkerframework.checker.units.qual.s;
 
 import java.util.HashMap;
-import java.io.*; 
-import java.text.*; 
 import java.util.*; 
-import java.net.*;
 
 public class Board {
   protected int playerNum;  //number of player
@@ -73,6 +70,10 @@ public class Board {
     return playerList;
   }
 
+  public ArrayList<Player> getPlayers() {
+    return playerSet;
+  }
+
   public HashMap<String, LinkedHashSet<Territory>> getBoard(){
     return gameBoard;
   }
@@ -94,7 +95,7 @@ public class Board {
     int i = 0;
     for(Territory t : singlePlayerTerritories){
       unitSetupStrings[i] = "You have " + territoryNumForOnePlayer + " territories, how do you want to place units on " + t.getTerritoryName() + " ?\n";
-      i ++;
+      i++;
     }
     return unitSetupStrings;
   }
@@ -162,7 +163,7 @@ public class Board {
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
     Soldiers srcBasicSoldier = getSoldiers("Basic Soldiers", src);
-    Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);;
+    Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
     int count = basicAct.getCount();
     srcBasicSoldier.updateCount(srcBasicSoldier.getCount() - count);
     destBasicSoldier.updateCount(destBasicSoldier.getCount() + count);
