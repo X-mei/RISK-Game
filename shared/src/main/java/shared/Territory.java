@@ -73,6 +73,11 @@ public class Territory {
   public Soldiers getOneUnits(String name) {
     return allUnits.get(name);
   }
+
+  public void updateOneUnits(String name, int count){
+    Soldiers temp = allUnits.get(name);
+    temp.updateCount(count);
+  }
   
   public void updateOwner(String oname) {
     this.ownerName = oname;
