@@ -3,6 +3,7 @@ package shared;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.util.LinkedHashSet;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,17 @@ public class PlayerTest {
     assertEquals("B", b1.getDestination());
 
     assertEquals(null, player.formAction("D", ""));
+  }
+
+  @Test
+  public void test_getTerritoryList() {
+    ActionFactory f = new ActionFactory();
+    Player player = new Player("player1", 1, f);
+    Territory t = new Territory("test", "player1");
+    LinkedHashSet<Territory> tSet = new LinkedHashSet<Territory>();
+    tSet.add(t);
+    player.addTerritory(tSet);
+    assertEquals(tSet, player.getTerritoryList());
   }
 
 }

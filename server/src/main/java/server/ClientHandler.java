@@ -62,7 +62,9 @@ public class ClientHandler extends Thread {
       // ask client to assign territory
       assignTerritory();
       // send board message
+      // while loop, check if game ends
       sendBoardPromptAndRecv();
+      updateBoard();
       //close connection when game over
       CloseConnection();
     }catch(IOException e){
@@ -84,6 +86,11 @@ public class ClientHandler extends Thread {
     return readyFlag;
   }
 
+  /**
+   * This function tells the client to assign the units
+   * to their territories
+   * @throws IOException
+   */
   public void assignTerritory() throws IOException {
     try {
       int totalUnits = board.getTotalUnits();
@@ -123,6 +130,10 @@ public class ClientHandler extends Thread {
     }
   }
   
+  /**
+   * This function sends the prompt and play one turn
+   * @throws IOException
+   */
   public void sendBoardPromptAndRecv() throws IOException {
     try {
       String boardMsg = board.displayAllPlayerAllBoard();
@@ -148,20 +159,26 @@ public class ClientHandler extends Thread {
           continue;
         }
         if(chr == 'D') {
-          output.writeUTF("Wait for other players to perform the action...");
-          lock.lock();
-          isReady.await();
-          lock.unlock();
-          break;
+          // rule checker of move and attack actions
+          if(board.checkIfActionBoolean(moveHashSet, "Move") && board.checkIfActionBoolean(attackHashSet, "Attack")) {
+            output.writeUTF("Wait for other players to perform the action...");
+            lock.lock();
+            isReady.await();
+            lock.unlock();
+            break;
+          } else {
+            moveHashSet.clear();
+            attackHashSet.clear();
+            valid = false;
+            continue;
+          }
         }
         else{
           output.writeUTF("Please enter the action: src dest count");
           String actionInfo = input.readUTF();
+          // TODO: check the action str
           BasicAction act = player.formAction(received, actionInfo);
-          if(act == null){
-            break;
-          }
-          if(act.getActionName() == "Move"){
+          if(act.getActionName().equals("Move")){
             moveHashSet.add(act);
           }
           else{
@@ -175,6 +192,15 @@ public class ClientHandler extends Thread {
       e.printStackTrace();
     }
   }
+  
+  /**
+   * This function transmits the two action set to the 
+   * board and update the board.
+   */
+  public void updateBoard() {
+    
+  }
+  
 
   void CloseConnection(){
     try{
