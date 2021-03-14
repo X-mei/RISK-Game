@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 
 import shared.BasicAction;
 import shared.Board;
@@ -27,8 +29,10 @@ public class ClientHandler extends Thread {
   final Boolean readyFlag;
   final Player player;
   final HashSet<Character> actionSet;
+  final Lock lock;
+  final Condition isReady;
 
-  public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, Board b, String name){
+  public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, Board b, String name, Lock lock, Condition isReady){
     this.input = in;
     this.output = out;
     this.socket = s;
@@ -44,6 +48,8 @@ public class ClientHandler extends Thread {
     actionSet.add('D');
     actionSet.add('M');
     actionSet.add('A');
+    this.lock = lock;
+    this.isReady = isReady;
   }
 
   @Override
@@ -107,7 +113,12 @@ public class ClientHandler extends Thread {
         j++;
       }
       output.writeUTF("Wait for other players to assign the units...");
+      lock.lock();
+      isReady.await();
+      lock.unlock();
     } catch(IOException e){
+      e.printStackTrace();
+    } catch(InterruptedException e) {
       e.printStackTrace();
     }
   }
@@ -138,6 +149,9 @@ public class ClientHandler extends Thread {
         }
         if(chr == 'D') {
           output.writeUTF("Wait for other players to perform the action...");
+          lock.lock();
+          isReady.await();
+          lock.unlock();
           break;
         }
         else{
@@ -156,6 +170,8 @@ public class ClientHandler extends Thread {
         }
       }
     }catch(IOException e){
+      e.printStackTrace();
+    }catch(InterruptedException e) {
       e.printStackTrace();
     }
   }
