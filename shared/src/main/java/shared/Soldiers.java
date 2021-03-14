@@ -35,6 +35,7 @@ public abstract class Soldiers implements Units{
   public Integer randomNum(){
     return randomGenerator.nextInt((20 - 1) + 1) + 1;
   }
+
 }
 
 
