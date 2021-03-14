@@ -1,5 +1,9 @@
 package shared;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 import com.google.common.base.Function;
@@ -151,7 +155,7 @@ public class Board {
       processSingleBasicMove(basicAct);
     }
     else if(basicAct.getActionName() == "A"){
-      processSingleBasicAttack(basicAct);
+      processSingleBasicAttackWhole(basicAct);
     }
   }
 
@@ -166,33 +170,66 @@ public class Board {
     Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
     int count = basicAct.getCount();
     srcBasicSoldier.updateCount(srcBasicSoldier.getCount() - count);
-    destBasicSoldier.updateCount(destBasicSoldier.getCount() - count);
+    destBasicSoldier.updateCount(destBasicSoldier.getCount() + count);
+  }
+
+  /**
+   * before the attack, extract specific numbers of soldiers from source territory
+   * @param basicAct
+   */
+  public void processSingleBasicAttackPre(BasicAction basicAct){
+    String src = basicAct.getSource();
+    Territory srtT = allTerritory.get(src);
+    Soldiers srcSoldier = getSoldiers("Basic Soldiers", src);
+    int count = basicAct.getCount();
+    srcSoldier.updateCount(srcSoldier.getCount() - count);
   }
 
   /**
    * process single attack action
    * @param basicAct
    */
-  public void processSingleBasicAttack(BasicAction basicAct){
+  public void processSingleBasicAttackNext(BasicAction basicAct){
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
-    Soldiers srcBasicSoldier = getSoldiers("Basic Soldiers", src);
-    Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);;
-    int srcBasicSoldierNum = srcBasicSoldier.getCount();
-    int destBasicSoldierNum = destBasicSoldier.getCount();
-    while(srcBasicSoldierNum > 0 && destBasicSoldierNum > 0){
-      int srcRandom = srcBasicSoldier.randomNum();
+    int count = basicAct.getCount();
+    Soldiers attackBasicSoldier = new BasicSoldiers(count);
+    Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
+    while(attackBasicSoldier.getCount() > 0 && destBasicSoldier.getCount() > 0){
+      int srcRandom = attackBasicSoldier.randomNum();
       int destRandom = destBasicSoldier.randomNum();
+      //int srcRandom = 2;
+      //int destRandom = 1;
       if(srcRandom > destRandom){
-        destBasicSoldier.updateCount(-1);
+        destBasicSoldier.modifyCount(-1);
       }
       else if(srcRandom < destRandom){
-        srcBasicSoldier.updateCount(-1);
+        attackBasicSoldier.modifyCount(-1);
       }
       else{
         continue;
       }
     }
+    //update onwner if needed 
+    if(destBasicSoldier.getCount() == 0){
+      Territory tDest = allTerritory.get(dest);
+      Territory tSrc = allTerritory.get(src);
+      String attackerName = tSrc.getOwner();
+      String defenderName = tDest.getOwner();
+      tDest.updateOwner(attackerName);
+      LinkedHashSet<Territory> attackerTerriSet = gameBoard.get(attackerName);
+      LinkedHashSet<Territory> defenderTerriSet = gameBoard.get(defenderName);
+      attackerTerriSet.add(tDest);
+      defenderTerriSet.remove(tDest);
+    }
+  }
+
+  /**
+   * process one complete attack action
+   */
+  public void processSingleBasicAttackWhole(BasicAction basicAct){
+    processSingleBasicAttackPre(basicAct);
+    processSingleBasicAttackNext(basicAct);
   }
 
   public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
@@ -218,7 +255,7 @@ public class Board {
   }
   
   /**
-   * get soldier's number on one territory
+   * get specific kind of soldier's number on one territory
    * @param UnitsName the name of the soldier we want 
    * @param territoryName which territory we want to find
    * @return the soldier object 
