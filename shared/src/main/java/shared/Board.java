@@ -25,7 +25,7 @@ public class Board {
   private final RuleChecker attackRuleChecker;
   private HashMap<String, Integer> tempCount;
   private LinkedHashSet<String> UnitName;
-  private ArrayList<Player> playerSet;
+  private ArrayList<Player> playerList;
 
   /**
    * Constrcut a board
@@ -39,7 +39,7 @@ public class Board {
     this.mapF = mapFac;
     this.gameBoard = mapF.getMap(num);
     this.UnitsF = UnitsFac;
-    this.playerSet = createPlayer(gameBoard, new ActionFactory());
+    createPlayer(gameBoard, new ActionFactory());
     this.unitsCreateFunction = new HashMap<String, Function<Integer, Soldiers>>();
     setUpUnitsCreationMap();
     this.allTerritory = new LinkedHashMap<String, Territory>();
@@ -62,8 +62,8 @@ public class Board {
  * @param actF
  * @return
  */
-  private ArrayList<Player> createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF){
-    ArrayList<Player> playerList = new ArrayList<>();
+  private void createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF){
+    this.playerList = new ArrayList<>();
     int i = 1;
     for(String s : gameBoard.keySet()){
       Player p = new Player(s, i, actF);
@@ -71,11 +71,10 @@ public class Board {
       playerList.add(p);
       i++;
     }
-    return playerList;
   }
 
   public ArrayList<Player> getPlayers() {
-    return playerSet;
+    return playerList;
   }
 
   public HashMap<String, LinkedHashSet<Territory>> getBoard(){
