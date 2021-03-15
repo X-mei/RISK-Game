@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 
 import shared.BasicAction;
 import shared.Board;
 import shared.MapFactory;
 import shared.Player;
+import shared.Territory;
 import shared.UnitsFactory;
 
 public class ClientHandler extends Thread {
@@ -26,8 +29,10 @@ public class ClientHandler extends Thread {
   final Boolean readyFlag;
   final Player player;
   final HashSet<Character> actionSet;
+  final Lock lock;
+  final Condition isReady;
 
-  public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, Board b, String name){
+  public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, Board b, String name, Lock lock, Condition isReady){
     this.input = in;
     this.output = out;
     this.socket = s;
@@ -43,6 +48,8 @@ public class ClientHandler extends Thread {
     actionSet.add('D');
     actionSet.add('M');
     actionSet.add('A');
+    this.lock = lock;
+    this.isReady = isReady;
   }
 
   @Override
@@ -52,9 +59,12 @@ public class ClientHandler extends Thread {
     try{
       // send playerInfo
       output.writeUTF(playerInfo);
-      
+      // ask client to assign territory
+      assignTerritory();
       // send board message
+      // while loop, check if game ends
       sendBoardPromptAndRecv();
+      updateBoard();
       //close connection when game over
       CloseConnection();
     }catch(IOException e){
@@ -75,9 +85,59 @@ public class ClientHandler extends Thread {
   public boolean getReadyFlag() {
     return readyFlag;
   }
+
+  /**
+   * This function tells the client to assign the units
+   * to their territories
+   * @throws IOException
+   */
+  public void assignTerritory() throws IOException {
+    try {
+      int totalUnits = board.getTotalUnits();
+      int unitsSetup = 0;
+      String[] promptMsg = board.askUnitSetup(playerName);
+      int[] unitsAssign = new int[promptMsg.length];
+      int i = 0;
+      output.writeUTF("You have total " + totalUnits + " to set up in your territories.");
+      while(i < promptMsg.length) {
+        output.writeUTF(promptMsg[i] + "You have " + (totalUnits - unitsSetup) + " units left.");
+        String received = input.readUTF();
+        // TODO : check the interger
+        int unitsNum = Integer.parseInt(received);
+        if (unitsNum + unitsSetup > totalUnits) {
+          continue;
+        } else {
+          unitsSetup += unitsNum;
+          unitsAssign[i] = unitsNum;
+          i++;
+        }
+      }
+      int j = 0;
+      for(Territory t: player.getTerritoryList()) {
+        int[] unitsToAdd = new int[1];
+        unitsToAdd[0] = unitsAssign[j];
+        board.singleTerritoryUnitSetup(t.getTerritoryName(), unitsToAdd);
+        j++;
+      }
+      output.writeUTF("Wait for other players to assign the units...");
+      lock.lock();
+      isReady.await();
+      lock.unlock();
+    } catch(IOException e){
+      e.printStackTrace();
+    } catch(InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
   
+  /**
+   * This function sends the prompt and play one turn
+   * @throws IOException
+   */
   public void sendBoardPromptAndRecv() throws IOException {
     try {
+      String boardMsg = board.displayAllPlayerAllBoard();
+      output.writeUTF(boardMsg);
       Boolean valid = true;
       String received = null;
       while(true) {
@@ -99,17 +159,26 @@ public class ClientHandler extends Thread {
           continue;
         }
         if(chr == 'D') {
-          output.writeUTF("Wait for other players to perform the action...");
-          break;
+          // rule checker of move and attack actions
+          if(board.checkIfActionBoolean(moveHashSet, "Move") && board.checkIfActionBoolean(attackHashSet, "Attack")) {
+            output.writeUTF("Wait for other players to perform the action...");
+            lock.lock();
+            isReady.await();
+            lock.unlock();
+            break;
+          } else {
+            moveHashSet.clear();
+            attackHashSet.clear();
+            valid = false;
+            continue;
+          }
         }
         else{
           output.writeUTF("Please enter the action: src dest count");
           String actionInfo = input.readUTF();
+          // TODO: check the action str
           BasicAction act = player.formAction(received, actionInfo);
-          if(act == null){
-            break;
-          }
-          if(act.getActionName() == "Move"){
+          if(act.getActionName().equals("Move")){
             moveHashSet.add(act);
           }
           else{
@@ -119,46 +188,19 @@ public class ClientHandler extends Thread {
       }
     }catch(IOException e){
       e.printStackTrace();
+    }catch(InterruptedException e) {
+      e.printStackTrace();
     }
   }
-
-
-  // void StoreAction(){
-  //   while(true){
-  //     try{
-  //       String prompt = "You are the "+ player.getName() + " player, What would you like to do?" + "(M)ove\n" + "(A)ttack\n" + "(D)one";
-  //       output.writeUTF(prompt);
-  //       String input_choice = input.readUTF();
-  //       String Choice = input_choice.toUpperCase();
-  //       char chr = Choice.charAt(0);
-  //       if(Choice.length() != 1){
-  //         output.writeUTF("Please input one character.");
-  //         continue;
-  //       }
-  //       if(chr != 'D' && chr != 'M' && chr != 'A'){
-  //         output.writeUTF("Invalid action choice! please try again.");
-  //         continue;
-  //       }
-  //       else{
-  //           String actionInfo = input.readUTF();
-  //           BasicAction act = player.formAction(Choice, actionInfo);
-  //           if(act == null){
-  //             break;
-  //           }
-  //           if(act.getActionName() == "Move"){
-  //             moveHashSet.add(act);
-  //           }
-  //           else{
-  //             attackHashSet.add(act);
-  //           }  
-  //       }
-  //     }catch(Exception e){
-  //       e.printStackTrace();
-  //     }
-  //   }
-  // } 
-
-
+  
+  /**
+   * This function transmits the two action set to the 
+   * board and update the board.
+   */
+  public void updateBoard() {
+    
+  }
+  
 
   void CloseConnection(){
     try{

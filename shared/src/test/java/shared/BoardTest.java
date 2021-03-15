@@ -72,6 +72,14 @@ public class BoardTest {
   }
 
   @Test
+  public void test_getTotalUnits() {
+    MapFactory f = new MapFactory();
+    UnitsFactory u = new UnitsFactory();
+    Board b = new Board(2, f, u);
+    assertEquals(20, b.getTotalUnits());
+  }
+
+  @Test
   public void test_displayAllPlayerAllBoard(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){

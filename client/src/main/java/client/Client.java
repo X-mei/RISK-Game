@@ -54,11 +54,31 @@ public class Client {
     }
   }
 
+  public void recvAssignTerritory() throws IOException {
+    try {
+      String promptMsg = dataIn.readUTF(); 
+      out.println(promptMsg);
+      while(true) {
+        String line = dataIn.readUTF(); 
+        out.println(line);
+        if (line.equals("Wait for other players to assign the units...")) {
+          break;
+        }
+        String readIn = inputReader.readLine();
+        dataOut.writeUTF(readIn);
+      }
+    } catch (IOException e) {
+      out.println("Receive failed.");
+    }
+  }
+
   /**
    * This function receives playerName and playerSeq
    */
   public void recvBoardPromptAndSend() throws IOException {
     try {
+      String boardMsg = dataIn.readUTF(); 
+      out.println(boardMsg);
       while(true) {
         String line = dataIn.readUTF(); 
         out.println(line);

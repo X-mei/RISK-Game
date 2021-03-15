@@ -1,5 +1,6 @@
 package server;
 import java.io.*;
+import java.lang.Thread.State;
 
 import shared.ActionFactory;
 import shared.Board;
@@ -9,6 +10,9 @@ import shared.UnitsFactory;
 
 import java.net.*;
 import java.util.ArrayList;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Server {
   private ServerSocket serverSocket ;
@@ -20,6 +24,8 @@ public class Server {
   Board board;
   private ArrayList<String> names;
   private ArrayList<Thread> threadList;
+  final Lock lock;
+  final Condition isReady;
 
   public Server(int portNum, int playerNum) {
     this.serverSocket = null;
@@ -35,6 +41,8 @@ public class Server {
     names.add("Blue");
     names.add("Green");
     this.threadList = new ArrayList<Thread>();
+    this.lock = new ReentrantLock();
+    this.isReady  = lock.newCondition();
   }
 
   public void buildserver() throws IOException{
@@ -50,7 +58,7 @@ public class Server {
         DataInputStream input = new DataInputStream(clientSocket.getInputStream());
         DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
         String name = names.get(num-1);
-        Thread t = new ClientHandler(clientSocket, input, output, board, name);
+        Thread t = new ClientHandler(clientSocket, input, output, board, name, lock, isReady);
         t.start();
         threadList.add(t);
         num++;
@@ -60,9 +68,33 @@ public class Server {
         e.printStackTrace(); 
       }
     }
-    
+    try {
+      synchronizeThreads();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
+  public void synchronizeThreads() throws InterruptedException {
+    while(true) {
+      while(!areAllWaiting()) {
+        // loop to wait all threads to finish
+      }
+      // if game over, break
+      lock.lock();
+      isReady.signalAll();
+      lock.unlock();
+    }
+  }
+
+  public boolean areAllWaiting() {
+    for (Thread t: threadList) {
+      if (t.getState() != State.WAITING) {
+        return false;
+      }
+    }
+    return true;
+  }
 
 
 }
