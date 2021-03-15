@@ -150,6 +150,17 @@ public class Board {
   }
 
   /**
+   * process one turn game
+   * @param actionSet the set of all actions(all same kind)
+   */
+  public void processOneTurn(LinkedHashSet<BasicAction> actionSet){
+    for(BasicAction a : actionSet){
+      processSingleBasicAction(a);
+    }
+  }
+
+
+  /**
    * identify the kind of one single attack and process it
    * @param basicAct the attack object
    */
@@ -318,6 +329,20 @@ public class Board {
     }
     ans += "\n";
     return ans;
+  }
+
+ /**
+  * check if any player lose
+  * @return the player who lose
+  * if no one lose, return null
+  */
+  public Player checkSinglePlayerLose(){
+    for(Player p : playerList){
+      if(p.getTerritoryList().size() == 0){
+        return p;
+      }
+    }
+    return null;
   }
 }
 
