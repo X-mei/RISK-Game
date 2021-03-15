@@ -153,12 +153,24 @@ public class Board {
    * process one turn game
    * @param actionSet the set of all actions(all same kind)
    */
-  public void processOneTurn(LinkedHashSet<BasicAction> actionSet){
+  public void processOneTurnMove(LinkedHashSet<BasicAction> actionSet){
     for(BasicAction a : actionSet){
-      processSingleBasicAction(a);
+      processSingleBasicMove(a);
     }
   }
 
+  public synchronized void processOneTurnAttackPre(LinkedHashSet<BasicAction> actionSet){
+    for(BasicAction a : actionSet){
+      processSingleBasicAttackPre(a);
+    }
+  }
+
+
+  public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
+    for(BasicAction a : actionSet){
+      processSingleBasicAttackNext(a);
+    }
+  }
 
   /**
    * identify the kind of one single attack and process it
@@ -331,20 +343,22 @@ public class Board {
     return ans;
   }
 
- /**
-  * check if any player lose
-  * @return the player who lose
-  * if no one lose, return null
+  /**
+  * check if a specific player lose
+  * @return true if lose 
+  * 
   */
-  public Player checkSinglePlayerLose(){
-    for(Player p : playerList){
-      if(p.getTerritoryList().size() == 0){
-        return p;
-      }
+  public Boolean checkSinglePlayerLose(String playerName){
+    if(gameBoard.get(playerName).size() == 0){
+      return true;
     }
-    return null;
+    return false;
   }
+
 }
+
+
+
 
 
 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
@@ -22,8 +23,8 @@ public class ClientHandler extends Thread {
   final Socket socket;
   final MapFactory mapFac;
   final UnitsFactory UnitsFac;
-  final HashSet<BasicAction> moveHashSet;
-  final HashSet<BasicAction> attackHashSet;
+  final LinkedHashSet<BasicAction> moveHashSet;
+  final LinkedHashSet<BasicAction> attackHashSet;
   final Board board;
   final String playerName;
   final Boolean readyFlag;
@@ -38,8 +39,8 @@ public class ClientHandler extends Thread {
     this.socket = s;
     this.mapFac = new MapFactory();
     this.UnitsFac = new UnitsFactory();
-    this.moveHashSet = new HashSet<>();
-    this.attackHashSet = new HashSet<>();
+    this.moveHashSet = new LinkedHashSet<BasicAction>();
+    this.attackHashSet = new LinkedHashSet<BasicAction>();
     this.board = b;
     this.playerName = name;
     this.readyFlag = false;
@@ -63,8 +64,10 @@ public class ClientHandler extends Thread {
       assignTerritory();
       // send board message
       // while loop, check if game ends
-      sendBoardPromptAndRecv();
-      updateBoard();
+      while(!board.checkSinglePlayerLose(playerName)) {
+        sendBoardPromptAndRecv();
+        updateBoard();
+      }
       //close connection when game over
       CloseConnection();
     }catch(IOException e){
@@ -136,6 +139,8 @@ public class ClientHandler extends Thread {
    */
   public void sendBoardPromptAndRecv() throws IOException {
     try {
+      moveHashSet.clear();
+      attackHashSet.clear();
       String boardMsg = board.displayAllPlayerAllBoard();
       output.writeUTF(boardMsg);
       Boolean valid = true;
@@ -198,6 +203,22 @@ public class ClientHandler extends Thread {
    * board and update the board.
    */
   public void updateBoard() {
+    try {
+      board.processOneTurnMove(moveHashSet);
+      lock.lock();
+      isReady.await();
+      lock.unlock();
+      board.processOneTurnAttackPre(attackHashSet);
+      lock.lock();
+      isReady.await();
+      lock.unlock();
+      board.processOneTurnAttackNext(attackHashSet);
+      lock.lock();
+      isReady.await();
+      lock.unlock();
+    } catch(InterruptedException e) {
+      e.printStackTrace();
+    }
     
   }
   
