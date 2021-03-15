@@ -15,6 +15,7 @@ import java.util.*;
 
 public class Board {
   protected int playerNum;  //number of player
+  protected int remainedPlayerNum;
   protected int totalUnitsNum;  //number of units for each player; 
   protected HashMap<String, LinkedHashSet<Territory>> gameBoard;  //the map
   protected MapFactory mapF;  //map factory to create the map
@@ -35,6 +36,7 @@ public class Board {
    */
   public Board(int num, MapFactory mapFac, UnitsFactory UnitsFac){
     this.playerNum = num;
+    this.remainedPlayerNum = num;
     this.totalUnitsNum = 20;
     this.mapF = mapFac;
     this.gameBoard = mapF.getMap(num);
@@ -227,10 +229,10 @@ public class Board {
       //int srcRandom = 2;
       //int destRandom = 1;
       if(srcRandom > destRandom){
-        destBasicSoldier.modifyCount(-1);
+        destBasicSoldier.updateCount(destBasicSoldier.getCount() - 1);
       }
       else if(srcRandom < destRandom){
-        attackBasicSoldier.modifyCount(-1);
+        attackBasicSoldier.updateCount(attackBasicSoldier.getCount() - 1);
       }
       else{
         continue;
@@ -247,6 +249,7 @@ public class Board {
       LinkedHashSet<Territory> defenderTerriSet = gameBoard.get(defenderName);
       attackerTerriSet.add(tDest);
       defenderTerriSet.remove(tDest);
+      destBasicSoldier.updateCount(attackBasicSoldier.getCount());
     }
   }
 
@@ -350,11 +353,22 @@ public class Board {
   */
   public Boolean checkSinglePlayerLose(String playerName){
     if(gameBoard.get(playerName).size() == 0){
+      remainedPlayerNum --;
       return true;
     }
     return false;
   }
 
+  public String checkGameEnd(){
+    if(remainedPlayerNum == 1){
+      for(String s : gameBoard.keySet()){
+        if(gameBoard.get(s).size() > 0){
+          return s;
+        }
+      }
+    }
+    return "";
+  }
 }
 
 

@@ -197,6 +197,14 @@ public class BoardTest {
     assertEquals(4,unitsNum);
   }
 
+  @Test
+  public void test_checkSinglePlayerLose(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    
+  }
 }
 
 
