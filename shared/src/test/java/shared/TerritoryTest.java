@@ -62,7 +62,7 @@ public class TerritoryTest {
     unitSet.add(unit);
     assertEquals(unitSet, t1.getUnits());
   }
-
+  
   @Test
   public void test_updateOwner() {
     Territory t1 = new Territory("t1", "player1");

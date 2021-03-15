@@ -18,13 +18,9 @@ public abstract class Soldiers implements Units{
     return count;
   }
 
+  @Override
   public void updateCount(int num){
     count = num;
-  }
-  
-  @Override
-  public void modifyCount(Integer modiBy){
-    count += modiBy;
   }
 
   @Override

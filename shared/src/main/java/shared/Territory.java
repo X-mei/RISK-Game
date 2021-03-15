@@ -50,10 +50,6 @@ public class Territory {
     allUnits.put(units.getName(), units);
   }
 
-  public void changeUnits(Soldiers units, int increaseNum){
-
-  }
-
   public String getTerritoryName() {
     return this.territoryName;
   }
@@ -74,11 +70,6 @@ public class Territory {
     return allUnits.get(name);
   }
 
-  public void updateOneUnits(String name, int count){
-    Soldiers temp = allUnits.get(name);
-    temp.updateCount(count);
-  }
-  
   public void updateOwner(String oname) {
     this.ownerName = oname;
   }

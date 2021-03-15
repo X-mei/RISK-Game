@@ -3,7 +3,7 @@ package shared;
 public interface Units {
   public Integer getCount();
 
-  public void modifyCount(Integer modiBy);
+  public void updateCount(int num);
 
   public String getName();
 }

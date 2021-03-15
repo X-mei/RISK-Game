@@ -16,9 +16,9 @@ public class BasicSoldiersTest {
   public void test_modifyCount() {
     UnitsFactory f = new UnitsFactory();
     Units u = f.createBasicSoldiers(10);
-    u.modifyCount(-5);
+    u.updateCount(u.getCount()-5);
     assertEquals(5, u.getCount());
-    u.modifyCount(2);
+    u.updateCount(u.getCount()+2);
     assertEquals(7, u.getCount());
   }
 

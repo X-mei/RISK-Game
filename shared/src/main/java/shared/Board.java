@@ -227,10 +227,10 @@ public class Board {
       //int srcRandom = 2;
       //int destRandom = 1;
       if(srcRandom > destRandom){
-        destBasicSoldier.modifyCount(-1);
+        destBasicSoldier.updateCount(destBasicSoldier.getCount() - 1);
       }
       else if(srcRandom < destRandom){
-        attackBasicSoldier.modifyCount(-1);
+        attackBasicSoldier.updateCount(attackBasicSoldier.getCount() - 1);
       }
       else{
         continue;
