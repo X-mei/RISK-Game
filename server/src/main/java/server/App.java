@@ -16,11 +16,16 @@ public class App {
         while(true) {
           System.out.println("How many players do you want to include?");
           // TODO: check the integer
-          playerNum = Integer.parseInt(scan.nextLine());
+          try {
+            playerNum = Integer.parseInt(scan.nextLine());
+          } catch(NumberFormatException e) {
+            System.out.println("Please input number.");
+            continue;
+          }
           if (playerNum >= 2 && playerNum <= 5) {
             break;
           }
-          System.out.println("Invalid input.");
+          System.out.println("Invalid input. Player number should be >=2 and <= 5.");
         }
         scan.close();
         Server server = new Server(12345, playerNum);

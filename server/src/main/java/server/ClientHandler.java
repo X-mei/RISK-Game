@@ -68,10 +68,17 @@ public class ClientHandler extends Thread {
         sendBoardPromptAndRecv();
         updateBoard();
       }
-      //close connection when game over
-      CloseConnection();
+      output.writeUTF("You lost all your territories!");
+      // this client lost the game, only send msg and don't recv
+      while(board.checkGameEnd().equals("")) {
+        sendBoardMsg();
+      }
+      sendGameEndMsg();
     }catch(IOException e){
       e.printStackTrace();
+    }finally {
+      //close connection when game over
+      closeConnection();
     }
   }
 
@@ -106,7 +113,12 @@ public class ClientHandler extends Thread {
         output.writeUTF(promptMsg[i] + "You have " + (totalUnits - unitsSetup) + " units left.");
         String received = input.readUTF();
         // TODO : check the interger
-        int unitsNum = Integer.parseInt(received);
+        int unitsNum;
+        try {
+          unitsNum = Integer.parseInt(received);
+        } catch(NumberFormatException e) {
+          continue;
+        }
         if (unitsNum + unitsSetup > totalUnits) {
           continue;
         } else {
@@ -197,6 +209,22 @@ public class ClientHandler extends Thread {
       e.printStackTrace();
     }
   }
+
+  /**
+   * This function only sends the message
+   */
+  void sendBoardMsg() throws IOException {
+    String boardMsg = board.displayAllPlayerAllBoard();
+    output.writeUTF(boardMsg);
+  }
+
+  /**
+   * This function sends the game end message
+   */
+  void sendGameEndMsg() throws IOException {
+    String winner = board.checkGameEnd();
+    output.writeUTF(winner + " wins the game!");
+  }
   
   /**
    * This function transmits the two action set to the 
@@ -223,7 +251,7 @@ public class ClientHandler extends Thread {
   }
   
 
-  void CloseConnection(){
+  void closeConnection(){
     try{
       this.input.close();
       this.output.close();
