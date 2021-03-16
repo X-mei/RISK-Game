@@ -195,7 +195,7 @@ public class ClientHandler extends Thread {
           String actionInfo = input.readUTF();
           // TODO: check the action str
           BasicAction act = player.formAction(received, actionInfo);
-          if(act.getActionName().equals("Move")){
+          if(act.getActionName().equals("M")){
             moveHashSet.add(act);
           }
           else{
@@ -208,22 +208,6 @@ public class ClientHandler extends Thread {
     }catch(InterruptedException e) {
       e.printStackTrace();
     }
-  }
-
-  /**
-   * This function only sends the message
-   */
-  void sendBoardMsg() throws IOException {
-    String boardMsg = board.displayAllPlayerAllBoard();
-    output.writeUTF(boardMsg);
-  }
-
-  /**
-   * This function sends the game end message
-   */
-  void sendGameEndMsg() throws IOException {
-    String winner = board.checkGameEnd();
-    output.writeUTF(winner + " wins the game!");
   }
   
   /**
@@ -250,6 +234,21 @@ public class ClientHandler extends Thread {
     
   }
   
+  /**
+   * This function only sends the message
+   */
+  void sendBoardMsg() throws IOException {
+    String boardMsg = board.displayAllPlayerAllBoard();
+    output.writeUTF(boardMsg);
+  }
+
+  /**
+   * This function sends the game end message
+   */
+  void sendGameEndMsg() throws IOException {
+    String winner = board.checkGameEnd();
+    output.writeUTF(winner + " wins the game!");
+  }
 
   void closeConnection(){
     try{
