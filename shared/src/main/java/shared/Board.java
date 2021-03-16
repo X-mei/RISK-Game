@@ -196,8 +196,8 @@ public class Board {
     Soldiers srcBasicSoldier = getSoldiers("Basic Soldiers", src);
     Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
     int count = basicAct.getCount();
-    srcBasicSoldier.updateCount(/*srcBasicSoldier.getCount() - count*/20);
-    destBasicSoldier.updateCount(/*destBasicSoldier.getCount() + count*/10);
+    srcBasicSoldier.updateCount(srcBasicSoldier.getCount() - count);
+    destBasicSoldier.updateCount(destBasicSoldier.getCount() + count);
   }
 
   /**
