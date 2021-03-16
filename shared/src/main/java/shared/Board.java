@@ -263,7 +263,7 @@ public class Board {
   public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
     for (BasicAction action : actions) {
       if (type == "Move") {
-        if (moveRuleChecker.checkMyRule(action, this) == null) {
+        if (moveRuleChecker.checkAction(action, this) == null) {
           continue;
         }
         else {
@@ -271,7 +271,7 @@ public class Board {
         }
       }
       else {
-        if (attackRuleChecker.checkMyRule(action, this) == null) {
+        if (attackRuleChecker.checkAction(action, this) == null) {
           continue;
         }
         else {
@@ -325,8 +325,7 @@ public class Board {
   }
 
 
-  private String displaySinlgePlayerBoard(String playerName){
-    
+  private String displaySinlgePlayerBoard(String playerName){ 
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     String s1 = playerName + " player:\n";
     // Eg: ans = "King player:
@@ -384,5 +383,12 @@ public class Board {
       }
     }
     return "";
+  }
+
+  public void spawnOneUnitForPlayer(String name) {
+    for (Territory t : gameBoard.get(name)) {
+      Soldiers temp = t.getOneUnits("Basic Soldiers");
+      temp.updateCount(temp.getCount()+1);
+    }
   }
 }
