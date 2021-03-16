@@ -3,6 +3,7 @@ package client;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -81,6 +82,10 @@ public class Client {
       out.println(boardMsg);
       return false;
     }
+    if (boardMsg.equals("The game ends.")) {
+      out.println(boardMsg);
+      return false;
+    }
     out.println(boardMsg);
     while(true) {
       String line = dataIn.readUTF(); 
@@ -95,6 +100,32 @@ public class Client {
   }
 
   /**
+   * This checks if the client wants to exit or continue
+   * @throws IOException
+   */
+  public boolean exitOrContinue() throws IOException {
+    String prompt = dataIn.readUTF();
+    if (!prompt.equals("Do you want to exit or continue watching the game? Input exit or continue.")) {
+      out.println(prompt);
+      return false;
+    }
+    out.println(prompt);
+    String readIn = null;
+    while(true) {
+      readIn = inputReader.readLine();
+      if(readIn.equals("exit")) {
+        dataOut.writeUTF(readIn);
+        return false;
+      } else if (readIn.equals("continue")) {
+        dataOut.writeUTF(readIn);
+        return true;
+      } else {
+        out.println("wrong input format!");
+      }
+    }
+  }
+
+  /**
    * This function recv the message
    */
   public void recvMsg() throws IOException {
@@ -105,8 +136,7 @@ public class Client {
       }
     } catch (IOException e) {
       closeConnection();
-    }
-    
+    } 
   }
 
   /**

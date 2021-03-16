@@ -306,21 +306,6 @@ public class Board {
     for(String s : gameBoard.keySet()){
       ans += displaySinlgePlayerBoard(s);
     }
-    
-    for(String s : allTerritory.keySet()){
-      Soldiers temp = allTerritory.get(s).getOneUnits("Basic Soldiers");
-      ans += s + ": " + allTerritory.get(s).getOwner() + ": " + temp.getCount();
-    }
-    ans += "\n";
-
-    for(String s : gameBoard.keySet()){
-      ans += s + ": ";
-      LinkedHashSet<Territory> terriSet = gameBoard.get(s);
-      for(Territory t: terriSet) {
-        ans += t.getTerritoryName() + ", ";
-      }
-      ans += "\n";
-    }
     return ans;
   }
 
@@ -369,19 +354,23 @@ public class Board {
   */
   public Boolean checkSinglePlayerLose(String playerName){
     if(gameBoard.get(playerName).size() == 0){
-      remainedPlayerNum --;
       return true;
     }
     return false;
   }
 
   public String checkGameEnd(){
-    if(remainedPlayerNum == 1){
-      for(String s : gameBoard.keySet()){
-        if(gameBoard.get(s).size() > 0){
-          return s;
-        }
+    int endPlayer = 0;
+    String winner = null;
+    for(String s : gameBoard.keySet()) {
+      if(gameBoard.get(s).size() == 0) {
+        endPlayer++;
+      } else {
+        winner = s;
       }
+    }
+    if (endPlayer + 1 == playerNum) {
+      return winner;
     }
     return "";
   }
