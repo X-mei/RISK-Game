@@ -195,7 +195,11 @@ public class ClientHandler extends Thread {
         else{
           output.writeUTF("Please enter the action: src dest count");
           String actionInfo = input.readUTF();
-          // TODO: check the action str
+          //check the input string
+          if(!checkActionStr(actionInfo)){
+            valid = false;
+            continue;
+          }
           BasicAction act = player.formAction(received, actionInfo);
           if(act.getActionName().equals("M")){
             moveHashSet.add(act);
@@ -261,4 +265,25 @@ public class ClientHandler extends Thread {
     }
   }
 
+  Boolean checkActionStr(String str){
+    if(str == null){
+      return false;
+    }
+    int pos1 = str.indexOf(" ");
+    if(pos1 == -1){
+      return false;
+    }
+    String substr1 = str.substring(pos1 + 1);
+    int pos2 = substr1.indexOf(" ");
+    if(pos2 == -1){
+      return false;
+    }
+    String substr2 = substr1.substring(pos2 + 1);
+    for(int i = 0; i < substr2.length(); i++){
+      if(!Character.isDigit(substr2.charAt(i))){
+        return false;
+      }
+    }
+    return true;
+  }
 }
