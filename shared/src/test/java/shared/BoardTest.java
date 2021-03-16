@@ -203,7 +203,11 @@ public class BoardTest {
     for(String s : b.getAllTerritroy().keySet()){
       b.singleTerritoryUnitSetup(s, new int[]{10});
     }
-    
+    assertEquals(false, b.checkSinglePlayerLose("King"));
+    b.getTerritory("Dorado").updateOwner("Red");
+    b.getTerritory("Hanamura").updateOwner("Red");
+    b.getTerritory("Hollywood").updateOwner("Red");
+    assertEquals(true, b.checkSinglePlayerLose("King"));
   }
 }
 

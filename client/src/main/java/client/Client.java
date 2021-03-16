@@ -73,24 +73,40 @@ public class Client {
   }
 
   /**
-   * This function receives playerName and playerSeq
+   * This function recv the board prompt and send action
    */
-  public void recvBoardPromptAndSend() throws IOException {
-    try {
-      String boardMsg = dataIn.readUTF(); 
+  public boolean recvBoardPromptAndSend() throws IOException {
+    String boardMsg = dataIn.readUTF();
+    if (boardMsg.equals("You lost all your territories!")) {
       out.println(boardMsg);
-      while(true) {
-        String line = dataIn.readUTF(); 
-        out.println(line);
-        if (line.equals("Wait for other players to perform the action...")) {
-          break;
-        }
-        String readIn = inputReader.readLine();
-        dataOut.writeUTF(readIn);
-      }
-    } catch (IOException e){
-      out.println("Receive failed.");
+      return false;
     }
+    out.println(boardMsg);
+    while(true) {
+      String line = dataIn.readUTF(); 
+      out.println(line);
+      if (line.equals("Wait for other players to perform the action...")) {
+        break;
+      }
+      String readIn = inputReader.readLine();
+      dataOut.writeUTF(readIn);
+    }
+    return true;
+  }
+
+  /**
+   * This function recv the message
+   */
+  public void recvMsg() throws IOException {
+    try {
+      while(true) {
+        String msg = dataIn.readUTF();
+        out.println(msg);
+      }
+    } catch (IOException e) {
+      closeConnection();
+    }
+    
   }
 
   /**
@@ -109,10 +125,14 @@ public class Client {
     return playerName;
   }
 
-  /**
-   * This function indicates that the first Player
-   * should decide how many people in the game.
-   */
+  void closeConnection(){
+    try{
+      this.dataIn.close();
+      this.dataOut.close();
+    } catch(IOException e){
+      e.printStackTrace();
+    }
+  }
   
   
 

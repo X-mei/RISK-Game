@@ -17,8 +17,11 @@ public class App {
         client.recvNameAndSeq();
         client.recvAssignTerritory();
         while(true) {
-          client.recvBoardPromptAndSend();
+          if (!client.recvBoardPromptAndSend()) {
+            break;
+          }
         }
+        client.recvMsg();
       } catch (IOException e) {
         e.printStackTrace();
       }
