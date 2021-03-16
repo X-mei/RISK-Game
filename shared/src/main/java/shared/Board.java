@@ -322,8 +322,7 @@ public class Board {
   }
 
 
-  private String displaySinlgePlayerBoard(String playerName){
-    
+  private String displaySinlgePlayerBoard(String playerName){ 
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     String s1 = playerName + " player:\n";
     // Eg: ans = "King player:
@@ -381,6 +380,13 @@ public class Board {
       }
     }
     return "";
+  }
+
+  public void spawnOneMoreUnit() {
+    for (Territory t : allTerritory.values()) {
+      Soldiers temp = t.getOneUnits("Basic Soldiers");
+      temp.updateCount(temp.getCount()+1);
+    }
   }
 }
 
