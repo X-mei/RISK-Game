@@ -263,7 +263,7 @@ public class Board {
   public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
     for (BasicAction action : actions) {
       if (type == "Move") {
-        if (moveRuleChecker.checkMyRule(action, this) == null) {
+        if (moveRuleChecker.checkAction(action, this) == null) {
           continue;
         }
         else {
@@ -271,7 +271,7 @@ public class Board {
         }
       }
       else {
-        if (attackRuleChecker.checkMyRule(action, this) == null) {
+        if (attackRuleChecker.checkAction(action, this) == null) {
           continue;
         }
         else {
@@ -382,8 +382,8 @@ public class Board {
     return "";
   }
 
-  public void spawnOneMoreUnit() {
-    for (Territory t : allTerritory.values()) {
+  public void spawnOneUnitForPlayer(String name) {
+    for (Territory t : gameBoard.get(name)) {
       Soldiers temp = t.getOneUnits("Basic Soldiers");
       temp.updateCount(temp.getCount()+1);
     }
