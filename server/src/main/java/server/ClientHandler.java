@@ -67,6 +67,7 @@ public class ClientHandler extends Thread {
       while(!board.checkSinglePlayerLose(playerName)) {
         sendBoardPromptAndRecv();
         updateBoard();
+        board.spawnOneUnitForPlayer(playerName);
       }
       output.writeUTF("You lost all your territories!");
       // this client lost the game, only send msg and don't recv
@@ -196,7 +197,7 @@ public class ClientHandler extends Thread {
           String actionInfo = input.readUTF();
           // TODO: check the action str
           BasicAction act = player.formAction(received, actionInfo);
-          if(act.getActionName().equals("Move")){
+          if(act.getActionName().equals("M")){
             moveHashSet.add(act);
           }
           else{
