@@ -67,6 +67,7 @@ public class ClientHandler extends Thread {
       while(!board.checkSinglePlayerLose(playerName)) {
         sendBoardPromptAndRecv();
         updateBoard();
+        board.spawnOneUnitForPlayer(playerName);
       }
       output.writeUTF("You lost all your territories!");
       // this client lost the game, only send msg and don't recv
