@@ -16,7 +16,9 @@ public class App {
         client.connectToServer();
         client.recvNameAndSeq();
         client.recvAssignTerritory();
-        client.recvBoardPromptAndSend();
+        while(true) {
+          client.recvBoardPromptAndSend();
+        }
       } catch (IOException e) {
         e.printStackTrace();
       }

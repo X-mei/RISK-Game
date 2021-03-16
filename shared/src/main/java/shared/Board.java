@@ -155,7 +155,7 @@ public class Board {
    * process one turn game
    * @param actionSet the set of all actions(all same kind)
    */
-  public void processOneTurnMove(LinkedHashSet<BasicAction> actionSet){
+  public synchronized void processOneTurnMove(LinkedHashSet<BasicAction> actionSet){
     for(BasicAction a : actionSet){
       processSingleBasicMove(a);
     }
@@ -307,11 +307,24 @@ public class Board {
     for(String s : gameBoard.keySet()){
       ans += displaySinlgePlayerBoard(s);
     }
+    //
+    // for(String s : allTerritory.keySet()){
+    //   ans += s + ": " + allTerritory.get(s).getOwner() + "; ";
+    // }
+    for(String s : gameBoard.keySet()){
+      ans += s + ": ";
+      LinkedHashSet<Territory> terriSet = gameBoard.get(s);
+      for(Territory t: terriSet) {
+        ans += t.getTerritoryName() + ", ";
+      }
+      ans += "\n";
+    }
     return ans;
   }
 
 
   private String displaySinlgePlayerBoard(String playerName){
+    
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     String s1 = playerName + " player:\n";
     // Eg: ans = "King player:
@@ -334,6 +347,7 @@ public class Board {
       territoryInfo += temp + tempNeighbor + ")\n";
     }
     ans += territoryInfo;
+
     return ans;
   }
 
