@@ -177,34 +177,34 @@ public class Board {
    * identify the kind of one single attack and process it
    * @param basicAct the attack object
    */
-  public void processSingleBasicAction(BasicAction basicAct){
-    if(basicAct.getActionName() == "M"){
-      processSingleBasicMove(basicAct);
-    }
-    else if(basicAct.getActionName() == "A"){
-      processSingleBasicAttackWhole(basicAct);
-    }
-  }
+  // public synchronized void processSingleBasicAction(BasicAction basicAct){
+  //   if(basicAct.getActionName().equals("M")){
+  //     processSingleBasicMove(basicAct);
+  //   }
+  //   else if(basicAct.getActionName().equals("A")){
+  //     processSingleBasicAttackWhole(basicAct);
+  //   }
+  // }
 
   /**
    * process single move action
    * @param basicAct
    */
-  public void processSingleBasicMove(BasicAction basicAct){
+  public synchronized void processSingleBasicMove(BasicAction basicAct){
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
     Soldiers srcBasicSoldier = getSoldiers("Basic Soldiers", src);
     Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
     int count = basicAct.getCount();
-    srcBasicSoldier.updateCount(srcBasicSoldier.getCount() - count);
-    destBasicSoldier.updateCount(destBasicSoldier.getCount() + count);
+    srcBasicSoldier.updateCount(/*srcBasicSoldier.getCount() - count*/20);
+    destBasicSoldier.updateCount(/*destBasicSoldier.getCount() + count*/10);
   }
 
   /**
    * before the attack, extract specific numbers of soldiers from source territory
    * @param basicAct
    */
-  public void processSingleBasicAttackPre(BasicAction basicAct){
+  public synchronized void processSingleBasicAttackPre(BasicAction basicAct){
     String src = basicAct.getSource();
     Territory srtT = allTerritory.get(src);
     Soldiers srcSoldier = getSoldiers("Basic Soldiers", src);
@@ -216,7 +216,7 @@ public class Board {
    * process single attack action
    * @param basicAct
    */
-  public void processSingleBasicAttackNext(BasicAction basicAct){
+  public synchronized void processSingleBasicAttackNext(BasicAction basicAct){
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
     int count = basicAct.getCount();
@@ -306,10 +306,13 @@ public class Board {
     for(String s : gameBoard.keySet()){
       ans += displaySinlgePlayerBoard(s);
     }
-    //
-    // for(String s : allTerritory.keySet()){
-    //   ans += s + ": " + allTerritory.get(s).getOwner() + "; ";
-    // }
+    
+    for(String s : allTerritory.keySet()){
+      Soldiers temp = allTerritory.get(s).getOneUnits("Basic Soldiers");
+      ans += s + ": " + allTerritory.get(s).getOwner() + ": " + temp.getCount();
+    }
+    ans += "\n";
+
     for(String s : gameBoard.keySet()){
       ans += s + ": ";
       LinkedHashSet<Territory> terriSet = gameBoard.get(s);
@@ -383,16 +386,3 @@ public class Board {
     return "";
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
