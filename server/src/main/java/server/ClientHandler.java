@@ -260,17 +260,21 @@ public class ClientHandler extends Thread {
   }
 
   Boolean checkActionStr(String str){
+    if(str == null){
+      return false;
+    }
     int pos1 = str.indexOf(" ");
     if(pos1 == -1){
       return false;
     }
     String substr1 = str.substring(pos1 + 1);
+    substr1 = substr1.trim();
     int pos2 = substr1.indexOf(" ");
     if(pos2 == -1){
       return false;
     }
-    String substr2 = str.substring(pos2 +1);
-    for(int i = substr2.length(); --i >=0;){
+    String substr2 = str.substring(pos2 + 1);
+    for(int i = 0; i < substr2.length(); i++){
       if(!Character.isDigit(substr2.charAt(i))){
         return false;
       }
