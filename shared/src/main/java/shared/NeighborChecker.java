@@ -14,6 +14,9 @@ public class NeighborChecker extends RuleChecker {
     if(theBoard.getTerritory(dest) == null){
       return "The selected destination do not exist.";
     }
+    if (thisAct.getActionOwner() == theBoard.getTerritory(thisAct.getDestination()).getOwner()) {
+      return "You cannot attack your own territory.";
+    }
     if(theBoard.getTerritory(src).isNeighbor(theBoard.getTerritory(dest))){
       return null;
     }

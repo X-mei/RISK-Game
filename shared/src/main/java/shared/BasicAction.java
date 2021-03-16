@@ -3,7 +3,7 @@ package shared;
 public abstract class BasicAction implements Action {
   protected final String dest;
   protected final String src;
-  protected final Integer count;
+  protected final int count;
   protected final String owner;
   protected final String actionName;
 
@@ -42,7 +42,7 @@ public abstract class BasicAction implements Action {
     return dest;
   }
 
-  public Integer getCount() {
+  public int getCount() {
     return count;
   }
   

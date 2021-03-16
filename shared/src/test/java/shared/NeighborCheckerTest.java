@@ -15,7 +15,7 @@ public class NeighborCheckerTest {
     BasicAction b4 = new Attack("King", "Hanamura Junkertown 5");
     BasicAction b5 = new Attack("King", "A Junkertown 5");
     assertEquals("The selected destination do not exist.", c.checkMyRule(b1, b));
-    assertEquals("Destination is not the nerghbour of the source!", c.checkMyRule(b2, b));
+    assertEquals("You cannot attack your own territory.", c.checkMyRule(b2, b));
     assertEquals(null, c.checkMyRule(b3, b));
     assertEquals("Destination is not the nerghbour of the source!", c.checkMyRule(b4, b));
     assertEquals("The selected source do not exist.", c.checkMyRule(b5, b));
