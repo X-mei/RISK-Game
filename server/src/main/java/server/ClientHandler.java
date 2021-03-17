@@ -69,20 +69,20 @@ public class ClientHandler extends Thread {
         updateBoard();
       }
       if (board.checkSinglePlayerLose(playerName) && board.checkGameEnd().equals("")) {
-        connectFlag = false;
         output.writeUTF("You lost all your territories!");
-        output.writeUTF("Do you want to exit or continue watching the game? Input exit or continue.");
+        output.writeUTF("Do you want to exit or continue watching the game? Input c to continue or else to exit.");
+        // TODO : check lowercase or uppercase, both okay
         String isContinue = input.readUTF();
-        if (isContinue.equals("continue")) {
+        if (isContinue.equals("c")) {
           // only send board msg
         } else {
-          closeConnection();
+          connectFlag = false;
         }
       } else {
         connectFlag = false;
         sendGameEndMsg();
       }
-
+      closeConnection();
     }catch(IOException e){
       e.printStackTrace();
     }finally {
@@ -164,14 +164,19 @@ public class ClientHandler extends Thread {
       String boardMsg = board.displayAllPlayerAllBoard();
       output.writeUTF(boardMsg);
       Boolean valid = true;
+      Boolean actionValid = true;
       String received = null;
       while(true) {
         String prompt = "";
         if (!valid) {
-          prompt += "Invalid input!\n";
+          prompt += "Invalid input format! Please input this action again.\n";
+        }
+        else if (!actionValid) {
+          prompt += "Invalid action! Please input all actions you want again.\n";
         }
         prompt += "You are the " + playerName + " player, what would you like to do?\n(M)ove\n(A)ttack\n(D)one";
         valid = true;
+        actionValid = true;
         output.writeUTF(prompt);
         received = input.readUTF();
         char chr =  received.charAt(0);
@@ -195,7 +200,7 @@ public class ClientHandler extends Thread {
           } else {
             moveHashSet.clear();
             attackHashSet.clear();
-            valid = false;
+            actionValid = false;
             continue;
           }
         }
