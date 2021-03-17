@@ -121,10 +121,10 @@ public class Board {
     return allTerritory.get(name);
   }
 
-  public void refreshTemp(){
-    for(String tN : allTerritory.keySet()){
-      Soldiers sol = allTerritory.get(tN).getOneUnits("Basic Soldiers");
-      tempCount.put(tN, sol.getCount());
+  public void refreshTemp(String name){
+    for(Territory t : gameBoard.get(name)){
+      Soldiers sol = t.getOneUnits("Basic Soldiers");
+      tempCount.put(t.getTerritoryName(), sol.getCount());
     }
   }
 

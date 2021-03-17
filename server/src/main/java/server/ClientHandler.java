@@ -67,7 +67,6 @@ public class ClientHandler extends Thread {
       while(!board.checkSinglePlayerLose(playerName)) {
         sendBoardPromptAndRecv();
         updateBoard();
-        board.spawnOneUnitForPlayer(playerName);
       }
       output.writeUTF("You lost all your territories!");
       // this client lost the game, only send msg and don't recv
@@ -177,7 +176,7 @@ public class ClientHandler extends Thread {
           continue;
         }
         if(chr == 'D') {
-          board.refreshTemp();
+          board.refreshTemp(playerName);
           // rule checker of move and attack actions
           if(board.checkIfActionBoolean(moveHashSet, "Move") && board.checkIfActionBoolean(attackHashSet, "Attack")) {
             output.writeUTF("Wait for other players to perform the action...");
@@ -227,6 +226,10 @@ public class ClientHandler extends Thread {
       isReady.await();
       lock.unlock();
       board.processOneTurnAttackNext(attackHashSet);
+      lock.lock();
+      isReady.await();
+      lock.unlock();
+      board.spawnOneUnitForPlayer(playerName);
       lock.lock();
       isReady.await();
       lock.unlock();
