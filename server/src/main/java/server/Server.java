@@ -23,7 +23,7 @@ public class Server {
   private int playerNum;
   Board board;
   private ArrayList<String> names;
-  private ArrayList<Thread> threadList;
+  private ArrayList<ClientHandler> threadList;
   final Lock lock;
   final Condition isReady;
 
@@ -40,7 +40,7 @@ public class Server {
     names.add("Pink");
     names.add("Blue");
     names.add("Green");
-    this.threadList = new ArrayList<Thread>();
+    this.threadList = new ArrayList<ClientHandler>();
     this.lock = new ReentrantLock();
     this.isReady  = lock.newCondition();
   }
@@ -58,7 +58,7 @@ public class Server {
         DataInputStream input = new DataInputStream(clientSocket.getInputStream());
         DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
         String name = names.get(num-1);
-        Thread t = new ClientHandler(clientSocket, input, output, board, name, lock, isReady);
+        ClientHandler t = new ClientHandler(clientSocket, input, output, board, name, lock, isReady);
         t.start();
         threadList.add(t);
         num++;
@@ -88,8 +88,8 @@ public class Server {
   }
 
   public boolean areAllWaiting() {
-    for (Thread t: threadList) {
-      if (t.getState() != State.WAITING) {
+    for (ClientHandler t: threadList) {
+      if (t.getState() != State.WAITING && t.getConnectFlag() == true) {
         return false;
       }
     }
