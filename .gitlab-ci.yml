@@ -16,7 +16,7 @@ build:
      - ece651
   stage: build
   script:
-    - gradle --build
+    - ./gradlew installDist
 
 test:
   tags:
