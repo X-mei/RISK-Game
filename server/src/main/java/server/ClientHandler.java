@@ -179,6 +179,10 @@ public class ClientHandler extends Thread {
         actionValid = true;
         output.writeUTF(prompt);
         received = input.readUTF();
+        if(received == null){
+          valid = false;
+          continue;
+        }
         char chr =  received.charAt(0);
         if(received.length() != 1){
           valid = false;
