@@ -3,7 +3,6 @@ before_script:
   - whoami
   - pwd
   - ls -la
-  - docker --version
 
 stages:
    - build
@@ -17,18 +16,17 @@ build:
      - ece651
   stage: build
   script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
+    - gradle --build
 
 test:
   tags:
      - ece651
   stage: test
   script:
-    - echo "This job tests something"
+    - gradle check
   artifacts:
     paths:
       - coverage
-  
       
 pages:
  stage: coverage
@@ -41,10 +39,11 @@ pages:
  artifacts:
    paths:
      - public
+     
 deploy:
   tags:
     - ece651
   stage: deploy
   script:
-    - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
+    - echo "Deploy."
 
