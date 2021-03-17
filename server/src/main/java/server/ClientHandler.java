@@ -2,6 +2,7 @@ package server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -179,15 +180,12 @@ public class ClientHandler extends Thread {
         actionValid = true;
         output.writeUTF(prompt);
         received = input.readUTF();
-        if(received == null){
-          valid = false;
-          continue;
-        }
-        char chr =  received.charAt(0);
         if(received.length() != 1){
           valid = false;
           continue;
         }
+        received.toUpperCase();
+        char chr =  received.charAt(0);
         if(!actionSet.contains(chr)){
           valid = false;
           continue;
