@@ -262,19 +262,22 @@ public class Board {
 
   public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
     for (BasicAction action : actions) {
+      String output;
       if (type == "Move") {
-        if (moveRuleChecker.checkAction(action, this) == null) {
+        if ((output = moveRuleChecker.checkAction(action, this)) == null) {
           continue;
         }
         else {
+          System.out.println(output);
           return false;
         }
       }
       else {
-        if (attackRuleChecker.checkAction(action, this) == null) {
+        if ((output = attackRuleChecker.checkAction(action, this)) == null) {
           continue;
         }
         else {
+          System.out.println(output);
           return false;
         }
       }
