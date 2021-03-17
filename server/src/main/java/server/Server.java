@@ -80,13 +80,17 @@ public class Server {
       while(!areAllWaiting()) {
         // loop to wait all threads to finish
       }
-      // if game over, break
       lock.lock();
       isReady.signalAll();
       lock.unlock();
-      // if (!board.checkGameEnd().equals("")) {
-      //   break;
-      // }
+      // if game over, break
+      boolean endFlag = true;
+      for (ClientHandler t: threadList) {
+        endFlag &= !t.getConnectFlag();
+      }
+      if (endFlag) {
+        break;
+      }
     }
   }
 
