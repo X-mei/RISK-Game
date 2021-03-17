@@ -27,11 +27,11 @@ public class ClientHandler extends Thread {
   final LinkedHashSet<BasicAction> attackHashSet;
   final Board board;
   final String playerName;
-  final Boolean readyFlag;
   final Player player;
   final HashSet<Character> actionSet;
   final Lock lock;
   final Condition isReady;
+  Boolean connectFlag;
 
   public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, Board b, String name, Lock lock, Condition isReady){
     this.input = in;
@@ -43,7 +43,7 @@ public class ClientHandler extends Thread {
     this.attackHashSet = new LinkedHashSet<BasicAction>();
     this.board = b;
     this.playerName = name;
-    this.readyFlag = false;
+    this.connectFlag = true;
     this.player = getPlayer();
     this.actionSet = new HashSet<Character>();
     actionSet.add('D');
@@ -64,17 +64,26 @@ public class ClientHandler extends Thread {
       assignTerritory();
       // send board message
       // while loop, check if game ends
-      while(!board.checkSinglePlayerLose(playerName)) {
+      while(!board.checkSinglePlayerLose(playerName) && board.checkGameEnd().equals("")){
         sendBoardPromptAndRecv();
         updateBoard();
         board.spawnOneUnitForPlayer(playerName);
       }
-      output.writeUTF("You lost all your territories!");
-      // this client lost the game, only send msg and don't recv
-      while(board.checkGameEnd().equals("")) {
-        sendBoardMsg();
+      if (board.checkSinglePlayerLose(playerName) && board.checkGameEnd().equals("")) {
+        connectFlag = false;
+        output.writeUTF("You lost all your territories!");
+        output.writeUTF("Do you want to exit or continue watching the game? Input exit or continue.");
+        String isContinue = input.readUTF();
+        if (isContinue.equals("continue")) {
+          // only send board msg
+        } else {
+          closeConnection();
+        }
+      } else {
+        connectFlag = false;
+        sendGameEndMsg();
       }
-      sendGameEndMsg();
+
     }catch(IOException e){
       e.printStackTrace();
     }finally {
@@ -93,8 +102,8 @@ public class ClientHandler extends Thread {
     return null;
   }
 
-  public boolean getReadyFlag() {
-    return readyFlag;
+  public boolean getConnectFlag() {
+    return connectFlag;
   }
 
   /**
@@ -113,7 +122,6 @@ public class ClientHandler extends Thread {
       while(i < promptMsg.length) {
         output.writeUTF(promptMsg[i] + "You have " + (totalUnits - unitsSetup) + " units left.");
         String received = input.readUTF();
-        // TODO : check the interger
         int unitsNum;
         try {
           unitsNum = Integer.parseInt(received);
@@ -252,6 +260,7 @@ public class ClientHandler extends Thread {
    * This function sends the game end message
    */
   void sendGameEndMsg() throws IOException {
+    output.writeUTF("The game ends.");
     String winner = board.checkGameEnd();
     output.writeUTF(winner + " wins the game!");
   }
