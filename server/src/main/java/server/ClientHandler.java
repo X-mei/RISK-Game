@@ -187,6 +187,7 @@ public class ClientHandler extends Thread {
           valid = false;
           continue;
         }
+        received = received.toUpperCase();
         char chr =  received.charAt(0);
         if(!actionSet.contains(chr)){
           valid = false;
