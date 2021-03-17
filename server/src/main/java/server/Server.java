@@ -84,6 +84,9 @@ public class Server {
       lock.lock();
       isReady.signalAll();
       lock.unlock();
+      if (!board.checkGameEnd().equals("")) {
+        break;
+      }
     }
   }
 

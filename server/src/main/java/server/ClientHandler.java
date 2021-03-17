@@ -2,6 +2,7 @@ package server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -75,6 +76,8 @@ public class ClientHandler extends Thread {
         String isContinue = input.readUTF();
         if (isContinue.equals("c")) {
           // only send board msg
+          sendBoardMsg();
+          sendGameEndMsg();
         } else {
           connectFlag = false;
         }
@@ -82,6 +85,7 @@ public class ClientHandler extends Thread {
         connectFlag = false;
         sendGameEndMsg();
       }
+      connectFlag = false;
       closeConnection();
     }catch(IOException e){
       e.printStackTrace();
@@ -179,15 +183,11 @@ public class ClientHandler extends Thread {
         actionValid = true;
         output.writeUTF(prompt);
         received = input.readUTF();
-        if(received == null){
-          valid = false;
-          continue;
-        }
-        char chr =  received.charAt(0);
         if(received.length() != 1){
           valid = false;
           continue;
         }
+        char chr =  received.charAt(0);
         if(!actionSet.contains(chr)){
           valid = false;
           continue;
@@ -264,8 +264,20 @@ public class ClientHandler extends Thread {
    * This function only sends the message
    */
   void sendBoardMsg() throws IOException {
-    String boardMsg = board.displayAllPlayerAllBoard();
-    output.writeUTF(boardMsg);
+    try {
+      while (board.checkGameEnd().equals("")) {
+        String boardMsg = board.displayAllPlayerAllBoard();
+        output.writeUTF(boardMsg);
+        for (int i = 0; i < 5; i++) {
+          lock.lock();
+          isReady.await();
+          lock.unlock();
+        }
+      }
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    
   }
 
   /**
