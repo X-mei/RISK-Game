@@ -131,6 +131,11 @@ public class Client {
       while(true) {
         String msg = dataIn.readUTF();
         out.println(msg);
+        if (msg.equals("The game ends.")) {
+          msg = dataIn.readUTF();
+          out.println(msg);
+          break;
+        }
       }
     } catch (IOException e) {
       closeConnection();
