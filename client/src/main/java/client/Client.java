@@ -105,7 +105,7 @@ public class Client {
    */
   public boolean exitOrContinue() throws IOException {
     String prompt = dataIn.readUTF();
-    if (!prompt.equals("Do you want to exit or continue watching the game? Input exit or continue.")) {
+    if (!prompt.equals("Do you want to exit or continue watching the game? Input c to continue or else to exit.")) {
       out.println(prompt);
       return false;
     }
@@ -113,14 +113,12 @@ public class Client {
     String readIn = null;
     while(true) {
       readIn = inputReader.readLine();
-      if(readIn.equals("exit")) {
-        dataOut.writeUTF(readIn);
-        return false;
-      } else if (readIn.equals("continue")) {
+      if (readIn.equals("c")) {
         dataOut.writeUTF(readIn);
         return true;
       } else {
-        out.println("wrong input format!");
+        dataOut.writeUTF(readIn);
+        return false;
       }
     }
   }
