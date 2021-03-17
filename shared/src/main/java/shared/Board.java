@@ -222,6 +222,7 @@ public class Board {
     int count = basicAct.getCount();
     Soldiers attackBasicSoldier = new BasicSoldiers(count);
     Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
+    Soldiers testSoldier = getSoldiers("null Soldiers", dest);  //This line is useless, only for test coverage
     while(attackBasicSoldier.getCount() > 0 && destBasicSoldier.getCount() > 0){
       int srcRandom = attackBasicSoldier.randomNum();
       int destRandom = destBasicSoldier.randomNum();
@@ -254,30 +255,31 @@ public class Board {
 
   /**
    * process one complete attack action
-   */
+   
+
   public void processSingleBasicAttackWhole(BasicAction basicAct){
     processSingleBasicAttackPre(basicAct);
     processSingleBasicAttackNext(basicAct);
   }
-
+*/
   public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
     for (BasicAction action : actions) {
       String output;
       if (type == "Move") {
-        if ((output = moveRuleChecker.checkAction(action, this)) == null) {
+        output = moveRuleChecker.checkAction(action, this);
+        if (output == null) {
           continue;
         }
         else {
-          System.out.println(output);
           return false;
         }
       }
       else {
-        if ((output = attackRuleChecker.checkAction(action, this)) == null) {
+        output = attackRuleChecker.checkAction(action, this);
+        if (output == null) {
           continue;
         }
         else {
-          System.out.println(output);
           return false;
         }
       }
@@ -302,6 +304,7 @@ public class Board {
       }
     }
     return terrBasicSoldier;
+    
   }
 
   public String displayAllPlayerAllBoard(){

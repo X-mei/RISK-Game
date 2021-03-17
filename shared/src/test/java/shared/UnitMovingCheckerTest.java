@@ -16,13 +16,15 @@ public class UnitMovingCheckerTest {
     b.singleTerritoryUnitSetup("Ilios", new int[]{10});
     b.singleTerritoryUnitSetup("Junkertown", new int[]{5});
     BasicAction b1 = new Move("King", "Dorado B 10");
-    BasicAction b2 = new Move("King", "Hanamura B 5");
+    BasicAction b2 = new Move("King", "Hanamura Hollywood 5");
     BasicAction b3 = new Attack("King", "Hanamura B 9");
     BasicAction b4 = new Move("King", "A B 5");
-    b.refreshTemp();
+    b.refreshTemp("King");
+    b.refreshTemp("Red");
     assertEquals("The selected source do not exist.", c.checkMyRule(b4, b));
     assertEquals("You do not have enough unit to move.", c.checkMyRule(b1, b));
-    b.refreshTemp();
+    b.refreshTemp("King");
+    b.refreshTemp("Red");
     assertEquals(null, c.checkMyRule(b2, b));
     assertEquals("You do not have enough unit to move.", c.checkMyRule(b3, b));
   }
