@@ -23,7 +23,7 @@ public class NeighborChecker extends RuleChecker {
       return null;
     }
     else{
-      return "Destination is not the nerghbour of the source!";
+      return "Destination is not the neighbor of the source!";
     }
   }
 }

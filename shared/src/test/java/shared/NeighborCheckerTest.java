@@ -17,7 +17,7 @@ public class NeighborCheckerTest {
     assertEquals("The selected destination do not exist.", c.checkMyRule(b1, b));
     assertEquals("You cannot attack your own territory.", c.checkMyRule(b2, b));
     assertEquals(null, c.checkMyRule(b3, b));
-    assertEquals("Destination is not the nerghbour of the source!", c.checkMyRule(b4, b));
+    assertEquals("Destination is not the neighbor of the source!", c.checkMyRule(b4, b));
     assertEquals("The selected source do not exist.", c.checkMyRule(b5, b));
     
     

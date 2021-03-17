@@ -28,6 +28,7 @@ public class BoardTest {
     assertEquals(2, gameMap.size());
   }
 
+  
   @Test
   public void test_getPlayerNum() {
     MapFactory f = new MapFactory();
@@ -131,12 +132,22 @@ public class BoardTest {
     for(String s : b.getAllTerritroy().keySet()){
       b.singleTerritoryUnitSetup(s, new int[]{10});
     }
-    BasicAction a1 = new Move("Red", "Ilios Volskaya 7");
-    BasicAction a3 = new Attack("King", "Hanamura Ilios 9");
+    BasicAction a1 = new Move("Red", "Ilios Volskaya 1");
+    BasicAction a2 = new Move("Red", "Ilios Volskaya 1");
+    LinkedHashSet<BasicAction> s1 = new LinkedHashSet<>();
+    s1.add(a1);
+    s1.add(a2);
+    BasicAction a3 = new Attack("King", "Hanamura Ilios 1");
+    BasicAction a4 = new Attack("King", "Hanamura Ilios 9");
+    LinkedHashSet<BasicAction> s2 = new LinkedHashSet<>();
+    s2.add(a3);
+    s2.add(a4);
     //BasicAction a4 = new Attack("Red", "Ilios Hollywood 2");
-    //b.processSingleBasicAction(a1);
-    //b.processSingleBasicAction(a3);
-    //assertEquals("King", b.getTerritory("Volskaya").getOwner());
+    b.processOneTurnMove(s1);
+    assertEquals(12, b.getTerritory("Volskaya").getOneUnits("Basic Soldiers").getCount());
+    b.processOneTurnAttackPre(s2);
+    b.processOneTurnAttackNext(s2);
+    assertEquals(0, b.getTerritory("Hanamura").getOneUnits("Basic Soldiers").getCount());
   }
 
   @Test
@@ -145,6 +156,7 @@ public class BoardTest {
     HashSet<BasicAction> testattack = new HashSet<>();
     HashSet<BasicAction> testmove1 = new HashSet<>();
     HashSet<BasicAction> testattack1 = new HashSet<>();
+    HashSet<BasicAction> testattack2 = new HashSet<>();
     Board b = getTestBoard();
     b.singleTerritoryUnitSetup("Dorado", new int[]{5});
     b.singleTerritoryUnitSetup("Hanamura", new int[]{10});
@@ -158,22 +170,26 @@ public class BoardTest {
     BasicAction attackact1 = new Attack("King", "Hanamura B 9");
     BasicAction attackact2 = new Attack("King", "A B 5");
     BasicAction attackact3 = new Attack("King", "Dorado Ilios 3");
-    b.refreshTemp();
-    b.refreshTemp();
+    BasicAction attackact4 = new Attack("King", "Hollywood Ilios 3");
+    b.refreshTemp("King");
+    b.refreshTemp("Red");
     testmove.add(moveact1);
     testmove.add(moveact2);
     testmove1.add(moveact3);
     testattack.add(attackact1);
     testattack.add(attackact2);
     testattack1.add(attackact3);
+    testattack2.add(attackact4);
     String type1 = "Move";
     String type2 = "Attack";
     Boolean status1 = b.checkIfActionBoolean(testmove, type1);
     Boolean status2 = b.checkIfActionBoolean(testattack, type2);
     Boolean status3 = b.checkIfActionBoolean(testmove1, type1);
     Boolean status4 = b.checkIfActionBoolean(testattack1, type2);
+    Boolean status5= b.checkIfActionBoolean(testattack2, type2);
     assertEquals(true, status1);
-    assertEquals(true, status4);
+    assertEquals(true, status5);
+    assertEquals(false, status4);
     assertEquals(false, status3);
     assertEquals(false, status2);
   }
@@ -192,23 +208,39 @@ public class BoardTest {
     for (String s : b.getAllTerritroy().keySet()) {
       b.singleTerritoryUnitSetup(s, count);
     }
-    b.refreshTemp();
+    b.refreshTemp("King");
+    b.refreshTemp("Red");
     b.updateTempCount("Hanamura", 1);
     Integer unitsNum = b.getTerritoryUnitsCount("Hanamura");
     assertEquals(4,unitsNum);
   }
 
-  @Disabled
+  
   @Test
   public void test_checkSinglePlayerLose(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
       b.singleTerritoryUnitSetup(s, new int[]{10});
     }
+    assertEquals("", b.checkGameEnd());
     assertEquals(false, b.checkSinglePlayerLose("King"));
     b.getTerritory("Dorado").updateOwner("Red");
     b.getTerritory("Hanamura").updateOwner("Red");
     b.getTerritory("Hollywood").updateOwner("Red");
+    LinkedHashSet<Territory> temp = b.getBoard().get("King");
+    temp.clear();
+    assertEquals(true, b.checkSinglePlayerLose("King"));
+    assertEquals("Red", b.checkGameEnd());
+  }
+
+  @Test
+  public void spawnOneUnitForPlayer(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    b.spawnOneUnitForPlayer("King");
+    assertEquals(11, b.getTerritory("Hanamura").getOneUnits("Basic Soldiers").getCount());
   }
 }
 
