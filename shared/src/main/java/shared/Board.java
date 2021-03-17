@@ -121,10 +121,10 @@ public class Board {
     return allTerritory.get(name);
   }
 
-  public void refreshTemp(){
-    for(String tN : allTerritory.keySet()){
-      Soldiers sol = allTerritory.get(tN).getOneUnits("Basic Soldiers");
-      tempCount.put(tN, sol.getCount());
+  public void refreshTemp(String name){
+    for(Territory t : gameBoard.get(name)){
+      Soldiers sol = t.getOneUnits("Basic Soldiers");
+      tempCount.put(t.getTerritoryName(), sol.getCount());
     }
   }
 
@@ -262,19 +262,22 @@ public class Board {
 
   public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
     for (BasicAction action : actions) {
+      String output;
       if (type == "Move") {
-        if (moveRuleChecker.checkAction(action, this) == null) {
+        if ((output = moveRuleChecker.checkAction(action, this)) == null) {
           continue;
         }
         else {
+          System.out.println(output);
           return false;
         }
       }
       else {
-        if (attackRuleChecker.checkAction(action, this) == null) {
+        if ((output = attackRuleChecker.checkAction(action, this)) == null) {
           continue;
         }
         else {
+          System.out.println(output);
           return false;
         }
       }
@@ -305,21 +308,6 @@ public class Board {
     String ans = "";
     for(String s : gameBoard.keySet()){
       ans += displaySinlgePlayerBoard(s);
-    }
-    
-    for(String s : allTerritory.keySet()){
-      Soldiers temp = allTerritory.get(s).getOneUnits("Basic Soldiers");
-      ans += s + ": " + allTerritory.get(s).getOwner() + ": " + temp.getCount();
-    }
-    ans += "\n";
-
-    for(String s : gameBoard.keySet()){
-      ans += s + ": ";
-      LinkedHashSet<Territory> terriSet = gameBoard.get(s);
-      for(Territory t: terriSet) {
-        ans += t.getTerritoryName() + ", ";
-      }
-      ans += "\n";
     }
     return ans;
   }
@@ -368,19 +356,23 @@ public class Board {
   */
   public Boolean checkSinglePlayerLose(String playerName){
     if(gameBoard.get(playerName).size() == 0){
-      remainedPlayerNum --;
       return true;
     }
     return false;
   }
 
   public String checkGameEnd(){
-    if(remainedPlayerNum == 1){
-      for(String s : gameBoard.keySet()){
-        if(gameBoard.get(s).size() > 0){
-          return s;
-        }
+    int endPlayer = 0;
+    String winner = null;
+    for(String s : gameBoard.keySet()) {
+      if(gameBoard.get(s).size() == 0) {
+        endPlayer++;
+      } else {
+        winner = s;
       }
+    }
+    if (endPlayer + 1 == playerNum) {
+      return winner;
     }
     return "";
   }
