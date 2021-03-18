@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import shared.MapFactory;
 import shared.UnitsFactory;
 import shared.Board;
+import shared.Player;
 
 public class ClientHandlerTest {
 
@@ -28,6 +30,14 @@ public class ClientHandlerTest {
     Condition isReady  = lock.newCondition();
     ClientHandler t = new ClientHandler(clientSocket, input, output, board, "King", lock, isReady);
     return t;
+  }
+
+  @Test
+  public void test_sendGameEnd() throws IOException {
+    ClientHandler t = getTestClientHandler();
+    Player p = t.getPlayer();
+    assertEquals(p.getName(), "King");
+    t.sendGameEndMsg();
   }
 
   @Test

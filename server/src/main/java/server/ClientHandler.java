@@ -104,7 +104,7 @@ public class ClientHandler extends Thread {
    * client.
    * @return Player
    */
-  private Player getPlayer() {
+  public Player getPlayer() {
     ArrayList<Player> playerList = board.getPlayers();
     for (Player p: playerList) {
       if (p.getName().equals(playerName)) {
@@ -292,7 +292,6 @@ public class ClientHandler extends Thread {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    
   }
 
   /**
