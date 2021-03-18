@@ -34,7 +34,8 @@ RUN mkdir -p /home/juser/.emacs.d/dcoverage
 COPY --chown=juser scripts/dcoverage.el /home/juser/.emacs.d/dcoverage/
 RUN chmod u+x emacs-bare.sh && ./emacs-bare.sh
 
-RUN chmod u+x scripts/run-tests-in-docker.sh
+COPY --chown=juser scripts/run-tests-in-docker.sh ./
+RUN chmod u+x run-tests-in-docker.sh && ./run-tests-in-docker.sh
 
 # we are going to do a bit of gradle first, just to speed
 # up future builds
