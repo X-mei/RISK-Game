@@ -14,6 +14,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Build a server class for socket communication
+ */
 public class Server {
   private ServerSocket serverSocket ;
   private ActionFactory actFactory;
@@ -45,6 +48,12 @@ public class Server {
     this.isReady  = lock.newCondition();
   }
 
+  /**
+   * This function builds the server socket and 
+   * waits for the client to connect.
+   * Each client will start a new thread.
+   * @throws IOException
+   */
   public void buildserver() throws IOException{
     //waits and listen
     serverSocket = new ServerSocket(port);
@@ -75,6 +84,11 @@ public class Server {
     }
   }
 
+  /**
+   * This function checks when to signal all the threads
+   * and if the game ends, break the while loop
+   * @throws InterruptedException
+   */
   public void synchronizeThreads() throws InterruptedException {
     while(true) {
       while(!areAllWaiting()) {
@@ -94,6 +108,11 @@ public class Server {
     }
   }
 
+  /**
+   * This function checks if all the threads are in the WAITING
+   * state, if return true, otherwise return false.
+   * @return boolean
+   */
   public boolean areAllWaiting() {
     for (ClientHandler t: threadList) {
       if (t.getState() != State.WAITING && t.getConnectFlag() == true) {

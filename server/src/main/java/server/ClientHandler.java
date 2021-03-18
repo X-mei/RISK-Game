@@ -18,6 +18,10 @@ import shared.Player;
 import shared.Territory;
 import shared.UnitsFactory;
 
+/**
+ * ClientHandler class extends from thread and
+ * handles the game logic.
+ */
 public class ClientHandler extends Thread {
   final DataInputStream input;
   final DataOutputStream output;
@@ -95,6 +99,11 @@ public class ClientHandler extends Thread {
     }
   }
 
+  /**
+   * This function gets the player of this current
+   * client.
+   * @return Player
+   */
   private Player getPlayer() {
     ArrayList<Player> playerList = board.getPlayers();
     for (Player p: playerList) {
@@ -105,6 +114,11 @@ public class ClientHandler extends Thread {
     return null;
   }
 
+  /**
+   * This function gets the thread's connect flag.
+   * If the player exits the game, return false.
+   * @return boolean
+   */
   public boolean getConnectFlag() {
     return connectFlag;
   }
@@ -290,6 +304,10 @@ public class ClientHandler extends Thread {
     output.writeUTF(winner + " wins the game!");
   }
 
+  /**
+   * This function close the connection of input
+   * and output.
+   */
   void closeConnection(){
     try{
       this.input.close();
@@ -299,6 +317,11 @@ public class ClientHandler extends Thread {
     }
   }
 
+  /**
+   * This function checks if the input string is
+   * valid to form an action.
+   * @return boolean
+   */
   Boolean checkActionStr(String str){
     if(str == null){
       return false;
