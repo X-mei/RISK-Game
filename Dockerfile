@@ -34,6 +34,7 @@ RUN mkdir -p /home/juser/.emacs.d/dcoverage
 COPY --chown=juser scripts/dcoverage.el /home/juser/.emacs.d/dcoverage/
 RUN chmod u+x emacs-bare.sh && ./emacs-bare.sh
 
+RUN chmod u+x scripts/run-tests-in-docker.sh
 
 # we are going to do a bit of gradle first, just to speed
 # up future builds
@@ -43,8 +44,6 @@ COPY --chown=juser gradle/wrapper gradle/wrapper
 
 # this will fetch gradle 5.4, and the packages we depend on
 RUN ./gradlew resolveDependencies
-
-RUN chmod u+x run-tests-in-docker.sh
 
 # Now we copy all our source files in.  Note that
 # if we change src, etc, but not our gradle setup,
