@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
+/**
+ * Client class 
+ */
 public class Client {
   private Socket clientSocket;
   private String serverIPAddr;
@@ -55,6 +58,11 @@ public class Client {
     }
   }
 
+  /**
+   * This function receives the prompt about assigning
+   * the territory and send the message.
+   * @throws IOException
+   */
   public void recvAssignTerritory() throws IOException {
     try {
       String promptMsg = dataIn.readUTF(); 
@@ -158,6 +166,9 @@ public class Client {
     return playerName;
   }
 
+  /**
+   * This function closes the connection.
+   */
   void closeConnection(){
     try{
       this.dataIn.close();
