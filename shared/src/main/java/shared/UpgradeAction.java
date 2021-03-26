@@ -1,23 +1,23 @@
 package shared;
 
-public abstract class BasicAction implements Action {
-  protected final String dest;
+public class UpgradeAction{
   protected final String src;
+  protected final String sLevel;
   protected final int count;
+  protected final String fLevel;
   protected final String owner;
   protected final String actionName;
-  protected final String LevelName;
-  
-  public BasicAction(String owner, String actionName, String s) throws IllegalArgumentException{
+
+  public UpgradeAction(String owner, String s) throws IllegalArgumentException {
     String[] sections = s.split(" ", 0);
-    if (sections.length != 4) {
+    if (sections.length != 4){
       throw new IllegalArgumentException("Invalid input length.");
     }
     this.owner = owner;
+    this.actionName = "U";
     this.src = sections[0];
-    this.dest = sections[1];
-    this.LevelName = sections[3];
-    this.actionName = actionName;
+    this.sLevel = sections[1];
+    this.fLevel = sections[3];
     try {
       this.count = Integer.parseInt(sections[2]);
     }
@@ -26,12 +26,10 @@ public abstract class BasicAction implements Action {
     }
   }
 
-  @Override
   public String getActionOwner() {
     return owner;
   }
 
-  @Override
   public String getActionName() {
     return actionName;
   }
@@ -40,22 +38,18 @@ public abstract class BasicAction implements Action {
     return src;
   }
 
-  public String getDestination() {
-    return dest;
+  public String getsLevel() {
+    return sLevel;
+  }
+
+  public String getfLevel() {
+    return fLevel;
   }
 
   public int getCount() {
     return count;
   }
-
-  public String getLevelName() {
-    return LevelName;
-  }
-  
 }
-
-
-
 
 
 
