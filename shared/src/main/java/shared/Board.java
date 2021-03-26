@@ -6,10 +6,13 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
+
 import com.google.common.base.Function;
 
 
 import org.checkerframework.checker.units.qual.s;
+import org.graalvm.compiler.lir.amd64.AMD64Move.NullCheckOp;
 
 import java.util.HashMap;
 import java.util.*; 
@@ -29,6 +32,7 @@ public class Board {
   protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;   
   private final RuleChecker moveRuleChecker;
   private final RuleChecker attackRuleChecker;
+  private final SpecialRuleChecker upgradeRuleChecker;
   private HashMap<String, HashMap<String,Integer>> tempCount;
   private LinkedHashSet<String> UnitName;
   private ArrayList<Player> playerList;
@@ -62,6 +66,7 @@ public class Board {
     UnitName.add("Basic Soldiers");
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
+    this.upgradeRuleChecker = new UpgradeChecker(null);
     this.tempCount = new HashMap<String, HashMap<String,Integer>>();
     this.tempTechPoint = techPoint;
   }
@@ -324,6 +329,38 @@ public class Board {
       }
     }
     return true;
+  }
+
+  public Boolean checkIfUpgradeBoolean(HashSet<UpgradeAction> actions) {
+    String output;
+    for (UpgradeAction action : actions) {
+      output = upgradeRuleChecker.checkAction(action, this);
+      if (output == null) {
+        continue;
+      }
+      else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public Boolean checkIfTechUpdateBoolean(TechAction action) {
+    Integer cost = 0;
+    if (techLevel == 6) {
+      return false;
+    }
+    int multiplyer = 0;
+    for (int i = 0; i<techLevel; ++i){
+      multiplyer += i;
+    }
+    cost = 50 + multiplyer*25;
+    if (techPoint < cost) {
+      return false;
+    }
+    else {
+      return true;
+    }
   }
   
   /**
