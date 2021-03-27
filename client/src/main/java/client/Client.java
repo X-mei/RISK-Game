@@ -46,6 +46,27 @@ public class Client {
   }
 
   /**
+   * This function tells the server which game room
+   * @throws IOException
+   */  
+  public void sendGameRoom() throws IOException {
+    try {
+      while(true) {
+        String line = dataIn.readUTF(); 
+        out.println(line);
+        if (line.equals("Wait for other players to join.")) {
+          break;
+        }
+        String readIn = inputReader.readLine();
+        dataOut.writeUTF(readIn);
+      }
+    } catch (IOException e) {
+      out.println("Receive failed.");
+    }
+  }
+
+
+  /**
    * This function receives playerName and playerSeq
    */
   public void recvNameAndSeq() throws IOException {
