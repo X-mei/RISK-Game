@@ -18,7 +18,8 @@ public class RouteChecker extends RuleChecker{
     }
     HashMap<Territory, Boolean> visited = new HashMap<>();
     Integer cost = 0;
-    if(checkRoute(src, dest, cost, visited)){
+    Integer minCost = Integer.MAX_VALUE;
+    if(checkRoute(src, dest, cost, minCost, visited)){
       if (cost > theBoard.getFoodAmount()) {
         return "No enough food to move those soldiers.";
       }
@@ -31,15 +32,16 @@ public class RouteChecker extends RuleChecker{
     }
   }
   
-  private boolean checkRoute(Territory src, Territory dest, Integer cost, HashMap<Territory, Boolean> visited){
-    if(src == dest){
-      return true;
-    }
+  private boolean checkRoute(Territory src, Territory dest, Integer cost, Integer minCost, HashMap<Territory, Boolean> visited){
     visited.put(src,true);
     cost += src.getSize();
+    if(src == dest){
+      minCost = Math.min(minCost, cost);
+      return true;
+    }
     for(Territory neighbor : src.neighboursByOneOwner()){
       //src.neighbors:ArrayList for neighbors
-      if(!visited.containsKey(neighbor) && checkRoute(neighbor,dest,cost,visited)){
+      if(!visited.containsKey(neighbor) && checkRoute(neighbor,dest,cost, minCost, visited)){
         return true;
       }
     }
