@@ -12,7 +12,7 @@ import com.google.common.base.Function;
 
 
 import org.checkerframework.checker.units.qual.s;
-import org.graalvm.compiler.lir.amd64.AMD64Move.NullCheckOp;
+//import org.graalvm.compiler.lir.amd64.AMD64Move.NullCheckOp;
 
 import java.util.HashMap;
 import java.util.*; 
@@ -313,7 +313,7 @@ public class Board {
       System.out.println("Not enough tech resource to upgrade tech");
       return;
     }
-    actionPlayer.updateTechResource(techUpgradeCost);
+    actionPlayer.updateTechResource(-techUpgradeCost);
     actionPlayer.updateTechLevel();
   }
 
@@ -331,6 +331,31 @@ public class Board {
     Player actionPlayer = getPlayerByName(actionOwner);
     //update player's food, food consumed, count * 1
     actionPlayer.updateFoodResource(-count);
+  }
+
+  /**
+   * merge attack
+   * @param actionSet
+   * @return
+   */
+  public synchronized LinkedHashSet<BasicAction> mergeOneTurnAttack(LinkedHashSet<BasicAction> actionSet){
+    HashMap<String, BasicAction> tempMap = new HashMap<>();
+    LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
+    for(BasicAction b : actionSet){
+      String destName = b.getDestination();
+      int attackCount = b.getCount();
+      if(tempMap.containsKey(destName)){
+        BasicAction temp = tempMap.get(destName);
+        temp.modifyCount(attackCount);
+      }
+      else{
+        tempMap.put(destName, b);
+      }
+    }
+    for(String s : tempMap.keySet()){
+      newAttackset.add(tempMap.get(s));
+    }
+    return newAttackset;
   }
 
   /**
