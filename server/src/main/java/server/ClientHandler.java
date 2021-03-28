@@ -273,6 +273,7 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
+      sleep(100);
     } catch(InterruptedException e) {
       e.printStackTrace();
     }
@@ -292,6 +293,7 @@ public class ClientHandler extends Thread {
           isReady.await();
           lock.unlock();
         }
+        sleep(100);
       }
     } catch (InterruptedException e) {
       e.printStackTrace();
