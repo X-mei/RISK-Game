@@ -261,7 +261,11 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
-      board.processOneTurnAttackNext(attackHashSet);
+      LinkedHashSet<BasicAction> newAttackSet = board.mergeOneTurnAttack(attackHashSet);
+      lock.lock();
+      isReady.await();
+      lock.unlock();
+      board.processOneTurnAttackNext(newAttackSet);
       lock.lock();
       isReady.await();
       lock.unlock();
@@ -269,6 +273,7 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
+      sleep(100);
     } catch(InterruptedException e) {
       e.printStackTrace();
     }
@@ -283,11 +288,12 @@ public class ClientHandler extends Thread {
       while (board.checkGameEnd().equals("")) {
         String boardMsg = board.displayAllPlayerAllBoard();
         output.writeUTF(boardMsg);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
           lock.lock();
           isReady.await();
           lock.unlock();
         }
+        sleep(100);
       }
     } catch (InterruptedException e) {
       e.printStackTrace();

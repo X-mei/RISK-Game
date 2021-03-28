@@ -3,7 +3,7 @@ package shared;
 public abstract class BasicAction implements Action {
   protected final String dest;
   protected final String src;
-  protected final int count;
+  protected int count;
   protected final String owner;
   protected final String actionName;
   protected final String LevelName;
@@ -53,11 +53,17 @@ public abstract class BasicAction implements Action {
     return count;
   }
 
+
   @Override
   public int getCost() {
     return cost;
   }
 
+  @Override
+  public void modifyCount(int i){
+    count += i;
+  }
+  
   @Override
   public String getLevelName() {
     return LevelName;

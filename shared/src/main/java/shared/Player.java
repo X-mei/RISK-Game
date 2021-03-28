@@ -14,6 +14,9 @@ import java.util.function.BiFunction;
 public class Player {
   protected final String name;
   protected final Integer code;
+  protected int techResource;
+  protected int foodResource;
+  protected int techLevel;
   protected LinkedHashSet<Territory> ownedTerritory;
   protected HashSet<String> actionSet;
   protected String status;
@@ -27,6 +30,9 @@ public class Player {
   public Player(String name, Integer code, ActionFactory factory) {
     this.name = name;
     this.code = code;
+    this.techResource = 1000;
+    this.foodResource = 1000;
+    this.techLevel = 1;
     this.status = "In-game";
     //TODO: add territory
     this.ownedTerritory = new LinkedHashSet<Territory>();
@@ -82,6 +88,32 @@ public class Player {
   public String getStatus() {
     return status;
   }
+
+  public int getTechResource(){
+    return techResource;
+  }
+
+  public void updateTechResource(int credits){
+    techResource += credits;
+  }
+
+  public int getFoodResource(){
+    return foodResource;
+  }
+
+  public void updateFoodResource(int credits){
+    foodResource += credits;
+  }
+
+  
+  public int getTechLevel(){
+    return techLevel;
+  }
+
+  public void updateTechLevel(){
+    techLevel += 1;
+  }
+
 }                     
 
 
