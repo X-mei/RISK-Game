@@ -1,11 +1,12 @@
 package shared;
 
-import java.util.HashMap;
+import java.util.HashSet;
 
 public class RouteChecker extends RuleChecker{
   RouteChecker(RuleChecker next){
     super(next);
   }
+  
   @Override
   public String checkMyRule(BasicAction thisAct, Board theBoard){
     Territory src = theBoard.getTerritory(thisAct.getSource());
@@ -16,14 +17,17 @@ public class RouteChecker extends RuleChecker{
     if (dest == null){
       return "The selected destination do not exist.";
     }
-    HashMap<Territory, Boolean> visited = new HashMap<>();
+    HashSet<Territory> visited = new HashSet<Territory>();
     Integer cost = 0;
     Integer minCost = Integer.MAX_VALUE;
+    Player p = theBoard.getPlayer(thisAct.getActionOwner());
     if(checkRoute(src, dest, cost, minCost, visited)){
-      if (cost > theBoard.getFoodAmount()) {
+      if (cost > p.getFoodResource()) {
         return "No enough food to move those soldiers.";
       }
       else {
+        p.updateTempFoodResource(-minCost);
+        thisAct.setCost(minCost);
         return null;
       }
     }
@@ -32,8 +36,8 @@ public class RouteChecker extends RuleChecker{
     }
   }
   
-  private boolean checkRoute(Territory src, Territory dest, Integer cost, Integer minCost, HashMap<Territory, Boolean> visited){
-    visited.put(src,true);
+  private boolean checkRoute(Territory src, Territory dest, Integer cost, Integer minCost, HashSet<Territory> visited){
+    visited.add(src);
     cost += src.getSize();
     if(src == dest){
       minCost = Math.min(minCost, cost);
@@ -41,12 +45,12 @@ public class RouteChecker extends RuleChecker{
     }
     for(Territory neighbor : src.neighboursByOneOwner()){
       //src.neighbors:ArrayList for neighbors
-      if(!visited.containsKey(neighbor) && checkRoute(neighbor,dest,cost, minCost, visited)){
+      if(!visited.contains(neighbor) && checkRoute(neighbor,dest,cost, minCost, visited)){
         return true;
       }
     }
     cost -= src.getSize();
-    visited.put(src,false);
+    visited.remove(src);
     return false;
   }
 }

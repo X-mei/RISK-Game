@@ -5,25 +5,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-
-import javax.naming.directory.BasicAttribute;
-
-import com.google.common.base.Function;
-
-
-import org.checkerframework.checker.units.qual.s;
-//import org.graalvm.compiler.core.sparc.SPARCIndexedAddressNode;
-
-import java.util.HashMap;
-import java.util.*; 
+import java.util.Map;
+import java.util.function.Function; 
 
 public class Board {
   protected int playerNum;  //number of player
   protected int remainedPlayerNum;
-  protected int foodAmount;
-  protected int techPoint;
-  protected int techLevel;
-  protected int tempTechPoint;
+  //protected int foodAmount;
+  //protected int techPoint;
+  //protected int techLevel;
+  //protected int tempTechPoint;
   protected int totalUnitsNum;  //number of units for each player; 
   protected HashMap<String, LinkedHashSet<Territory>> gameBoard;  //the map
   protected MapFactory mapF;  //map factory to create the map
@@ -36,6 +27,7 @@ public class Board {
   private HashMap<String, HashMap<String,Integer>> tempCount;
   private LinkedHashSet<String> UnitName;
   private ArrayList<Player> playerList;
+  private HashMap<Integer, Integer> techUpgradetable;
 
   /**
    * Constrcut a board
@@ -47,9 +39,9 @@ public class Board {
     this.playerNum = num;
     this.remainedPlayerNum = num;
     this.totalUnitsNum = 20;
-    this.foodAmount = 100;
-    this.techPoint = 100;
-    this.techLevel = 1;
+    //this.foodAmount = 100;
+    //this.techPoint = 100;
+    //this.techLevel = 1;
     this.mapF = mapFac;
     this.gameBoard = mapF.getMap(num);
     this.UnitsF = UnitsFac;
@@ -68,7 +60,15 @@ public class Board {
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
     this.upgradeRuleChecker = new UpgradeChecker(null);
     this.tempCount = new HashMap<String, HashMap<String,Integer>>();
-    this.tempTechPoint = techPoint;
+    //this.tempTechPoint = techPoint;
+    //create a tech upgrade reference table
+    techUpgradetable = new HashMap<>();
+    techUpgradetable.put(1, 0);
+    techUpgradetable.put(2, 50);
+    techUpgradetable.put(3, 75);
+    techUpgradetable.put(4, 125);
+    techUpgradetable.put(5, 200);
+    techUpgradetable.put(6, 300);
   }
 
 /**
@@ -103,7 +103,7 @@ public class Board {
   public int getTotalUnits() {
     return totalUnitsNum;
   }
-
+/*
   public int getFoodAmount() {
     return foodAmount;
   }
@@ -114,6 +114,15 @@ public class Board {
   
   public int getTechLevel() {
     return techLevel;
+  }
+
+  public Player getPlayer(String pName) {
+    for (Player p : playerList) {
+      if (p.getName() == pName) {
+        return p;
+      }
+    }
+    return null;
   }
   
   /**
@@ -157,14 +166,14 @@ public class Board {
       tempCount.put(t.getTerritoryName(), temp);
     }
   }
-
+/*
   public void refreshTempTechPoint() {
     tempTechPoint = techPoint;
   }
 
   public void updateTempTechPoint(Integer pnt) {
     tempTechPoint -= pnt;
-  }
+  }*/
   
   public Integer getTerritoryUnitsCount(String Tname, String Sname){
     return tempCount.get(Tname).get(Sname);
@@ -210,7 +219,17 @@ public class Board {
     }
   }
 
-
+  
+  public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
+    for(BasicAction a : actionSet){
+      processSingleBasicAttackNext(a);
+    }
+  }
+  /**
+   * merge attack
+   * @param actionSet
+   * @return
+   */
   public synchronized LinkedHashSet<BasicAction> mergeOneTurnAttack(LinkedHashSet<BasicAction> actionSet){
     HashMap<String, BasicAction> tempMap = new HashMap<>();
     LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
@@ -231,11 +250,6 @@ public class Board {
     return newAttackset;
   }
 
-  public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
-    for(BasicAction a : actionSet){
-      processSingleBasicAttackNext(a);
-    }
-  }
 
   /**
    * identify the kind of one single attack and process it
@@ -255,13 +269,77 @@ public class Board {
    * @param basicAct
    */
   public synchronized void processSingleBasicMove(BasicAction basicAct){
-    String src = basicAct.getSource();
-    String dest = basicAct.getDestination();
-    Soldiers srcBasicSoldier = getSoldiers("Basic Soldiers", src);
-    Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
-    int count = basicAct.getCount();
-    srcBasicSoldier.updateCount(srcBasicSoldier.getCount() - count);
-    destBasicSoldier.updateCount(destBasicSoldier.getCount() + count);
+    String src = basicAct.getSource();  //get src territory name
+    String dest = basicAct.getDestination();  //get dest territory name
+    String soldierName = basicAct.getLevelName(); //get moved soldier name
+    Soldiers srcSoldier = getSoldiers(soldierName, src);  //get moved soldier object in src
+    Soldiers destSoldier = getSoldiers(soldierName, dest);  //get moved soldier object in dest
+    int foodConsumed = basicAct.getConsume(); //get move consumed food
+    int count = basicAct.getCount();  //get move number
+    //update soldier number in src an dest
+    srcSoldier.updateCount(srcSoldier.getCount() - count);  
+    destSoldier.updateCount(destSoldier.getCount() + count);
+    String actionOwner = basicAct.getActionOwner();
+    Player actionPlayer = getPlayerByName(actionOwner);
+    //update player's food, food consumed
+    actionPlayer.updateFoodResource(-foodConsumed);
+  }
+
+  /**
+   * find a player object by the string:name of the player 
+   * @param playerName
+   * @return the found player object
+   * if no found, return null
+   */
+  private Player getPlayerByName(String playerName){
+    Player pFind = null;
+    for(Player p : playerList){
+      if(p.getName().equals(playerName)){
+        pFind = p;
+        break;
+      }
+    }
+    return pFind;
+  }
+
+   /**
+    * upgrade single soldier action
+    * @param upAct
+    */
+  public synchronized void processSingleUpdateUnit(UpgradeAction upAct){
+    String src = upAct.getSource();  
+    String soldierSLevel = upAct.getsLevel(); 
+    String soldierFLevel = upAct.getfLevel(); 
+    int updateSoldierNum = upAct.getCount();
+    Soldiers sLevelSoldier = getSoldiers(soldierSLevel, src);  
+    Soldiers fLevelSoldier = getSoldiers(soldierFLevel, src);
+    int sLevelSoldierCost = sLevelSoldier.getCost();
+    int fLevelSoldierCost = fLevelSoldier.getCost();
+    int totalTechCost = updateSoldierNum * (fLevelSoldierCost - sLevelSoldierCost);
+    String actionOwner = upAct.getActionOwner();
+    Player actionPlayer = getPlayerByName(actionOwner);
+    actionPlayer.updateTechResource(-totalTechCost);
+  }
+/**
+ * Upgrade tech level, only once per round
+ * Also check if the tech upgrade is valid
+ * @param t
+ */
+  public synchronized void processUpdateTech(TechAction techUpAct){
+    String techUpOwner = techUpAct.getActionOwner();  
+    Player actionPlayer = getPlayerByName(techUpOwner);
+    int currTechLevel = actionPlayer.getTechLevel();
+    if(currTechLevel >= 6){
+      System.out.println("Reached Highest Tech Level 6, no more upgrade");
+      return;
+    }
+    int techUpgradeCost = techUpgradetable.get(currTechLevel + 1);
+    if(techUpgradeCost > actionPlayer.getTechResource()){
+      System.out.println("Not enough tech resource to upgrade tech");
+      return;
+    }
+    actionPlayer.updateTechResource(-techUpgradeCost);
+    actionPlayer.updateTechLevel();
   }
 
   /**
@@ -270,11 +348,16 @@ public class Board {
    */
   public synchronized void processSingleBasicAttackPre(BasicAction basicAct){
     String src = basicAct.getSource();
-    Territory srtT = allTerritory.get(src);
-    Soldiers srcSoldier = getSoldiers("Basic Soldiers", src);
+    String soldierName = basicAct.getLevelName(); //get moved soldier name
+    Soldiers srcSoldier = getSoldiers(soldierName, src);
     int count = basicAct.getCount();
     srcSoldier.updateCount(srcSoldier.getCount() - count);
+    String actionOwner = basicAct.getActionOwner();
+    Player actionPlayer = getPlayerByName(actionOwner);
+    //update player's food, food consumed, count * 1
+    actionPlayer.updateFoodResource(-count);
   }
+
 
   /**
    * process single attack action
@@ -284,26 +367,26 @@ public class Board {
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
     int count = basicAct.getCount();
-    Soldiers attackBasicSoldier = new BasicSoldiers(count);
-    Soldiers destBasicSoldier = getSoldiers("Basic Soldiers", dest);
+    Soldiers attackSoldier = new BasicSoldiers(count);
+    Soldiers destSoldier = getSoldiers("Basic Soldiers", dest);
     Soldiers testSoldier = getSoldiers("null Soldiers", dest);  //This line is useless, only for test coverage
-    while(attackBasicSoldier.getCount() > 0 && destBasicSoldier.getCount() > 0){
-      int srcRandom = attackBasicSoldier.randomNum();
-      int destRandom = destBasicSoldier.randomNum();
+    while(attackSoldier.getCount() > 0 && destSoldier.getCount() > 0){
+      int srcRandom = attackSoldier.randomNum();
+      int destRandom = destSoldier.randomNum();
       //int srcRandom = 2;
       //int destRandom = 1;
       if(srcRandom > destRandom){
-        destBasicSoldier.updateCount(destBasicSoldier.getCount() - 1);
+        destSoldier.updateCount(destSoldier.getCount() - 1);
       }
       else if(srcRandom < destRandom){
-        attackBasicSoldier.updateCount(attackBasicSoldier.getCount() - 1);
+        attackSoldier.updateCount(attackSoldier.getCount() - 1);
       }
       else{
         continue;
       }
     }
     //update onwner if needed 
-    if(destBasicSoldier.getCount() == 0){
+    if(destSoldier.getCount() == 0){
       Territory tDest = allTerritory.get(dest);
       Territory tSrc = allTerritory.get(src);
       String attackerName = tSrc.getOwner();
@@ -313,7 +396,7 @@ public class Board {
       LinkedHashSet<Territory> defenderTerriSet = gameBoard.get(defenderName);
       attackerTerriSet.add(tDest);
       defenderTerriSet.remove(tDest);
-      destBasicSoldier.updateCount(attackBasicSoldier.getCount());
+      destSoldier.updateCount(attackSoldier.getCount());
     }
   }
 
