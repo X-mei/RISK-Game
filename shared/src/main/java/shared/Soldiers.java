@@ -4,13 +4,19 @@ import java.util.Random;
 
 public abstract class Soldiers implements Units{
   protected final String name;
+  protected final int bonus;
+  protected final int cost;
+  protected final int techReq;
   protected int count;
   protected final Random randomGenerator;
   
-  public Soldiers(String name, int count){
+  public Soldiers(String name, int count, int bonus, int cost, int techReq){
     this.name = name;
     this.count = count;
     this.randomGenerator = new Random();
+    this.bonus = bonus;
+    this.cost = cost;
+    this.techReq = techReq;
   }
 
   @Override
@@ -26,6 +32,21 @@ public abstract class Soldiers implements Units{
   @Override
   public String getName(){
     return this.name;
+  }
+
+  @Override
+  public int getBonus() {
+    return this.bonus;
+  }
+
+  @Override
+  public int getCost() {
+    return this.cost;
+  }
+
+  @Override
+  public int getTechReq() {
+    return this.techReq;
   }
   
   public Integer randomNum(){
