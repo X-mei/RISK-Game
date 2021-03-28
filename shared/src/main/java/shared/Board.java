@@ -219,7 +219,17 @@ public class Board {
     }
   }
 
-
+  
+  public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
+    for(BasicAction a : actionSet){
+      processSingleBasicAttackNext(a);
+    }
+  }
+  /**
+   * merge attack
+   * @param actionSet
+   * @return
+   */
   public synchronized LinkedHashSet<BasicAction> mergeOneTurnAttack(LinkedHashSet<BasicAction> actionSet){
     HashMap<String, BasicAction> tempMap = new HashMap<>();
     LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
@@ -240,11 +250,6 @@ public class Board {
     return newAttackset;
   }
 
-  public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
-    for(BasicAction a : actionSet){
-      processSingleBasicAttackNext(a);
-    }
-  }
 
   /**
    * identify the kind of one single attack and process it
@@ -353,30 +358,6 @@ public class Board {
     actionPlayer.updateFoodResource(-count);
   }
 
-  /**
-   * merge attack
-   * @param actionSet
-   * @return
-   */
-  public synchronized LinkedHashSet<BasicAction> mergeOneTurnAttack(LinkedHashSet<BasicAction> actionSet){
-    HashMap<String, BasicAction> tempMap = new HashMap<>();
-    LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
-    for(BasicAction b : actionSet){
-      String destName = b.getDestination();
-      int attackCount = b.getCount();
-      if(tempMap.containsKey(destName)){
-        BasicAction temp = tempMap.get(destName);
-        temp.modifyCount(attackCount);
-      }
-      else{
-        tempMap.put(destName, b);
-      }
-    }
-    for(String s : tempMap.keySet()){
-      newAttackset.add(tempMap.get(s));
-    }
-    return newAttackset;
-  }
 
   /**
    * process single attack action
