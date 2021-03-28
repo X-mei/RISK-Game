@@ -55,6 +55,10 @@ public abstract class BasicAction implements Action {
   public String getLevelName() {
     return LevelName;
   }
+
+  public void modifyCount(int i){
+    count += i;
+  }
   
 }
 

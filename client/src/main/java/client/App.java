@@ -12,7 +12,7 @@ public class App {
 
     public static void main(String[] args) {
       try {
-        Client client = new Client(/*"dku-vcm-1221.vm.duke.edu"*/"127.0.0.1", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out);
+        Client client = new Client(/*"dku-vcm-1221.vm.duke.edu"*/"10.200.69.73"/*"127.0.0.1"*/, 12345, new BufferedReader(new InputStreamReader(System.in)), System.out);
         client.connectToServer();
         client.recvNameAndSeq();
         client.recvAssignTerritory();
