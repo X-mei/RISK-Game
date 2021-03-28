@@ -13,6 +13,7 @@ public class Territory {
 
   private final String territoryName;
   private String ownerName;
+  private Integer size;
   private LinkedHashMap<String, Territory> neighbours;
   private LinkedHashMap<String, Soldiers> allUnits;
   /*public Territory(String tname, String oname, LinkedHashSet<Units> units){
@@ -22,9 +23,10 @@ public class Territory {
     this.units = units;
   }*/
 
-  public Territory(String tname, String oname) {
+  public Territory(String tname, String oname, Integer size) {
     this.territoryName = tname;
     this.ownerName = oname;
+    this.size = size;
     this.neighbours = new LinkedHashMap<String, Territory>();
     this.allUnits = new LinkedHashMap<String, Soldiers>();
   }
@@ -58,6 +60,10 @@ public class Territory {
     return ownerName;
   }
 
+  public Integer getSize() {
+    return size;
+  }
+
   public LinkedHashSet<Soldiers> getUnits() {
     LinkedHashSet<Soldiers> unitsSet = new LinkedHashSet<Soldiers>();
     for(HashMap.Entry<String, Soldiers> entry: allUnits.entrySet()) {
@@ -68,6 +74,10 @@ public class Territory {
 
   public Soldiers getOneUnits(String name) {
     return allUnits.get(name);
+  }
+
+  public LinkedHashMap<String, Soldiers> getSoldiers() {
+    return allUnits;
   }
 
   public void updateOwner(String oname) {

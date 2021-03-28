@@ -20,6 +20,10 @@ import java.util.*;
 public class Board {
   protected int playerNum;  //number of player
   protected int remainedPlayerNum;
+  protected int foodAmount;
+  protected int techPoint;
+  protected int techLevel;
+  protected int tempTechPoint;
   protected int totalUnitsNum;  //number of units for each player; 
   protected HashMap<String, LinkedHashSet<Territory>> gameBoard;  //the map
   protected MapFactory mapF;  //map factory to create the map
@@ -28,7 +32,8 @@ public class Board {
   protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;   
   private final RuleChecker moveRuleChecker;
   private final RuleChecker attackRuleChecker;
-  private HashMap<String, Integer> tempCount;
+  private final SpecialRuleChecker upgradeRuleChecker;
+  private HashMap<String, HashMap<String,Integer>> tempCount;
   private LinkedHashSet<String> UnitName;
   private ArrayList<Player> playerList;
 
@@ -42,6 +47,9 @@ public class Board {
     this.playerNum = num;
     this.remainedPlayerNum = num;
     this.totalUnitsNum = 20;
+    this.foodAmount = 100;
+    this.techPoint = 100;
+    this.techLevel = 1;
     this.mapF = mapFac;
     this.gameBoard = mapF.getMap(num);
     this.UnitsF = UnitsFac;
@@ -58,7 +66,9 @@ public class Board {
     UnitName.add("Basic Soldiers");
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
-    this.tempCount = new HashMap<String, Integer>();
+    this.upgradeRuleChecker = new UpgradeChecker(null);
+    this.tempCount = new HashMap<String, HashMap<String,Integer>>();
+    this.tempTechPoint = techPoint;
   }
 
 /**
@@ -94,6 +104,18 @@ public class Board {
     return totalUnitsNum;
   }
 
+  public int getFoodAmount() {
+    return foodAmount;
+  }
+
+  public int getTechPoint() {
+    return techPoint;
+  }
+  
+  public int getTechLevel() {
+    return techLevel;
+  }
+  
   /**
    * Ask one player how they want to place his units in each of his territory
    * For a player with n territories, he will be asked for n times since each question for a territory
@@ -125,19 +147,37 @@ public class Board {
     return allTerritory.get(name);
   }
 
-  public void refreshTemp(String name){
-    for(Territory t : gameBoard.get(name)){
-      Soldiers sol = t.getOneUnits("Basic Soldiers");
-      tempCount.put(t.getTerritoryName(), sol.getCount());
+  public void refreshTemp(String Tname){
+    for(Territory t : gameBoard.get(Tname)){
+      LinkedHashMap<String, Soldiers> m = t.getSoldiers();
+      HashMap<String, Integer> temp = new HashMap<String, Integer>();
+      for (Map.Entry<String, Soldiers> entry : m.entrySet()) {
+        temp.put(entry.getKey(), entry.getValue().getCount());
+      }
+      tempCount.put(t.getTerritoryName(), temp);
     }
   }
 
-  public Integer getTerritoryUnitsCount(String name){
-    return tempCount.get(name);
+  public void refreshTempTechPoint() {
+    tempTechPoint = techPoint;
   }
 
-  public void updateTempCount(String name, Integer cnt){
-    tempCount.put(name, tempCount.get(name) - cnt);
+  public void updateTempTechPoint(Integer pnt) {
+    tempTechPoint -= pnt;
+  }
+  
+  public Integer getTerritoryUnitsCount(String Tname, String Sname){
+    return tempCount.get(Tname).get(Sname);
+  }
+
+  public void updateTempCount(String Tname, String Sname, Integer cnt){
+    HashMap<String, Integer> temp = tempCount.get(Tname);
+    if (temp.get(Sname) == null) {
+      temp.put(Sname, -cnt);
+    }
+    else {
+      temp.put(Sname, temp.get(Sname) - cnt);
+    }
   }
 
   /**
@@ -309,6 +349,38 @@ public class Board {
       }
     }
     return true;
+  }
+
+  public Boolean checkIfUpgradeBoolean(HashSet<UpgradeAction> actions) {
+    String output;
+    for (UpgradeAction action : actions) {
+      output = upgradeRuleChecker.checkAction(action, this);
+      if (output == null) {
+        continue;
+      }
+      else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public Boolean checkIfTechUpdateBoolean(TechAction action) {
+    Integer cost = 0;
+    if (techLevel == 6) {
+      return false;
+    }
+    int multiplyer = 0;
+    for (int i = 0; i<techLevel; ++i){
+      multiplyer += i;
+    }
+    cost = 50 + multiplyer*25;
+    if (techPoint < cost) {
+      return false;
+    }
+    else {
+      return true;
+    }
   }
   
   /**

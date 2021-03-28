@@ -17,28 +17,41 @@ public class RouteChecker extends RuleChecker{
       return "The selected destination do not exist.";
     }
     HashMap<Territory, Boolean> visited = new HashMap<>();
-    if(checkRoute(src, dest, visited)){
-      return null;
+    Integer cost = 0;
+    Integer minCost = Integer.MAX_VALUE;
+    if(checkRoute(src, dest, cost, minCost, visited)){
+      if (cost > theBoard.getFoodAmount()) {
+        return "No enough food to move those soldiers.";
+      }
+      else {
+        return null;
+      }
     }
     else{
       return "No existing route between source and destination!";
     }
   }
   
-  private boolean checkRoute(Territory dest, Territory src, HashMap<Territory, Boolean> visited){
-    if(dest == src){
+  private boolean checkRoute(Territory src, Territory dest, Integer cost, Integer minCost, HashMap<Territory, Boolean> visited){
+    visited.put(src,true);
+    cost += src.getSize();
+    if(src == dest){
+      minCost = Math.min(minCost, cost);
       return true;
     }
-    visited.put(src,true);
     for(Territory neighbor : src.neighboursByOneOwner()){
       //src.neighbors:ArrayList for neighbors
-      if(!visited.containsKey(neighbor) && checkRoute(neighbor,dest,visited)){
+      if(!visited.containsKey(neighbor) && checkRoute(neighbor,dest,cost, minCost, visited)){
         return true;
       }
     }
+    cost -= src.getSize();
+    visited.put(src,false);
     return false;
   }
 }
+ 
+
 
 
 
