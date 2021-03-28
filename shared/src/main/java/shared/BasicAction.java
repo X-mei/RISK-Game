@@ -73,6 +73,11 @@ public abstract class BasicAction implements Action {
   public void setCost(int cost) {
     this.cost = cost;
   }
+
+  @Override
+  public int getFoodConsume(){
+    return cost;
+  }
 }
 
 

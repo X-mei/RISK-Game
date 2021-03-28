@@ -19,7 +19,11 @@ public interface Action {
 
   public String getLevelName();
 
+  public void modifyCount(int i);
+
   public void setCost(int cost);
+
+  public int getFoodConsume();
 }
 
 
