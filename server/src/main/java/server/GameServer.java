@@ -2,10 +2,8 @@ package server;
 import java.io.*;
 import java.lang.Thread.State;
 
-import shared.ActionFactory;
 import shared.Board;
 import shared.MapFactory;
-import shared.Player;
 import shared.UnitsFactory;
 
 import java.net.*;
@@ -20,11 +18,8 @@ import static java.lang.Thread.sleep;
  * Build a server class for socket communication
  */
 public class GameServer implements Runnable {
-  private ServerSocket serverSocket ;
-  private ActionFactory actFactory;
   final MapFactory mapFac;
   final UnitsFactory UnitsFac;
-  private int port;
   private int playerNum;
   Board board;
   private ArrayList<String> names;
@@ -34,8 +29,6 @@ public class GameServer implements Runnable {
   final Condition isReady;
 
   public GameServer(int portNum, int playerNum) {
-    this.serverSocket = null;
-    this.port = portNum;
     this.mapFac = new MapFactory();
     this.UnitsFac = new UnitsFactory();
     this.board = null;
