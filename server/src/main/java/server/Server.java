@@ -14,6 +14,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Build a server class for socket communication
  */
@@ -94,6 +96,7 @@ public class Server {
       while(!areAllWaiting()) {
         // loop to wait all threads to finish
       }
+      sleep(100);
       lock.lock();
       isReady.signalAll();
       lock.unlock();

@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
+import javax.naming.directory.BasicAttribute;
 
 import com.google.common.base.Function;
 
 
 import org.checkerframework.checker.units.qual.s;
-import org.graalvm.compiler.lir.amd64.AMD64Move.NullCheckOp;
+//import org.graalvm.compiler.core.sparc.SPARCIndexedAddressNode;
 
 import java.util.HashMap;
 import java.util.*; 
@@ -210,6 +210,26 @@ public class Board {
     }
   }
 
+
+  public synchronized LinkedHashSet<BasicAction> mergeOneTurnAttack(LinkedHashSet<BasicAction> actionSet){
+    HashMap<String, BasicAction> tempMap = new HashMap<>();
+    LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
+    for(BasicAction b : actionSet){
+      String destName = b.getDestination();
+      int attackCount = b.getCount();
+      if(tempMap.containsKey(destName)){
+        BasicAction temp = tempMap.get(destName);
+        temp.modifyCount(attackCount);
+      }
+      else{
+        tempMap.put(destName, b);
+      }
+    }
+    for(String s : tempMap.keySet()){
+      newAttackset.add(tempMap.get(s));
+    }
+    return newAttackset;
+  }
 
   public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
     for(BasicAction a : actionSet){
