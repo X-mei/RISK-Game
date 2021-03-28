@@ -19,13 +19,15 @@ public class UpgradeChecker extends SpecialRuleChecker{
       return "Invalid starting or ending level.";
     }
     if (startL.getCount() < thisAct.getCount()) {
-      return "You do not have enough soldier to move.";
+      return "You do not have enough soldier to upgrade.";
     }
     Integer totalCost = thisAct.getCount() * (endL.getCost() - startL.getCost());
-    if (totalCost > theBoard.getTechPoint()) {
+    Player p = theBoard.getPlayer(thisAct.getActionOwner());
+    if (totalCost > p.getTechResources()) {
       return "You do not enough resources to upgrade.";
     }
     else {
+      p.updateTempTechResource(-totalCost);
       theBoard.updateTempTechPoint(totalCost);
       theBoard.updateTempCount(thisAct.getSource(), thisAct.getsLevel(), thisAct.getCount());
       theBoard.updateTempCount(thisAct.getSource(), thisAct.getfLevel(), -thisAct.getCount());

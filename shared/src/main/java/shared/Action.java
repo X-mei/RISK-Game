@@ -8,6 +8,18 @@ public interface Action {
   public String getActionOwner();
 
   public String getActionName();
+
+  public String getSource();
+
+  public String getDestination();
+
+  public int getCount();
+
+  public int getCost();
+
+  public String getLevelName();
+
+  public void setCost(int cost);
 }
 
 

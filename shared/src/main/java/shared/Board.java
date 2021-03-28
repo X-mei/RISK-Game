@@ -5,17 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-
-import javax.naming.directory.BasicAttribute;
-
-import com.google.common.base.Function;
-
-
-import org.checkerframework.checker.units.qual.s;
-//import org.graalvm.compiler.lir.amd64.AMD64Move.NullCheckOp;
-
-import java.util.HashMap;
-import java.util.*; 
+import java.util.Map;
+import java.util.function.Function; 
 
 public class Board {
   protected int playerNum;  //number of player
@@ -123,7 +114,16 @@ public class Board {
   
   public int getTechLevel() {
     return techLevel;
-  }*/
+  }
+
+  public Player getPlayer(String pName) {
+    for (Player p : playerList) {
+      if (p.getName() == pName) {
+        return p;
+      }
+    }
+    return null;
+  }
   
   /**
    * Ask one player how they want to place his units in each of his territory
