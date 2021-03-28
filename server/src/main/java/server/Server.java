@@ -1,134 +1,65 @@
 package server;
-import java.io.*;
-import java.lang.Thread.State;
 
-import shared.ActionFactory;
-import shared.Board;
-import shared.MapFactory;
-import shared.Player;
-import shared.UnitsFactory;
-
-import java.net.*;
-import java.util.ArrayList;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import static java.lang.Thread.sleep;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
 
 /**
- * Build a server class for socket communication
+ * This is a class which manages all the games.
  */
 public class Server {
-  private ServerSocket serverSocket ;
-  private ActionFactory actFactory;
-  final MapFactory mapFac;
-  final UnitsFactory UnitsFac;
-  private int port;
-  private int playerNum;
-  Board board;
-  private ArrayList<String> names;
-  private ArrayList<ClientHandler> threadList;
-  final Lock lock;
-  final Condition isReady;
-
-  public Server(int portNum, int playerNum) {
-    this.serverSocket = null;
-    this.port = portNum;
-    this.mapFac = new MapFactory();
-    this.UnitsFac = new UnitsFactory();
-    this.board = null;
-    this.playerNum = playerNum;
-    this.names = new ArrayList<>();
-    names.add("King");
-    names.add("Red");
-    names.add("Pink");
-    names.add("Blue");
-    names.add("Green");
-    this.threadList = new ArrayList<ClientHandler>();
-    this.lock = new ReentrantLock();
-    this.isReady  = lock.newCondition();
-  }
-
-  /**
-   * This function builds the server socket and 
-   * waits for the client to connect.
-   * Each client will start a new thread.
-   * @throws IOException
-   */
-  public void buildserver() throws IOException{
-    //waits and listen
-    serverSocket = new ServerSocket(port);
-    int num = 1;
-    Board board = new Board(playerNum, mapFac, UnitsFac);  
-    while (num <= playerNum) {
-      Socket clientSocket = null;
-      try{
-        clientSocket = serverSocket.accept();
-        System.out.println("Player " + num + " is connected");
-        DataInputStream input = new DataInputStream(clientSocket.getInputStream());
-        DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
-        String name = names.get(num-1);
-        ClientHandler t = new ClientHandler(clientSocket, input, output, board, name, lock, isReady);
-        t.start();
-        threadList.add(t);
-        num++;
-      }
-      catch(Exception e){
-        clientSocket.close(); 
-        e.printStackTrace(); 
-      }
-    }
-    try {
-      synchronizeThreads();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+  private ServerSocket serverSocket;
+  private int portNum;
+  private HashMap<Integer, GameServer> gameRooms;
+  
+  public Server(int portNum) throws IOException {
+    this.portNum = portNum;
+    this.serverSocket = new ServerSocket(portNum);
+    this.gameRooms = new HashMap<Integer, GameServer>();
+    // create rooms in advance for 2-5 people
+    for (int i = 2; i < 5; i++) {
+      gameRooms.put(i, new GameServer(portNum, i));
     }
   }
 
-  /**
-   * This function checks when to signal all the threads
-   * and if the game ends, break the while loop
-   * @throws InterruptedException
-   */
-  public void synchronizeThreads() throws InterruptedException {
-    while(true) {
-      while(!areAllWaiting()) {
-        // loop to wait all threads to finish
+  public void assignRoom() throws IOException {
+    // accept the client player
+    Socket clientSocket = serverSocket.accept();
+    System.out.println("One player is connected.");
+    DataInputStream input = new DataInputStream(clientSocket.getInputStream());
+    DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
+    int playerNum = 0;
+    while (true) {
+      // TODO: check the input
+      output.writeUTF("Which game room do you want to enter? Input 2-5.");
+      String received = input.readUTF();
+      System.out.println("receive the data: " + received);
+      try {
+        playerNum = Integer.parseInt(received);
+        if (playerNum < 2 || playerNum > 5) {
+          continue;
+        }
+        output.writeUTF("Wait for other players to join.");
+      } catch(NumberFormatException e) {
+        continue;
       }
-      sleep(100);
-      lock.lock();
-      isReady.signalAll();
-      lock.unlock();
-      // if game over, break
-      boolean endFlag = true;
-      for (ClientHandler t: threadList) {
-        endFlag &= !t.getConnectFlag();
-      }
-      if (endFlag) {
-        break;
-      }
+      break;
+    }
+    System.out.println("Get a room for playerNum: " + playerNum);
+    GameServer gameServer = gameRooms.get(playerNum);
+    if (gameServer.isReadyToStart()) {
+      System.out.println("Create a new room for playerNum: " + playerNum);
+      gameServer = new GameServer(portNum, playerNum);
+      gameRooms.put(playerNum, gameServer);
+    }
+    gameServer.addClient(clientSocket);
+    if (gameServer.isReadyToStart()) {
+      System.out.println("This room is ready to start, playerNum: " + playerNum);
+      Thread newGame = new Thread(gameServer);
+      newGame.start();
     }
   }
-
-  /**
-   * This function checks if all the threads are in the WAITING
-   * state, if return true, otherwise return false.
-   * @return boolean
-   */
-  public boolean areAllWaiting() {
-    for (ClientHandler t: threadList) {
-      if (t.getState() != State.WAITING && t.getConnectFlag() == true) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-
 }
-
-
-
-
-
