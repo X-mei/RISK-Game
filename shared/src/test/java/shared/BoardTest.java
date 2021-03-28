@@ -11,6 +11,8 @@ import java.util.LinkedHashSet;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import net.bytebuddy.dynamic.scaffold.MethodGraph.Linked;
+
 public class BoardTest {
   private Board getTestBoard(){
     MapFactory f = new MapFactory();
@@ -126,6 +128,27 @@ public class BoardTest {
     assertEquals(8, b.getTerritory("Ilios").getOneUnits("Basic Soldiers").getCount());
   }
 
+  /*@Test
+  public void test_processAttackMerge(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
+    BasicAction a1 = new Attack("King", "Hanamura Ilios 1");
+    BasicAction a2 = new Attack("King", "Hanamura Volskaya 1");
+    BasicAction a3 = new Attack("King", "Hanamura Ilios 2");
+    BasicAction a4 = new Attack("King", "Hollywood Volskaya 3");
+    BasicAction a5 = new Attack("King", "Hollywood Volskaya 2");
+    testSet.add(a1);
+    testSet.add(a2);
+    testSet.add(a3);
+    testSet.add(a4);
+    testSet.add(a5);
+    LinkedHashSet<BasicAction> ans = b.mergeOneTurnAttack(testSet);
+    assertEquals(2, ans.size());
+  }*/
+
   @Test
   public void test_processSingleBasicAction(){
     Board b = getTestBoard();
@@ -147,6 +170,7 @@ public class BoardTest {
     assertEquals(12, b.getTerritory("Volskaya").getOneUnits("Basic Soldiers").getCount());
     b.processOneTurnAttackPre(s2);
     b.processOneTurnAttackNext(s2);
+    b.processOneTurnAttackNext(b.mergeOneTurnAttack(s2));
     assertEquals(0, b.getTerritory("Hanamura").getOneUnits("Basic Soldiers").getCount());
   }
 

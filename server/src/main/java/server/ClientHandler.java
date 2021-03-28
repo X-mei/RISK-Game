@@ -261,7 +261,11 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
-      board.processOneTurnAttackNext(attackHashSet);
+      LinkedHashSet<BasicAction> newAttackSet = board.mergeOneTurnAttack(attackHashSet);
+      lock.lock();
+      isReady.await();
+      lock.unlock();
+      board.processOneTurnAttackNext(newAttackSet);
       lock.lock();
       isReady.await();
       lock.unlock();
