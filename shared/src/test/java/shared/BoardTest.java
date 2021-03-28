@@ -128,14 +128,14 @@ public class BoardTest {
     assertEquals(8, b.getTerritory("Ilios").getOneUnits("Basic Soldiers").getCount());
   }
 
-  /*@Test
+  @Test
   public void test_processAttackMerge(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
       b.singleTerritoryUnitSetup(s, new int[]{10});
     }
     LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
-    BasicAction a1 = new Attack("King", "Hanamura Ilios 1");
+    BasicAction a1 = new Attack("King", "Hanamura Ilios 4");
     BasicAction a2 = new Attack("King", "Hanamura Volskaya 1");
     BasicAction a3 = new Attack("King", "Hanamura Ilios 2");
     BasicAction a4 = new Attack("King", "Hollywood Volskaya 3");
@@ -147,7 +147,11 @@ public class BoardTest {
     testSet.add(a5);
     LinkedHashSet<BasicAction> ans = b.mergeOneTurnAttack(testSet);
     assertEquals(2, ans.size());
-  }*/
+    for(BasicAction act : ans){
+      assertEquals(6, act.getCount());
+    }
+
+  }
 
   @Test
   public void test_processSingleBasicAction(){

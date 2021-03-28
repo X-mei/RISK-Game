@@ -287,7 +287,7 @@ public class ClientHandler extends Thread {
       while (board.checkGameEnd().equals("")) {
         String boardMsg = board.displayAllPlayerAllBoard();
         output.writeUTF(boardMsg);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
           lock.lock();
           isReady.await();
           lock.unlock();
