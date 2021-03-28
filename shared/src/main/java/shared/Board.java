@@ -125,6 +125,7 @@ public class Board {
     return null;
   }
   
+  */
   /**
    * Ask one player how they want to place his units in each of his territory
    * For a player with n territories, he will be asked for n times since each question for a territory
@@ -274,7 +275,7 @@ public class Board {
     String soldierName = basicAct.getLevelName(); //get moved soldier name
     Soldiers srcSoldier = getSoldiers(soldierName, src);  //get moved soldier object in src
     Soldiers destSoldier = getSoldiers(soldierName, dest);  //get moved soldier object in dest
-    int foodConsumed = basicAct.getConsume(); //get move consumed food
+    int foodConsumed = basicAct.getFoodConsume(); //get move consumed food
     int count = basicAct.getCount();  //get move number
     //update soldier number in src an dest
     srcSoldier.updateCount(srcSoldier.getCount() - count);  
@@ -291,7 +292,7 @@ public class Board {
    * @return the found player object
    * if no found, return null
    */
-  private Player getPlayerByName(String playerName){
+  public Player getPlayerByName(String playerName){
     Player pFind = null;
     for(Player p : playerList){
       if(p.getName().equals(playerName)){
@@ -447,7 +448,7 @@ public class Board {
     }
     return true;
   }
-
+/*
   public Boolean checkIfTechUpdateBoolean(TechAction action) {
     Integer cost = 0;
     if (techLevel == 6) {
@@ -464,7 +465,7 @@ public class Board {
     else {
       return true;
     }
-  }
+  }*/
   
   /**
    * get specific kind of soldier's number on one territory

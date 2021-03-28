@@ -221,7 +221,7 @@ public class BoardTest {
     assertEquals(false, status3);
     assertEquals(false, status2);
   }
-
+  /*
   @Test
   public void test_getTerritoryUnitsCount(){
     Board b = getTestBoard();
@@ -241,7 +241,7 @@ public class BoardTest {
     b.updateTempCount("Hanamura", 1);
     Integer unitsNum = b.getTerritoryUnitsCount("Hanamura");
     assertEquals(4,unitsNum);
-  }
+  }*/
 
   
   @Test

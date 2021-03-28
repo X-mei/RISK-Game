@@ -22,13 +22,12 @@ public class UpgradeChecker extends SpecialRuleChecker{
       return "You do not have enough soldier to upgrade.";
     }
     Integer totalCost = thisAct.getCount() * (endL.getCost() - startL.getCost());
-    Player p = theBoard.getPlayer(thisAct.getActionOwner());
-    if (totalCost > p.getTechResources()) {
+    Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
+    if (totalCost > p.getTechResource()) {
       return "You do not enough resources to upgrade.";
     }
     else {
       p.updateTempTechResource(-totalCost);
-      theBoard.updateTempTechPoint(totalCost);
       theBoard.updateTempCount(thisAct.getSource(), thisAct.getsLevel(), thisAct.getCount());
       theBoard.updateTempCount(thisAct.getSource(), thisAct.getfLevel(), -thisAct.getCount());
       return null;

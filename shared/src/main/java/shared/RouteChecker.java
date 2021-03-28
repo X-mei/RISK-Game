@@ -20,7 +20,7 @@ public class RouteChecker extends RuleChecker{
     HashSet<Territory> visited = new HashSet<Territory>();
     Integer cost = 0;
     Integer minCost = Integer.MAX_VALUE;
-    Player p = theBoard.getPlayer(thisAct.getActionOwner());
+    Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
     if(checkRoute(src, dest, cost, minCost, visited)){
       if (cost > p.getFoodResource()) {
         return "No enough food to move those soldiers.";
