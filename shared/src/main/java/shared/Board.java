@@ -389,7 +389,7 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
   Collections.sort(attackList, comparatorIncrease);
   int marker = 1; //1 for attacker->defender, 0 for defender->attacker
   while(defenceList.size() > 0 && attackList.size() > 0){
-    if(marker == 1){
+    if(marker == 1){ 
       int attack = attackList.indexOf(attackList.size() - 1);
       int defender = defenceList.indexOf(0);
       int attackRandom = boardRandomNum() + attack;
