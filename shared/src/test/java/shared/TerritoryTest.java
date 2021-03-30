@@ -55,7 +55,7 @@ public class TerritoryTest {
   public void test_setUnits() {
     Territory t1 = new Territory("t1", "player1");
     UnitsFactory f = new UnitsFactory();
-    Soldiers unit = f.createBasicSoldiers(5);
+    Soldiers unit = f.createLevel1Soldiers(5);
     t1.setUnits(unit);
     assertEquals(unit, t1.getOneUnits("Basic Soldiers"));
     LinkedHashSet<Units> unitSet = new LinkedHashSet<Units>();
