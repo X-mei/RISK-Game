@@ -12,29 +12,29 @@ import java.util.function.Function;
 import java.util.Comparator;
 
 public class Board {
-  protected int playerNum;  //number of player
+  protected int playerNum; //number of player
   protected int remainedPlayerNum;
   //protected int foodAmount;
   //protected int techPoint;
   //protected int techLevel;
   //protected int tempTechPoint;
-  protected int totalUnitsNum;  //number of units for each player; 
-  protected HashMap<String, LinkedHashSet<Territory>> gameBoard;  //the map
-  protected MapFactory mapF;  //map factory to create the map
-  protected LinkedHashMap<String, Territory> allTerritory;  //a map to store all territories on the map, key is it's name
-  protected UnitsFactory UnitsF;  //units factory to create different kinds of units
-  protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;   
+  protected int totalUnitsNum; //number of units for each player; 
+  protected HashMap<String, LinkedHashSet<Territory>> gameBoard; //the map
+  protected MapFactory mapF; //map factory to create the map
+  protected LinkedHashMap<String, Territory> allTerritory; //a map to store all territories on the map, key is it's name
+  protected UnitsFactory UnitsF; //units factory to create different kinds of units
+  protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;
   private final RuleChecker moveRuleChecker;
   private final RuleChecker attackRuleChecker;
   private final SpecialRuleChecker upgradeRuleChecker;
-  private HashMap<String, HashMap<String,Integer>> tempCount;
+  private HashMap<String, HashMap<String, Integer>> tempCount;
   private LinkedHashSet<String> UnitName;
   private ArrayList<Player> playerList;
   protected final Random boardRandomGenerator;
  
 
   //Tech Update reference table
-  private static HashMap<Integer, Integer> techUpgradetable; 
+  private static HashMap<Integer, Integer> techUpgradetable;
   //Soldier Level Name-Integer reference table
   private HashMap<String, Integer> soldierBonusLevelTable;
   protected SoldierReferenceTable soldierRefTable;
@@ -53,7 +53,7 @@ public class Board {
    * @param mapFac  map factory
    * @param UnitsFac  unit factory
    */
-  public Board(int num, MapFactory mapFac, UnitsFactory UnitsFac){
+  public Board(int num, MapFactory mapFac, UnitsFactory UnitsFac) {
     this.playerNum = num;
     this.remainedPlayerNum = num;
     this.totalUnitsNum = 20;
@@ -67,8 +67,8 @@ public class Board {
     this.unitsCreateFunction = new HashMap<String, Function<Integer, Soldiers>>();
     setUpUnitsCreationMap();
     this.allTerritory = new LinkedHashMap<String, Territory>();
-    for(String s : gameBoard.keySet()){
-      for(Territory t : gameBoard.get(s)){
+    for (String s : gameBoard.keySet()) {
+      for (Territory t : gameBoard.get(s)) {
         allTerritory.put(t.getTerritoryName(), t);
       }
     }
@@ -77,12 +77,12 @@ public class Board {
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
     this.upgradeRuleChecker = new UpgradeChecker(null);
-    this.tempCount = new HashMap<String, HashMap<String,Integer>>();
+    this.tempCount = new HashMap<String, HashMap<String, Integer>>();
     //this.tempTechPoint = techPoint;
     //create a tech upgrade reference table
     techUpgradetable = new HashMap<>();
-    for(int i = 2; i< 7; i ++){
-      techUpgradetable.put(i, 50 + (i - 2)*(i - 1) / 2 * 25);
+    for (int i = 2; i < 7; i++) {
+      techUpgradetable.put(i, 50 + (i - 2) * (i - 1) / 2 * 25);
     }
     //Soldier Level Name-Integer reference table
     soldierBonusLevelTable = new HashMap<>();
@@ -107,16 +107,16 @@ public class Board {
     this.soldierRefTable = new SoldierReferenceTable();
   }
 
-/**
- * create the player list, used in board conctructor
- * @param gameBoard
- * @param actF
- * @return
- */
-  private void createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF){
+  /**
+   * create the player list, used in board conctructor
+   * @param gameBoard
+   * @param actF
+   * @return
+   */
+  private void createPlayer(HashMap<String, LinkedHashSet<Territory>> gameBoard, ActionFactory actF) {
     this.playerList = new ArrayList<>();
     int i = 1;
-    for(String s : gameBoard.keySet()){
+    for (String s : gameBoard.keySet()) {
       Player p = new Player(s, i, actF);
       p.addTerritory(gameBoard.get(s));
       playerList.add(p);
@@ -128,22 +128,23 @@ public class Board {
     return playerList;
   }
 
-  public HashMap<String, LinkedHashSet<Territory>> getBoard(){
+  public HashMap<String, LinkedHashSet<Territory>> getBoard() {
     return gameBoard;
   }
 
-  public int getPlayerNum(){
+  public int getPlayerNum() {
     return playerNum;
   }
 
   public int getTotalUnits() {
     return totalUnitsNum;
   }
-/*
+
+  /*
   public int getFoodAmount() {
     return foodAmount;
   }
-
+  
   public int getTechPoint() {
     return techPoint;
   }
@@ -151,7 +152,7 @@ public class Board {
   public int getTechLevel() {
     return techLevel;
   }
-
+  
   public Player getPlayer(String pName) {
     for (Player p : playerList) {
       if (p.getName() == pName) {
@@ -168,33 +169,39 @@ public class Board {
    * @param playerName is the plyaer's name
    * @return a string array which contains all the unit setup questions for one player
    */
-  public String[] askUnitSetup(String playerName){
+  public String[] askUnitSetup(String playerName) {
     LinkedHashSet<Territory> singlePlayerTerritories = gameBoard.get(playerName);
     int territoryNumForOnePlayer = singlePlayerTerritories.size();
     String[] unitSetupStrings = new String[territoryNumForOnePlayer];
     int i = 0;
-    for(Territory t : singlePlayerTerritories){
-      unitSetupStrings[i] = "You have " + territoryNumForOnePlayer + " territories, how do you want to place units on " + t.getTerritoryName() + " ?\n";
+    for (Territory t : singlePlayerTerritories) {
+      unitSetupStrings[i] = "You have " + territoryNumForOnePlayer + " territories, how do you want to place units on "
+          + t.getTerritoryName() + " ?\n";
       i++;
     }
     return unitSetupStrings;
   }
 
-
-  public void setUpUnitsCreationMap(){
-    unitsCreateFunction.put("Lv1", (count) -> UnitsF.createBasicSoldiers(count));
+  public void setUpUnitsCreationMap() {
+    unitsCreateFunction.put("Lv1", (count) -> UnitsF.createLevel1Soldiers(count));
+    unitsCreateFunction.put("Lv2", (count) -> UnitsF.createLevel2Soldiers(count));
+    unitsCreateFunction.put("Lv3", (count) -> UnitsF.createLevel3Soldiers(count));
+    unitsCreateFunction.put("Lv4", (count) -> UnitsF.createLevel4Soldiers(count));
+    unitsCreateFunction.put("Lv5", (count) -> UnitsF.createLevel5Soldiers(count));
+    unitsCreateFunction.put("Lv6", (count) -> UnitsF.createLevel6Soldiers(count));
+    unitsCreateFunction.put("Lv7", (count) -> UnitsF.createLevel7Soldiers(count));
   }
 
-  public LinkedHashMap<String, Territory> getAllTerritroy(){
+  public LinkedHashMap<String, Territory> getAllTerritroy() {
     return allTerritory;
   }
 
-  public Territory getTerritory(String name){
+  public Territory getTerritory(String name) {
     return allTerritory.get(name);
   }
 
-  public void refreshTemp(String Tname){
-    for(Territory t : gameBoard.get(Tname)){
+  public void refreshTemp(String Tname) {
+    for (Territory t : gameBoard.get(Tname)) {
       LinkedHashMap<String, Soldiers> m = t.getSoldiers();
       HashMap<String, Integer> temp = new HashMap<String, Integer>();
       for (Map.Entry<String, Soldiers> entry : m.entrySet()) {
@@ -203,25 +210,24 @@ public class Board {
       tempCount.put(t.getTerritoryName(), temp);
     }
   }
-/*
+  /*
   public void refreshTempTechPoint() {
     tempTechPoint = techPoint;
   }
-
+  
   public void updateTempTechPoint(Integer pnt) {
     tempTechPoint -= pnt;
   }*/
-  
-  public Integer getTerritoryUnitsCount(String Tname, String Sname){
+
+  public Integer getTerritoryUnitsCount(String Tname, String Sname) {
     return tempCount.get(Tname).get(Sname);
   }
 
-  public void updateTempCount(String Tname, String Sname, Integer cnt){
+  public void updateTempCount(String Tname, String Sname, Integer cnt) {
     HashMap<String, Integer> temp = tempCount.get(Tname);
     if (temp.get(Sname) == null) {
       temp.put(Sname, -cnt);
-    }
-    else {
+    } else {
       temp.put(Sname, temp.get(Sname) - cnt);
     }
   }
@@ -231,10 +237,10 @@ public class Board {
    * @param territoryName is the target territory
    * @param count is a array contains all numbers of each kind of unit
    */
-  public void singleTerritoryUnitSetup(String territoryName, int[] count){
+  public void singleTerritoryUnitSetup(String territoryName, int[] count) {
     int ind = 0;
     Territory t = allTerritory.get(territoryName);
-    for (String s : UnitName){
+    for (String s : UnitName) {
       Soldiers u = unitsCreateFunction.get(s).apply(count[ind++]);
       t.setUnits(u);
     }
@@ -244,46 +250,41 @@ public class Board {
    * process one turn game
    * @param actionSet the set of all actions(all same kind)
    */
-  public synchronized void processOneTurnMove(LinkedHashSet<BasicAction> actionSet){
-    for(BasicAction a : actionSet){
+  public synchronized void processOneTurnMove(LinkedHashSet<BasicAction> actionSet) {
+    for (BasicAction a : actionSet) {
       processSingleBasicMove(a);
     }
   }
 
-  public synchronized void processOneTurnAttackPre(LinkedHashSet<BasicAction> actionSet){
-    for(BasicAction a : actionSet){
+  public synchronized void processOneTurnAttackPre(LinkedHashSet<BasicAction> actionSet) {
+    for (BasicAction a : actionSet) {
       processSingleBasicAttackPre(a);
     }
   }
 
-    
   /**
    * merge attack
    * @param actionSet
    * @return
    */
-  public synchronized LinkedHashSet<BasicAction> mergeOneTurnAttack(LinkedHashSet<BasicAction> actionSet){
+  public synchronized LinkedHashSet<BasicAction> mergeOneTurnAttack(LinkedHashSet<BasicAction> actionSet) {
     HashMap<String, BasicAction> tempMap = new HashMap<>();
     LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
-    for(BasicAction b : actionSet){
+    for (BasicAction b : actionSet) {
       String destName = b.getDestination();
       int attackCount = b.getCount();
-      if(tempMap.containsKey(destName)){
+      if (tempMap.containsKey(destName)) {
         BasicAction temp = tempMap.get(destName);
         temp.modifyCount(attackCount);
-      }
-      else{
+      } else {
         tempMap.put(destName, b);
       }
     }
-    for(String s : tempMap.keySet()){
+    for (String s : tempMap.keySet()) {
       newAttackset.add(tempMap.get(s));
     }
     return newAttackset;
   }
-
-
-
 
   // Comparator<AttackNextObjV2> comparatorDecrease = new Comparator<AttackNextObjV2>(){
   //   public int compare(AttackNextObjV2 a1, AttackNextObjV2 a2) {
@@ -296,25 +297,24 @@ public class Board {
    * @param actionSet
    * @return
    */
-  public synchronized HashMap<String, HashMap<String, BasicAction>> mergeOneTurnAttackV2(LinkedHashSet<BasicAction> actionSet){
+  public synchronized HashMap<String, HashMap<String, BasicAction>> mergeOneTurnAttackV2(
+      LinkedHashSet<BasicAction> actionSet) {
     HashMap<String, HashMap<String, BasicAction>> tempMap = new HashMap<>();
     //LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
-    for(BasicAction b : actionSet){
+    for (BasicAction b : actionSet) {
       String destName = b.getDestination();
       int attackCount = b.getCount();
       String soliderLevelName = b.getLevelName();
       //int soldierLevelNum = soldierBonusLevelTable.get(soliderLevelName);
-      if(tempMap.containsKey(destName)){
+      if (tempMap.containsKey(destName)) {
         HashMap<String, BasicAction> tempSoldierSetMap = tempMap.get(destName);
-        if(tempSoldierSetMap.containsKey(soliderLevelName)){
+        if (tempSoldierSetMap.containsKey(soliderLevelName)) {
           BasicAction tempAct = tempSoldierSetMap.get(soliderLevelName);
           tempAct.modifyCount(attackCount);
-        }
-        else{
+        } else {
           tempSoldierSetMap.put(soliderLevelName, b);
         }
-      }
-      else{
+      } else {
         HashMap<String, BasicAction> tempAddMap = new HashMap<>();
         tempAddMap.put(soliderLevelName, b);
         tempMap.put(destName, tempAddMap);
@@ -330,25 +330,21 @@ public class Board {
   }
 
   /**
- * Version2 attack phase
- * @param actionSet version 2 merged attack set
- */
-public synchronized void processOneTurnAttackNextV2(HashMap<String, HashMap<String, BasicAction>> actionMap){
-  for(String s : actionMap.keySet()){
-    processOneTerritoryAttackNextV2(s, actionMap.get(s));
-  }
-  
-}
+  * Version2 attack phase
+  * @param actionSet version 2 merged attack set
+  */
+  public synchronized void processOneTurnAttackNextV2(HashMap<String, HashMap<String, BasicAction>> actionMap) {
+    for (String s : actionMap.keySet()) {
+      processOneTerritoryAttackNextV2(s, actionMap.get(s));
+    }
 
-Comparator<Integer> comparatorIncrease = new Comparator<Integer>(){
-  public int compare(Integer a1, Integer a2) {
-    return a1 - a2;
   }
-};
 
-private Integer boardRandomNum(){
-  return boardRandomGenerator.nextInt((20 - 1) + 1) + 1;
-}
+  Comparator<Integer> comparatorIncrease = new Comparator<Integer>() {
+    public int compare(Integer a1, Integer a2) {
+      return a1 - a2;
+    }
+  };
 
 /**
  * get a soldier's name by the bonus 
@@ -431,8 +427,6 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
         BasicAction attackLoseAction = oneTerritoryAttackMap.get(attackSoldierName);
         attackLoseAction.modifyCount(-1);
       }
-      marker = 1;
-      continue;
     }
   }
   //When defender lose, update territory owner and soldiers 
@@ -460,8 +454,6 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
       destTerri.setUnits(newSoldiers);
     }
   }
-}
-
 
 private Soldiers createDiffSoldiersByName(String name){
   if(name.equals("Lv1")){
@@ -496,8 +488,9 @@ private Soldiers createDiffSoldiersByName(String name){
       processSingleBasicAttackNext(a);
     }
   }
-
-
+  */  
+  
+  
   /**
    * identify the kind of one single attack and process it
    * @param basicAct the attack object
@@ -515,16 +508,16 @@ private Soldiers createDiffSoldiersByName(String name){
    * process single move action
    * @param basicAct
    */
-  public synchronized void processSingleBasicMove(BasicAction basicAct){
-    String src = basicAct.getSource();  //get src territory name
-    String dest = basicAct.getDestination();  //get dest territory name
+  public synchronized void processSingleBasicMove(BasicAction basicAct) {
+    String src = basicAct.getSource(); //get src territory name
+    String dest = basicAct.getDestination(); //get dest territory name
     String soldierName = basicAct.getLevelName(); //get moved soldier name
-    Soldiers srcSoldier = getSoldiersByName(soldierName, src);  //get moved soldier object in src
-    Soldiers destSoldier = getSoldiersByName(soldierName, dest);  //get moved soldier object in dest
+    Soldiers srcSoldier = getSoldiersByName(soldierName, src); //get moved soldier object in src
+    Soldiers destSoldier = getSoldiersByName(soldierName, dest); //get moved soldier object in dest
     int foodConsumed = basicAct.getFoodConsume(); //get move consumed food
-    int count = basicAct.getCount();  //get move number
+    int count = basicAct.getCount(); //get move number
     //update soldier number in src an dest
-    srcSoldier.updateCount(srcSoldier.getCount() - count);  
+    srcSoldier.updateCount(srcSoldier.getCount() - count);
     destSoldier.updateCount(destSoldier.getCount() + count);
     String actionOwner = basicAct.getActionOwner();
     Player actionPlayer = getPlayerByName(actionOwner);
@@ -538,10 +531,10 @@ private Soldiers createDiffSoldiersByName(String name){
    * @return the found player object
    * if no found, return null
    */
-  public Player getPlayerByName(String playerName){
+  public Player getPlayerByName(String playerName) {
     Player pFind = null;
-    for(Player p : playerList){
-      if(p.getName().equals(playerName)){
+    for (Player p : playerList) {
+      if (p.getName().equals(playerName)) {
         pFind = p;
         break;
       }
@@ -549,16 +542,16 @@ private Soldiers createDiffSoldiersByName(String name){
     return pFind;
   }
 
-   /**
-    * upgrade single soldier action
-    * @param upAct
-    */
-  public synchronized void processSingleUpdateUnit(UpgradeAction upAct){
-    String src = upAct.getSource();  
-    String soldierSLevel = upAct.getsLevel(); 
-    String soldierFLevel = upAct.getfLevel(); 
+  /**
+   * upgrade single soldier action
+   * @param upAct
+   */
+  public synchronized void processSingleUpdateUnit(UpgradeAction upAct) {
+    String src = upAct.getSource();
+    String soldierSLevel = upAct.getsLevel();
+    String soldierFLevel = upAct.getfLevel();
     int updateSoldierNum = upAct.getCount();
-    Soldiers sLevelSoldier = getSoldiersByName(soldierSLevel, src);  
+    Soldiers sLevelSoldier = getSoldiersByName(soldierSLevel, src);
     Soldiers fLevelSoldier = getSoldiersByName(soldierFLevel, src);
     //update number
     sLevelSoldier.updateCount(sLevelSoldier.getCount() - updateSoldierNum);
@@ -571,21 +564,22 @@ private Soldiers createDiffSoldiersByName(String name){
     Player actionPlayer = getPlayerByName(actionOwner);
     actionPlayer.updateTechResource(-totalTechCost);
   }
-/**
- * Upgrade tech level, only once per round
- * Also check if the tech upgrade is valid
- * @param t
- */
-  public synchronized void processUpdateTech(TechAction techUpAct){
-    String techUpOwner = techUpAct.getActionOwner();  
+
+  /**
+   * Upgrade tech level, only once per round
+   * Also check if the tech upgrade is valid
+   * @param t
+   */
+  public synchronized void processUpdateTech(TechAction techUpAct) {
+    String techUpOwner = techUpAct.getActionOwner();
     Player actionPlayer = getPlayerByName(techUpOwner);
     int currTechLevel = actionPlayer.getTechLevel();
-    if(currTechLevel >= 6){
+    if (currTechLevel >= 6) {
       System.out.println("Reached Highest Tech Level 6, no more upgrade");
       return;
     }
     int techUpgradeCost = techUpgradetable.get(currTechLevel + 1);
-    if(techUpgradeCost > actionPlayer.getTechResource()){
+    if (techUpgradeCost > actionPlayer.getTechResource()) {
       System.out.println("Not enough tech resource to upgrade tech");
       return;
     }
@@ -597,7 +591,7 @@ private Soldiers createDiffSoldiersByName(String name){
    * before the attack, extract specific numbers of soldiers from source territory
    * @param basicAct
    */
-  public synchronized void processSingleBasicAttackPre(BasicAction basicAct){
+  public synchronized void processSingleBasicAttackPre(BasicAction basicAct) {
     String src = basicAct.getSource();
     String soldierName = basicAct.getLevelName(); //get moved soldier name
     Soldiers srcSoldier = getSoldiersByName(soldierName, src);
@@ -613,6 +607,7 @@ private Soldiers createDiffSoldiersByName(String name){
    * process single attack action
    * @param basicAct 
    */
+  /*
   public synchronized void processSingleBasicAttackNext(BasicAction basicAct){
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
@@ -650,16 +645,16 @@ private Soldiers createDiffSoldiersByName(String name){
       destSoldier.updateCount(attackSoldier.getCount());
     }
   }
-
+  */
   /**
    * process one complete attack action
    
-
+  
   public void processSingleBasicAttackWhole(BasicAction basicAct){
     processSingleBasicAttackPre(basicAct);
     processSingleBasicAttackNext(basicAct);
   }
-*/
+  */
   public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
     for (BasicAction action : actions) {
       String output;
@@ -667,17 +662,14 @@ private Soldiers createDiffSoldiersByName(String name){
         output = moveRuleChecker.checkAction(action, this);
         if (output == null) {
           continue;
-        }
-        else {
+        } else {
           return false;
         }
-      }
-      else {
+      } else {
         output = attackRuleChecker.checkAction(action, this);
         if (output == null) {
           continue;
-        }
-        else {
+        } else {
           return false;
         }
       }
@@ -691,14 +683,13 @@ private Soldiers createDiffSoldiersByName(String name){
       output = upgradeRuleChecker.checkAction(action, this);
       if (output == null) {
         continue;
-      }
-      else {
+      } else {
         return false;
       }
     }
     return true;
   }
-/*
+  /*
   public Boolean checkIfTechUpdateBoolean(TechAction action) {
     Integer cost = 0;
     if (techLevel == 6) {
@@ -716,37 +707,36 @@ private Soldiers createDiffSoldiersByName(String name){
       return true;
     }
   }*/
-  
+
   /**
    * get specific kind of soldier's number on one territory
    * @param UnitsName the name of the soldier we want 
    * @param territoryName which territory we want to find
    * @return the soldier object 
    */
-  private Soldiers getSoldiersByName(String UnitsName, String territoryName){
+  private Soldiers getSoldiersByName(String UnitsName, String territoryName) {
     Territory terr = allTerritory.get(territoryName);
     LinkedHashSet<Soldiers> terrAllUnits = terr.getUnits();
     Soldiers terrBasicSoldier = null;
-    for(Soldiers u : terrAllUnits){
-      if(u.getName().equals(UnitsName)){
+    for (Soldiers u : terrAllUnits) {
+      if (u.getName().equals(UnitsName)) {
         terrBasicSoldier = u;
         break;
       }
     }
     return terrBasicSoldier;
-    
+
   }
 
-  public String displayAllPlayerAllBoard(){
+  public String displayAllPlayerAllBoard() {
     String ans = "";
-    for(String s : gameBoard.keySet()){
+    for (String s : gameBoard.keySet()) {
       ans += displaySinlgePlayerBoard(s);
     }
     return ans;
   }
 
-
-  private String displaySinlgePlayerBoard(String playerName){ 
+  private String displaySinlgePlayerBoard(String playerName) {
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     String s1 = playerName + " player:\n";
     // Eg: ans = "King player:
@@ -760,8 +750,8 @@ private Soldiers createDiffSoldiersByName(String name){
       //Eg: temp = "10 Lv1 in Numbani (next to:"
       String temp = SoldierNum + " " + tempS.getName() + " in " + t.getTerritoryName() + " (next to:";
       String space = " ";
-      String tempNeighbor = ""; 
-      for(Territory tNeighbor : t.getNeighbours()){
+      String tempNeighbor = "";
+      for (Territory tNeighbor : t.getNeighbours()) {
         tempNeighbor += space + tNeighbor.getTerritoryName();
         space = ", ";
       }
@@ -773,9 +763,9 @@ private Soldiers createDiffSoldiersByName(String name){
     return ans;
   }
 
-  private String createDottedLine(int length){
+  private String createDottedLine(int length) {
     String ans = "";
-    for(int i = 0; i < length - 1; i++){
+    for (int i = 0; i < length - 1; i++) {
       ans += "-";
     }
     ans += "\n";
@@ -787,18 +777,18 @@ private Soldiers createDiffSoldiersByName(String name){
   * @return true if lose 
   * 
   */
-  public Boolean checkSinglePlayerLose(String playerName){
-    if(gameBoard.get(playerName).size() == 0){
+  public Boolean checkSinglePlayerLose(String playerName) {
+    if (gameBoard.get(playerName).size() == 0) {
       return true;
     }
     return false;
   }
 
-  public String checkGameEnd(){
+  public String checkGameEnd() {
     int endPlayer = 0;
     String winner = null;
-    for(String s : gameBoard.keySet()) {
-      if(gameBoard.get(s).size() == 0) {
+    for (String s : gameBoard.keySet()) {
+      if (gameBoard.get(s).size() == 0) {
         endPlayer++;
       } else {
         winner = s;

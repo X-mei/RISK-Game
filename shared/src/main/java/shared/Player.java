@@ -16,6 +16,8 @@ public class Player {
   protected final Integer code;
   protected int techResource;
   protected int foodResource;
+  protected int tempTechResource;
+  protected int tempFoodResource;
   protected int techLevel;
   protected LinkedHashSet<Territory> ownedTerritory;
   protected HashSet<String> actionSet;
@@ -32,6 +34,8 @@ public class Player {
     this.code = code;
     this.techResource = 1000;
     this.foodResource = 1000;
+    this.tempFoodResource = foodResource;
+    this.tempTechResource = techResource;
     this.techLevel = 1;
     this.status = "In-game";
     //TODO: add territory
@@ -97,6 +101,14 @@ public class Player {
     techResource += credits;
   }
 
+  public void updateTempTechResource(int credits){
+    tempTechResource += credits;
+  }
+
+  public void refreshTempTechResource() {
+    tempTechResource = techResource;
+  }
+
   public int getFoodResource(){
     return foodResource;
   }
@@ -105,6 +117,13 @@ public class Player {
     foodResource += credits;
   }
 
+  public void refreshTempFoodResource() {
+    tempFoodResource = foodResource;
+  }
+  
+  public void updateTempFoodResource(int credits) {
+    tempFoodResource -= credits;
+  }
   
   public int getTechLevel(){
     return techLevel;
