@@ -45,6 +45,55 @@ public class Client {
     }
   }
 
+  public void login() {
+    try {
+      while(true) {
+        String line = dataIn.readUTF(); 
+        out.println(line);
+        if (line.equals("Login successfully.")) {
+          break;
+        }
+        String readIn = inputReader.readLine();
+        dataOut.writeUTF(readIn);
+      }
+    } catch (IOException e) {
+      out.println("Receive failed.");
+    }
+  }
+
+  public void answerInfo() {
+    try {
+      String line = dataIn.readUTF(); 
+      out.println(line);
+      String readIn = inputReader.readLine();
+      dataOut.writeUTF(readIn);
+      if (readIn.equals("p")) {
+        sendRoomID();
+      } else {
+        sendGameRoom();
+      }
+    } catch (IOException e) {
+      out.println("Receive failed.");
+    }
+  }
+
+  public void sendRoomID() {
+    try {
+      while(true) {
+        String line = dataIn.readUTF(); 
+        out.println(line);
+        if (line.equals("Enter successfully.")) {
+          break;
+        }
+        String readIn = inputReader.readLine();
+        dataOut.writeUTF(readIn);
+        // enter successfully
+      }
+    } catch (IOException e) {
+      out.println("Receive failed.");
+    }
+  }
+
   /**
    * This function tells the server which game room
    * @throws IOException

@@ -14,7 +14,8 @@ public class App {
       try {
         Client client = new Client(/*"dku-vcm-1221.vm.duke.edu"*/"127.0.0.1", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out);
         client.connectToServer();
-        client.sendGameRoom();
+        client.login();
+        client.answerInfo();
         client.recvNameAndSeq();
         client.recvAssignTerritory();
         while(true) {

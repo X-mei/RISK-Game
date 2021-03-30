@@ -81,7 +81,8 @@ public class ClientHandler extends Thread {
           // only send board msg
           sendBoardMsg();
           sendGameEndMsg();
-        } else {
+        } 
+        else {
           connectFlag = false;
         }
       } else {
@@ -89,10 +90,11 @@ public class ClientHandler extends Thread {
         sendGameEndMsg();
       }
       connectFlag = false;
-      closeConnection();
-    }catch(IOException e){
-      e.printStackTrace();
-    }finally {
+    } catch(IOException e){
+      // disconnect
+      System.out.println(playerName + " disconnected.");
+      //e.printStackTrace();
+    } finally {
       //close connection when game over
       closeConnection();
     }
@@ -163,8 +165,6 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
-    } catch(IOException e){
-      e.printStackTrace();
     } catch(InterruptedException e) {
       e.printStackTrace();
     }
@@ -239,9 +239,7 @@ public class ClientHandler extends Thread {
           }  
         }
       }
-    }catch(IOException e){
-      e.printStackTrace();
-    }catch(InterruptedException e) {
+    } catch(InterruptedException e) {
       e.printStackTrace();
     }
   }
