@@ -97,6 +97,10 @@ public class Territory {
     }
     return neighboursOneOwner;
   }
+
+  public void clearAllUnits(){
+    allUnits.clear();
+  }
 /*
   public int getTerriTechResource(){
     return terriTechResource;
