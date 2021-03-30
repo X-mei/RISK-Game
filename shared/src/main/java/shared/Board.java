@@ -1,12 +1,15 @@
 package shared;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Function; 
+import java.util.Comparator;
 
 public class Board {
   protected int playerNum;  //number of player
@@ -27,7 +30,19 @@ public class Board {
   private HashMap<String, HashMap<String,Integer>> tempCount;
   private LinkedHashSet<String> UnitName;
   private ArrayList<Player> playerList;
-  private HashMap<Integer, Integer> techUpgradetable;
+  protected final Random boardRandomGenerator;
+
+  //Tech Update reference table
+  private static HashMap<Integer, Integer> techUpgradetable; 
+  //Soldier Level Name-Integer reference table
+  private HashMap<String, Integer> soldierBonusLevelTable;
+
+  //techUpgradetable.put(1, 0);
+  // techUpgradetable.put(2, 50);
+  // techUpgradetable.put(3, 75);
+  // techUpgradetable.put(4, 125);
+  // techUpgradetable.put(5, 200);
+  // techUpgradetable.put(6, 300);
 
   /**
    * Constrcut a board
@@ -63,12 +78,19 @@ public class Board {
     //this.tempTechPoint = techPoint;
     //create a tech upgrade reference table
     techUpgradetable = new HashMap<>();
-    techUpgradetable.put(1, 0);
-    techUpgradetable.put(2, 50);
-    techUpgradetable.put(3, 75);
-    techUpgradetable.put(4, 125);
-    techUpgradetable.put(5, 200);
-    techUpgradetable.put(6, 300);
+    for(int i = 2; i< 7; i ++){
+      techUpgradetable.put(i, 50 + (i - 2)*(i - 1) / 2 * 25);
+    }
+    //Soldier Level Name-Integer reference table
+    soldierBonusLevelTable = new HashMap<>();
+    soldierBonusLevelTable.put("Basic Soldiers", 0);
+    soldierBonusLevelTable.put("Level 2 Soldiers", 1);
+    soldierBonusLevelTable.put("Level 3 Soldiers", 3);
+    soldierBonusLevelTable.put("Level 4 Soldiers", 5);
+    soldierBonusLevelTable.put("Level 5 Soldiers", 8);
+    soldierBonusLevelTable.put("Level 6 Soldiers", 11);
+    soldierBonusLevelTable.put("Level 7 Soldiers", 15);  
+    this.boardRandomGenerator = new Random();
   }
 
 /**
@@ -220,12 +242,7 @@ public class Board {
     }
   }
 
-  
-  public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
-    for(BasicAction a : actionSet){
-      processSingleBasicAttackNext(a);
-    }
-  }
+    
   /**
    * merge attack
    * @param actionSet
@@ -252,6 +269,159 @@ public class Board {
   }
 
 
+
+
+  // Comparator<AttackNextObjV2> comparatorDecrease = new Comparator<AttackNextObjV2>(){
+  //   public int compare(AttackNextObjV2 a1, AttackNextObjV2 a2) {
+  //     return a2.getAttackSoldierLevel() - a1.getAttackSoldierLevel();
+  //   }
+  // };
+
+  /**
+   * merge attack Version2
+   * @param actionSet
+   * @return
+   */
+  public synchronized HashMap<String, HashMap<String, BasicAction>> mergeOneTurnAttackV2(LinkedHashSet<BasicAction> actionSet){
+    HashMap<String, HashMap<String, BasicAction>> tempMap = new HashMap<>();
+    //LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
+    for(BasicAction b : actionSet){
+      String destName = b.getDestination();
+      int attackCount = b.getCount();
+      String soliderLevelName = b.getLevelName();
+      //int soldierLevelNum = soldierBonusLevelTable.get(soliderLevelName);
+      if(tempMap.containsKey(destName)){
+        HashMap<String, BasicAction> tempSoldierSetMap = tempMap.get(destName);
+        if(tempSoldierSetMap.containsKey(soliderLevelName)){
+          BasicAction tempAct = tempSoldierSetMap.get(soliderLevelName);
+          tempAct.modifyCount(attackCount);
+        }
+        else{
+          tempSoldierSetMap.put(soliderLevelName, b);
+        }
+      }
+      else{
+        HashMap<String, BasicAction> tempAddMap = new HashMap<>();
+        tempAddMap.put(soliderLevelName, b);
+        tempMap.put(destName, tempAddMap);
+      }
+    }
+    // for(String s : tempMap.keySet()){
+    //   HashMap<Integer, BasicAction> tempFinal = tempMap.get(s);
+    //   for(int i : tempFinal.keySet()){
+    //     newAttackset.add(tempFinal.get(i));
+    //   }
+    // }
+    return tempMap;
+  }
+
+  /**
+ * Version2 attack phase
+ * @param actionSet version 2 merged attack set
+ */
+public synchronized void processOneTurnAttackNextV2(HashMap<String, HashMap<String, BasicAction>> actionMap){
+  for(String s : actionMap.keySet()){
+    processOneTerritoryAttackNextV2(s, actionMap.get(s));
+  }
+  
+}
+
+Comparator<Integer> comparatorIncrease = new Comparator<Integer>(){
+  public int compare(Integer a1, Integer a2) {
+    return a1 - a2;
+  }
+};
+
+private Integer boardRandomNum(){
+  return boardRandomGenerator.nextInt((20 - 1) + 1) + 1;
+}
+
+public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, HashMap<String, BasicAction> oneTerritoryAttackMap){
+  ArrayList<Integer> attackList = new ArrayList<>();
+  ArrayList<Integer> defenceList = new ArrayList<>();
+  Territory destTerri = allTerritory.get(TerritoryName);
+  LinkedHashMap<String, Soldiers> allSoldiersInDestTerri = destTerri.getSoldiers();
+  //add defence list
+  for(String s : allSoldiersInDestTerri.keySet()){
+    Soldiers tempSoldier = allSoldiersInDestTerri.get(s);
+    int tempCount = tempSoldier.getCount();
+    int tempBonus = tempSoldier.getBonus();
+    for(int i = 0; i < tempCount; i ++){
+      defenceList.add(tempBonus);
+    }
+  }
+  //add attack list
+  for(String s : oneTerritoryAttackMap.keySet()){
+    int attackTempBonus = soldierBonusLevelTable.get(s);
+    for(int i = 0; i < oneTerritoryAttackMap.get(s).getCount(); i ++){
+      attackList.add(attackTempBonus);
+    }
+  }
+  //sorted ascending
+  Collections.sort(defenceList, comparatorIncrease);
+  Collections.sort(attackList, comparatorIncrease);
+  int marker = 1; //1 for attacker->defender, 0 for defender->attacker
+  while(defenceList.size() > 0 && attackList.size() > 0){
+    if(marker == 1){
+      int attack = attackList.indexOf(attackList.size() - 1);
+      int defender = defenceList.indexOf(0);
+      int attackRandom = boardRandomNum() + attack;
+      int defendRandom = boardRandomNum() + defender;
+      if(attackRandom > defendRandom){
+        defenceList.remove(0);
+      }
+      else if(attackRandom < defendRandom){
+        attackList.remove(attackList.size() - 1);
+      }
+      marker = 0;
+      continue;
+    }
+    else{ //marker = 0
+      int attack = attackList.indexOf(0);
+      int defender = defenceList.indexOf(defenceList.size() - 1);
+      int attackRandom = boardRandomNum() + attack;
+      int defendRandom = boardRandomNum() + defender;
+      if(attackRandom > defendRandom){
+        defenceList.remove(defenceList.size() - 1);
+      }
+      else if(attackRandom < defendRandom){
+        attackList.remove(0);
+      }
+      marker = 1;
+      continue;
+    }
+  }
+  if(defenceList.size() == 0){
+    Territory tDest = allTerritory.get(TerritoryName);
+    String defenderName = tDest.getOwner();
+    String attackerName = null;
+    for(String s : oneTerritoryAttackMap.keySet()){
+      attackerName = oneTerritoryAttackMap.get(s).getActionOwner();
+      break;
+    }
+    //Territory tSrc = allTerritory.get(basicAct.getSource());
+    if(attackerName != null){
+      tDest.updateOwner(attackerName);
+      LinkedHashSet<Territory> attackerTerriSet = gameBoard.get(attackerName);
+      LinkedHashSet<Territory> defenderTerriSet = gameBoard.get(defenderName);
+      attackerTerriSet.add(tDest);
+      defenderTerriSet.remove(tDest);
+    }
+  }
+}
+
+
+/**
+ * Version1 attack phase
+ * @param actionSet version1 merged attack set
+ */
+  public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
+    for(BasicAction a : actionSet){
+      processSingleBasicAttackNext(a);
+    }
+  }
+
+
   /**
    * identify the kind of one single attack and process it
    * @param basicAct the attack object
@@ -273,8 +443,8 @@ public class Board {
     String src = basicAct.getSource();  //get src territory name
     String dest = basicAct.getDestination();  //get dest territory name
     String soldierName = basicAct.getLevelName(); //get moved soldier name
-    Soldiers srcSoldier = getSoldiers(soldierName, src);  //get moved soldier object in src
-    Soldiers destSoldier = getSoldiers(soldierName, dest);  //get moved soldier object in dest
+    Soldiers srcSoldier = getSoldiersByName(soldierName, src);  //get moved soldier object in src
+    Soldiers destSoldier = getSoldiersByName(soldierName, dest);  //get moved soldier object in dest
     int foodConsumed = basicAct.getFoodConsume(); //get move consumed food
     int count = basicAct.getCount();  //get move number
     //update soldier number in src an dest
@@ -312,8 +482,12 @@ public class Board {
     String soldierSLevel = upAct.getsLevel(); 
     String soldierFLevel = upAct.getfLevel(); 
     int updateSoldierNum = upAct.getCount();
-    Soldiers sLevelSoldier = getSoldiers(soldierSLevel, src);  
-    Soldiers fLevelSoldier = getSoldiers(soldierFLevel, src);
+    Soldiers sLevelSoldier = getSoldiersByName(soldierSLevel, src);  
+    Soldiers fLevelSoldier = getSoldiersByName(soldierFLevel, src);
+    //update number
+    sLevelSoldier.updateCount(sLevelSoldier.getCount() - updateSoldierNum);
+    fLevelSoldier.updateCount(fLevelSoldier.getCount() + updateSoldierNum);
+    //consume tech resource
     int sLevelSoldierCost = sLevelSoldier.getCost();
     int fLevelSoldierCost = fLevelSoldier.getCost();
     int totalTechCost = updateSoldierNum * (fLevelSoldierCost - sLevelSoldierCost);
@@ -350,7 +524,7 @@ public class Board {
   public synchronized void processSingleBasicAttackPre(BasicAction basicAct){
     String src = basicAct.getSource();
     String soldierName = basicAct.getLevelName(); //get moved soldier name
-    Soldiers srcSoldier = getSoldiers(soldierName, src);
+    Soldiers srcSoldier = getSoldiersByName(soldierName, src);
     int count = basicAct.getCount();
     srcSoldier.updateCount(srcSoldier.getCount() - count);
     String actionOwner = basicAct.getActionOwner();
@@ -359,18 +533,18 @@ public class Board {
     actionPlayer.updateFoodResource(-count);
   }
 
-
   /**
    * process single attack action
-   * @param basicAct
+   * @param basicAct 
    */
   public synchronized void processSingleBasicAttackNext(BasicAction basicAct){
     String src = basicAct.getSource();
     String dest = basicAct.getDestination();
     int count = basicAct.getCount();
+    String soldierLevelName = basicAct.getLevelName();
     Soldiers attackSoldier = new BasicSoldiers(count);
-    Soldiers destSoldier = getSoldiers("Basic Soldiers", dest);
-    Soldiers testSoldier = getSoldiers("null Soldiers", dest);  //This line is useless, only for test coverage
+    Soldiers destSoldier = getSoldiersByName("Basic Soldiers", dest);
+    Soldiers testSoldier = getSoldiersByName("null Soldiers", dest);  //This line is useless, only for test coverage
     while(attackSoldier.getCount() > 0 && destSoldier.getCount() > 0){
       int srcRandom = attackSoldier.randomNum();
       int destRandom = destSoldier.randomNum();
@@ -473,7 +647,7 @@ public class Board {
    * @param territoryName which territory we want to find
    * @return the soldier object 
    */
-  private Soldiers getSoldiers(String UnitsName, String territoryName){
+  private Soldiers getSoldiersByName(String UnitsName, String territoryName){
     Territory terr = allTerritory.get(territoryName);
     LinkedHashSet<Soldiers> terrAllUnits = terr.getUnits();
     Soldiers terrBasicSoldier = null;
