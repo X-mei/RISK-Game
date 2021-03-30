@@ -7,7 +7,7 @@ public class SoldierReferenceTable {
 
     public SoldierReferenceTable(){
         HashMap<String, Soldiers> tempTable = new HashMap<>();
-        tempTable.put("Lv1", new BasicSoldiers(1));
+        tempTable.put("Lv1", new Level1Soldiers(1));
         tempTable.put("Lv2", new Level2Soldiers(1));
         tempTable.put("Lv3", new Level3Soldiers(1));
         tempTable.put("Lv4", new Level4Soldiers(1));

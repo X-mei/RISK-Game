@@ -346,6 +346,10 @@ public class Board {
     }
   };
 
+  private Integer boardRandomNum(){
+    return boardRandomGenerator.nextInt((20 - 1) + 1) + 1;
+  }
+  
 /**
  * get a soldier's name by the bonus 
  * @param Bonus
@@ -427,6 +431,8 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
         BasicAction attackLoseAction = oneTerritoryAttackMap.get(attackSoldierName);
         attackLoseAction.modifyCount(-1);
       }
+      marker = 1;
+      continue;
     }
   }
   //When defender lose, update territory owner and soldiers 
@@ -454,10 +460,11 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
       destTerri.setUnits(newSoldiers);
     }
   }
+}
 
 private Soldiers createDiffSoldiersByName(String name){
   if(name.equals("Lv1")){
-    return new BasicSoldiers(1);
+    return new Level1Soldiers(1);
   }
   else if(name.equals("Lv2")){
     return new Level2Soldiers(1);
@@ -483,6 +490,7 @@ private Soldiers createDiffSoldiersByName(String name){
  * Version1 attack phase
  * @param actionSet version1 merged attack set
  */
+/*
   public synchronized void processOneTurnAttackNext(LinkedHashSet<BasicAction> actionSet){
     for(BasicAction a : actionSet){
       processSingleBasicAttackNext(a);

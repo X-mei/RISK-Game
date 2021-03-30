@@ -51,17 +51,17 @@ public class TerritoryTest {
     assertEquals(t2Neighbors, t2.getNeighbours());
   }
 
-  @Test
-  public void test_setUnits() {
-    Territory t1 = new Territory("t1", "player1");
-    UnitsFactory f = new UnitsFactory();
-    Soldiers unit = f.createLevel1Soldiers(5);
-    t1.setUnits(unit);
-    assertEquals(unit, t1.getOneUnits("Basic Soldiers"));
-    LinkedHashSet<Units> unitSet = new LinkedHashSet<Units>();
-    unitSet.add(unit);
-    assertEquals(unitSet, t1.getUnits());
-  }
+  // @Test
+  // public void test_setUnits() {
+  //   Territory t1 = new Territory("t1", "player1");
+  //   UnitsFactory f = new UnitsFactory();
+  //   Soldiers unit = f.createLevel1Soldiers(5);
+  //   t1.setUnits(unit);
+  //   assertEquals(unit, t1.getOneUnits("Basic Soldiers"));
+  //   LinkedHashSet<Units> unitSet = new LinkedHashSet<Units>();
+  //   unitSet.add(unit);
+  //   assertEquals(unitSet, t1.getUnits());
+  // }
   
   @Test
   public void test_updateOwner() {
