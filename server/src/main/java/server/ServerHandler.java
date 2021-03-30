@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import shared.Board;
+
 public class ServerHandler extends Thread {
 
   private DataInputStream input;
@@ -19,11 +21,14 @@ public class ServerHandler extends Thread {
   private HashMap<GameServer, Integer> gameIDs;
   private String username;
   private static int gameID = 1000;
+  private HashMap<Integer, Board> gameBoards;
+  private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
 
   public ServerHandler (DataInputStream input, DataOutputStream output, 
-    Socket clientSock, int portNum, HashMap<Integer, GameServer> gameRooms,
-    HashMap<String, String> userLogInfo, HashMap<Integer, HashSet<String>> currentGames,
-    HashMap<GameServer, Integer> gameIDs) {
+                          Socket clientSock, int portNum, HashMap<Integer, GameServer> gameRooms,
+                          HashMap<String, String> userLogInfo, HashMap<Integer, HashSet<String>> currentGames,
+                          HashMap<GameServer, Integer> gameIDs, HashMap<Integer, Board> gameBoards,
+                          HashMap<Integer, HashMap<String, String>> disconnectedUsers) {
     this.input = input;
     this.output = output;
     this.clientSocket = clientSock;
@@ -32,6 +37,8 @@ public class ServerHandler extends Thread {
     this.userLogInfo = userLogInfo;
     this.currentGames = currentGames;
     this.gameIDs = gameIDs;
+    this.gameBoards = gameBoards;
+    this.disconnectedUsers = disconnectedUsers;
   }
 
   public void run () {
@@ -103,27 +110,38 @@ public class ServerHandler extends Thread {
 
   public void enterRoom() {
     try {
+      String name = null;
+      int room = 0;
       while(true) {
         output.writeUTF("Please input room id.");
         String roomID = input.readUTF();
-        int room = 0;
         try {
           room = Integer.parseInt(roomID);
         } catch(NumberFormatException e) {
           continue;
         }
         // check the room id
-        if (!currentGames.containsKey(room)) {
+        if (!disconnectedUsers.containsKey(room)) {
           continue;
         } else {
-          HashSet<String> users = currentGames.get(room);
-          if (!users.contains(username)) {
+          HashMap<String, String> users = disconnectedUsers.get(room);
+          if (!users.containsKey(username)) {
             continue;
+          } else {
+            name = users.get(username);
           }
         }
-        // TODO: assign old room
         output.writeUTF("Enter successfully.");
         break;
+      }
+      // TODO: assign old room
+      // get the old gameServer
+      for (HashMap.Entry<GameServer, Integer> entry : gameIDs.entrySet()) {
+        if (entry.getValue() == room) {
+          GameServer gameServer = entry.getKey();
+          gameServer.reconnectUser(clientSocket, name, username);
+          break;
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -153,10 +171,11 @@ public class ServerHandler extends Thread {
       GameServer gameServer = gameRooms.get(playerNum);
       if (gameServer.isReadyToStart()) {
         System.out.println("Create a new room for playerNum: " + playerNum);
-        gameServer = new GameServer(portNum, playerNum);
+        gameServer = new GameServer(portNum, playerNum, gameBoards, disconnectedUsers);
         gameRooms.put(playerNum, gameServer);
       }
       gameServer.addClient(clientSocket);
+      gameServer.addUsername(username);
       // store current gameid and player username
       if (currentGames.containsKey(gameID)) {
         currentGames.get(gameID).add(username);
@@ -169,6 +188,7 @@ public class ServerHandler extends Thread {
       if (gameServer.isReadyToStart()) {
         // store corresponding gameID
         gameIDs.put(gameServer, gameID);
+        gameServer.setGameID(gameID);
         System.out.println("This room is ready to start, playerNum: " + playerNum + " gameID: " + gameID);
         gameID++;
         // detach a new thread for a room

@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.concurrent.locks.Condition;
@@ -36,8 +37,15 @@ public class ClientHandler extends Thread {
   final Lock lock;
   final Condition isReady;
   Boolean connectFlag;
+  Boolean disconnectFlag;
+  private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
+  final String username;
+  final int gameID;
 
-  public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, Board b, String name, Lock lock, Condition isReady){
+  public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, 
+                        Board b, String name, Lock lock, Condition isReady,
+                        HashMap<Integer, HashMap<String, String>> disconnectedUsers,
+                        int gameID, String username){
     this.input = in;
     this.output = out;
     this.socket = s;
@@ -48,6 +56,7 @@ public class ClientHandler extends Thread {
     this.board = b;
     this.playerName = name;
     this.connectFlag = true;
+    this.disconnectFlag = false;
     this.player = getPlayer();
     this.actionSet = new HashSet<Character>();
     actionSet.add('D');
@@ -55,6 +64,9 @@ public class ClientHandler extends Thread {
     actionSet.add('A');
     this.lock = lock;
     this.isReady = isReady;
+    this.disconnectedUsers = disconnectedUsers;
+    this.gameID = gameID;
+    this.username = username;
   }
 
   @Override
@@ -92,7 +104,16 @@ public class ClientHandler extends Thread {
       connectFlag = false;
     } catch(IOException e){
       // disconnect
-      System.out.println(playerName + " disconnected.");
+      if (disconnectedUsers.containsKey(gameID)) {
+        HashMap<String, String> users = disconnectedUsers.get(gameID);
+        users.put(username, playerName);
+      } else {
+        HashMap<String, String> users = new HashMap<String, String>();
+        users.put(username, playerName);
+        disconnectedUsers.put(gameID, users);
+      }
+      this.disconnectFlag = true;
+      System.out.println(username + ": " + playerName + " in gameID: " + gameID + " disconnected.");
       //e.printStackTrace();
     } finally {
       //close connection when game over
@@ -122,6 +143,10 @@ public class ClientHandler extends Thread {
    */
   public boolean getConnectFlag() {
     return connectFlag;
+  }
+
+  public boolean getDisconnectFlag() {
+    return disconnectFlag;
   }
 
   /**
