@@ -256,6 +256,12 @@ public class Board {
     }
   }
 
+  public synchronized void processOneTurnUpdateUnits(LinkedHashSet<UpgradeAction> actionSet) {
+    for (UpgradeAction a : actionSet) {
+      processSingleUpdateUnit(a);
+    }
+  }
+
   public synchronized void processOneTurnAttackPre(LinkedHashSet<BasicAction> actionSet) {
     for (BasicAction a : actionSet) {
       processSingleBasicAttackPre(a);
@@ -267,6 +273,7 @@ public class Board {
    * @param actionSet
    * @return
    */
+  /*
   public synchronized LinkedHashSet<BasicAction> mergeOneTurnAttack(LinkedHashSet<BasicAction> actionSet) {
     HashMap<String, BasicAction> tempMap = new HashMap<>();
     LinkedHashSet<BasicAction> newAttackset = new LinkedHashSet<>();
@@ -285,7 +292,7 @@ public class Board {
     }
     return newAttackset;
   }
-
+*/
   // Comparator<AttackNextObjV2> comparatorDecrease = new Comparator<AttackNextObjV2>(){
   //   public int compare(AttackNextObjV2 a1, AttackNextObjV2 a2) {
   //     return a2.getAttackSoldierLevel() - a1.getAttackSoldierLevel();
@@ -349,7 +356,7 @@ public class Board {
   private Integer boardRandomNum(){
     return boardRandomGenerator.nextInt((20 - 1) + 1) + 1;
   }
-  
+
 /**
  * get a soldier's name by the bonus 
  * @param Bonus
@@ -391,36 +398,51 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
   //sorted ascending
   Collections.sort(defenceList, comparatorIncrease);
   Collections.sort(attackList, comparatorIncrease);
+  //System.out.println("begin " + defenceList);
+    //System.out.println("begin " + attackList);
   int marker = 1; //1 for attacker->defender, 0 for defender->attacker
+  //process attack
   while(defenceList.size() > 0 && attackList.size() > 0){
+    //System.out.println("turn");
     if(marker == 1){ 
-      int attack = attackList.indexOf(attackList.size() - 1);
-      int defender = defenceList.indexOf(0);
+      //System.out.println("in 1");
+      int attack = attackList.get(attackList.size() - 1);
+      //System.out.println("1 attack = " + attack);
+      int defender = defenceList.get(0);
+      //System.out.println("1 defender = " + defender);
       int attackRandom = boardRandomNum() + attack;
       int defendRandom = boardRandomNum() + defender;
       if(attackRandom > defendRandom){
         defenceList.remove(0);
         String defenderSoldierName = getSoldierNameByBonus(defender);
+        //System.out.println("d " + defender + ", "+ defenderSoldierName);
         Soldiers defenderLoseSoldier = getSoldiersByName(defenderSoldierName, TerritoryName);
         defenderLoseSoldier.updateCount(defenderLoseSoldier.getCount() - 1);
+        marker = 0;
       }
       else if(attackRandom < defendRandom){
         attackList.remove(attackList.size() - 1);
         String attackSoldierName = getSoldierNameByBonus(attack);
+        //System.out.println("a " + attack + ", " + attackSoldierName);
         BasicAction attackLoseAction = oneTerritoryAttackMap.get(attackSoldierName);
         attackLoseAction.modifyCount(-1);
       }
-      marker = 0;
+      //System.out.println(defenceList);
+      //System.out.println(attackList);
       continue;
     }
     else{ //marker = 0
-      int attack = attackList.indexOf(0);
-      int defender = defenceList.indexOf(defenceList.size() - 1);
+      //System.out.println("in 0");
+      int attack = attackList.get(0);
+      int defender = defenceList.get(defenceList.size() - 1);
+      //System.out.println("0 attack = " + attack);
+      //System.out.println("0 defender = " + defender);
       int attackRandom = boardRandomNum() + attack;
       int defendRandom = boardRandomNum() + defender;
       if(attackRandom > defendRandom){
         defenceList.remove(defenceList.size() - 1);
         String defenderSoldierName = getSoldierNameByBonus(defender);
+        //System.out.println("0 d " + defender + ", "+ defenderSoldierName);
         Soldiers defenderLoseSoldier = getSoldiersByName(defenderSoldierName, TerritoryName);
         defenderLoseSoldier.updateCount(defenderLoseSoldier.getCount() - 1);
 
@@ -430,8 +452,10 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
         String attackSoldierName = getSoldierNameByBonus(attack);
         BasicAction attackLoseAction = oneTerritoryAttackMap.get(attackSoldierName);
         attackLoseAction.modifyCount(-1);
+        marker = 1;
       }
-      marker = 1;
+      //System.out.println(defenceList);
+      //System.out.println(attackList);
       continue;
     }
   }
@@ -457,6 +481,7 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
       BasicAction bTemp = oneTerritoryAttackMap.get(s);
       //Soldiers s = new (bTemp.getLevelName(), bTemp.getCount(), soldierBonusLevelTable.get(bTemp.getLevelName()), int cost, int techReq);
       Soldiers newSoldiers = createDiffSoldiersByName(bTemp.getLevelName());
+      newSoldiers.updateCount(bTemp.getCount());
       destTerri.setUnits(newSoldiers);
     }
   }
@@ -522,6 +547,12 @@ private Soldiers createDiffSoldiersByName(String name){
     String soldierName = basicAct.getLevelName(); //get moved soldier name
     Soldiers srcSoldier = getSoldiersByName(soldierName, src); //get moved soldier object in src
     Soldiers destSoldier = getSoldiersByName(soldierName, dest); //get moved soldier object in dest
+    if(destSoldier == null){
+      destSoldier = createDiffSoldiersByName(soldierName);
+      destSoldier.updateCount(0);
+      Territory t = allTerritory.get(dest);
+      t.setUnits(destSoldier);
+    }
     int foodConsumed = basicAct.getFoodConsume(); //get move consumed food
     int count = basicAct.getCount(); //get move number
     //update soldier number in src an dest
@@ -556,11 +587,17 @@ private Soldiers createDiffSoldiersByName(String name){
    */
   public synchronized void processSingleUpdateUnit(UpgradeAction upAct) {
     String src = upAct.getSource();
+    Territory tSrc = allTerritory.get(src);
     String soldierSLevel = upAct.getsLevel();
     String soldierFLevel = upAct.getfLevel();
     int updateSoldierNum = upAct.getCount();
     Soldiers sLevelSoldier = getSoldiersByName(soldierSLevel, src);
     Soldiers fLevelSoldier = getSoldiersByName(soldierFLevel, src);
+    if(fLevelSoldier == null){
+      fLevelSoldier = createDiffSoldiersByName(soldierFLevel);
+      fLevelSoldier.updateCount(0);
+      tSrc.setUnits(fLevelSoldier);
+    }
     //update number
     sLevelSoldier.updateCount(sLevelSoldier.getCount() - updateSoldierNum);
     fLevelSoldier.updateCount(fLevelSoldier.getCount() + updateSoldierNum);
