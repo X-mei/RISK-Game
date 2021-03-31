@@ -76,11 +76,13 @@ public class ClientHandler extends Thread {
 
   @Override
   public void run(){
-    String playerInfo;
-    playerInfo = playerName;
+    String playerInfo = playerName;
     try{
       // send playerInfo
       output.writeUTF(playerInfo);
+      output.writeUTF("Hi, You are player " + playerName + ", and this gameID is " + gameID);
+      output.writeUTF(Integer.toString(statusFlag));
+      
       // ask client to assign territory
       if (statusFlag == 1) {
         assignTerritory();
@@ -121,7 +123,7 @@ public class ClientHandler extends Thread {
       }
       this.disconnectFlag = true;
       disconnectedGames.put(gameID, statusFlag);
-      System.out.println(username + ": " + playerName + " in gameID: " + gameID + " disconnected.");
+      System.out.println(username + ": " + playerName + " in gameID: " + gameID + " disconnected. StatusFlag = " + statusFlag);
       //e.printStackTrace();
     } finally {
       //close connection when game over
@@ -202,7 +204,6 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
-      sleep(100);
     } catch(InterruptedException e) {
       e.printStackTrace();
     }

@@ -17,7 +17,8 @@ public class App {
         client.login();
         client.answerInfo();
         client.recvNameAndSeq();
-        if (client.getReconnected() == false) {
+        client.recvStartStatus();
+        if (client.getStartStatus() == 1) {
           client.recvAssignTerritory();
         }
         while(true) {
