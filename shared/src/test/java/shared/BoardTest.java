@@ -238,7 +238,51 @@ public class BoardTest {
     //b.processOneTerritoryAttackNextV2("Ilios", outMap.get("Ilios"));
     b.processOneTurnAttackNextV2(outMap);
   }
-  /*
+
+  @Test 
+  public void test_displaySinlgePlayerBoardV2(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv3");
+    UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv1 1 Lv7");
+    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv3 2 Lv7");
+    LinkedHashSet<UpgradeAction> s1 = new LinkedHashSet<>();
+    s1.add(a1);
+    s1.add(a2);
+    s1.add(a3);
+    b.processOneTurnUpdateUnits(s1);
+    b.displayAllPlayerAllBoard();
+  }
+
+  @Test
+  public void test_checkSinglePlayerLose() {
+    Board b = getTestBoard();
+    for (String s : b.getAllTerritroy().keySet()) {
+      b.singleTerritoryUnitSetup(s, new int[] { 10 });
+    }
+    assertEquals("", b.checkGameEnd());
+    assertEquals(false, b.checkSinglePlayerLose("King"));
+    b.getTerritory("Dorado").updateOwner("Red");
+    b.getTerritory("Hanamura").updateOwner("Red");
+    b.getTerritory("Hollywood").updateOwner("Red");
+    LinkedHashSet<Territory> temp = b.getBoard().get("King");
+    temp.clear();
+    assertEquals(true, b.checkSinglePlayerLose("King"));
+    assertEquals("Red", b.checkGameEnd());
+  }
+
+  @Test
+  public void spawnOneUnitForPlayer() {
+    Board b = getTestBoard();
+    for (String s : b.getAllTerritroy().keySet()) {
+      b.singleTerritoryUnitSetup(s, new int[] { 10 });
+    }
+    b.spawnOneUnitForPlayer("King");
+    assertEquals(11, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+  }
+
   @Test
   public void test_getBoard() {
     MapFactory f = new MapFactory();
@@ -268,6 +312,14 @@ public class BoardTest {
   }
   
   @Test
+  public void test_getTotalUnits() {
+    MapFactory f = new MapFactory();
+    UnitsFactory u = new UnitsFactory();
+    Board b = new Board(2, f, u);
+    assertEquals(20, b.getTotalUnits());
+  }
+
+  @Test
   public void test_askUnitSetup() {
     MapFactory f = new MapFactory();
     UnitsFactory u = new UnitsFactory();
@@ -282,6 +334,9 @@ public class BoardTest {
     assertEquals(expected[2], actual[2]);
   }
   
+  /*
+  
+  
   @Test
   public void test_getTerritory() {
     MapFactory f = new MapFactory();
@@ -293,13 +348,7 @@ public class BoardTest {
     assertEquals("Red", t1.getOwner());
   }
   
-  @Test
-  public void test_getTotalUnits() {
-    MapFactory f = new MapFactory();
-    UnitsFactory u = new UnitsFactory();
-    Board b = new Board(2, f, u);
-    assertEquals(20, b.getTotalUnits());
-  }
+  
   
   @Test
   public void test_displayAllPlayerAllBoard(){
@@ -461,32 +510,7 @@ public class BoardTest {
     assertEquals(4,unitsNum);
   }
 
-  @Test
-  public void test_checkSinglePlayerLose() {
-    Board b = getTestBoard();
-    for (String s : b.getAllTerritroy().keySet()) {
-      b.singleTerritoryUnitSetup(s, new int[] { 10 });
-    }
-    assertEquals("", b.checkGameEnd());
-    assertEquals(false, b.checkSinglePlayerLose("King"));
-    b.getTerritory("Dorado").updateOwner("Red");
-    b.getTerritory("Hanamura").updateOwner("Red");
-    b.getTerritory("Hollywood").updateOwner("Red");
-    LinkedHashSet<Territory> temp = b.getBoard().get("King");
-    temp.clear();
-    assertEquals(true, b.checkSinglePlayerLose("King"));
-    assertEquals("Red", b.checkGameEnd());
-  }
-
-  @Test
-  public void spawnOneUnitForPlayer() {
-    Board b = getTestBoard();
-    for (String s : b.getAllTerritroy().keySet()) {
-      b.singleTerritoryUnitSetup(s, new int[] { 10 });
-    }
-    b.spawnOneUnitForPlayer("King");
-    assertEquals(11, b.getTerritory("Hanamura").getOneUnits("Basic Soldiers").getCount());
-  }
+  
   */
 }
 
