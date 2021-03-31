@@ -250,6 +250,7 @@ public class BoardTest {
     s1.add(a2);
     s1.add(a3);
     b.processOneTurnUpdateUnits(s1);
+    assertEquals("", b.displayAllPlayerAllBoard());
     b.displayAllPlayerAllBoard();
   }
 

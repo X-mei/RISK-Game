@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.concurrent.locks.Condition;
@@ -14,8 +15,10 @@ import shared.BasicAction;
 import shared.Board;
 import shared.MapFactory;
 import shared.Player;
+import shared.TechAction;
 import shared.Territory;
 import shared.UnitsFactory;
+import shared.UpgradeAction;
 
 /**
  * ClientHandler class extends from thread and
@@ -29,6 +32,8 @@ public class ClientHandler extends Thread {
   final UnitsFactory UnitsFac;
   final LinkedHashSet<BasicAction> moveHashSet;
   final LinkedHashSet<BasicAction> attackHashSet;
+  final LinkedHashSet<UpgradeAction> upgradeSoldierHashSet;
+  private TechAction techUpgarde;
   final Board board;
   final String playerName;
   final Player player;
@@ -36,6 +41,7 @@ public class ClientHandler extends Thread {
   final Lock lock;
   final Condition isReady;
   Boolean connectFlag;
+  //private Boolean techUpgradeMarker;
 
   public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, Board b, String name, Lock lock, Condition isReady){
     this.input = in;
@@ -45,6 +51,8 @@ public class ClientHandler extends Thread {
     this.UnitsFac = new UnitsFactory();
     this.moveHashSet = new LinkedHashSet<BasicAction>();
     this.attackHashSet = new LinkedHashSet<BasicAction>();
+    this.upgradeSoldierHashSet = new LinkedHashSet<UpgradeAction>();
+    this.techUpgarde = null;
     this.board = b;
     this.playerName = name;
     this.connectFlag = true;
@@ -53,8 +61,11 @@ public class ClientHandler extends Thread {
     actionSet.add('D');
     actionSet.add('M');
     actionSet.add('A');
+    actionSet.add('U');
+    actionSet.add('T');
     this.lock = lock;
     this.isReady = isReady;
+    //this.techUpgradeMarker = true;
   }
 
   @Override
@@ -154,7 +165,7 @@ public class ClientHandler extends Thread {
       }
       int j = 0;
       for(Territory t: player.getTerritoryList()) {
-        int[] unitsToAdd = new int[1];
+        int [] unitsToAdd = new int[7];
         unitsToAdd[0] = unitsAssign[j];
         board.singleTerritoryUnitSetup(t.getTerritoryName(), unitsToAdd);
         j++;
@@ -178,11 +189,15 @@ public class ClientHandler extends Thread {
     try {
       moveHashSet.clear();
       attackHashSet.clear();
+      upgradeSoldierHashSet.clear();
+      techUpgarde = null;
       String boardMsg = board.displayAllPlayerAllBoard();
       output.writeUTF(boardMsg);
       Boolean valid = true;
       Boolean actionValid = true;
+      Boolean techUpgradeMarker = true;
       String received = null;
+      String techUpdate = "";
       while(true) {
         String prompt = "";
         if (!valid) {
@@ -191,9 +206,11 @@ public class ClientHandler extends Thread {
         else if (!actionValid) {
           prompt += "Invalid action! Please input all actions you want again.\n";
         }
-        prompt += "You are the " + playerName + " player, what would you like to do?\n(M)ove\n(A)ttack\n(D)one";
+        prompt += techUpdate;
+        prompt += "You are the " + playerName + " player, what would you like to do?\n(U)pgrade Soldier\n(M)ove\n(A)ttack\n(T)ech Upgrade\n(D)one";
         valid = true;
         actionValid = true;
+        techUpdate = "";
         output.writeUTF(prompt);
         received = input.readUTF();
         if(received.length() != 1){
@@ -208,8 +225,11 @@ public class ClientHandler extends Thread {
         }
         if(chr == 'D') {
           board.refreshTemp(playerName);
+          Player actionPlayer = board.getPlayerByName(playerName);
+          actionPlayer.refreshTempFoodResource();
+          actionPlayer.refreshTempTechResource();
           // rule checker of move and attack actions
-          if(board.checkIfActionBoolean(moveHashSet, "Move") && board.checkIfActionBoolean(attackHashSet, "Attack")) {
+          if(board.checkIfUpgradeBoolean(upgradeSoldierHashSet) && board.checkIfActionBoolean(moveHashSet, "Move") && board.checkIfActionBoolean(attackHashSet, "Attack")) {
             output.writeUTF("Wait for other players to perform the action...");
             lock.lock();
             isReady.await();
@@ -218,18 +238,20 @@ public class ClientHandler extends Thread {
           } else {
             moveHashSet.clear();
             attackHashSet.clear();
+            upgradeSoldierHashSet.clear();
+            techUpgarde = null;
             actionValid = false;
             continue;
           }
         }
-        else{
-          output.writeUTF("Please enter the action: src dest count");
+        else if(chr == 'M' || chr == 'A'){
+          output.writeUTF("Please enter the action: src dest count Level");
           String actionInfo = input.readUTF();
           //check the input string
-          if(!checkActionStr(actionInfo)){
+          /*if(!checkActionStr(actionInfo)){
             valid = false;
             continue;
-          }
+          }*/
           BasicAction act = player.formAction(received, actionInfo);
           if(act.getActionName().equals("M")){
             moveHashSet.add(act);
@@ -237,6 +259,38 @@ public class ClientHandler extends Thread {
           else{
             attackHashSet.add(act);
           }  
+        }
+        else if(chr == 'U'){
+          output.writeUTF("Please enter the action: Territory start-level count final-level");
+          String actionInfo = input.readUTF();
+          //check the input string
+          /*if(!checkActionStr(actionInfo)){
+            System.out.println("checkActionStr(actionInfo): " + checkActionStr(actionInfo));
+            valid = false;
+            continue;
+          }*/
+          UpgradeAction act = player.formUpgradeAction(actionInfo);
+          System.out.println(act.getfLevel() + " " + act.getsLevel() + " " + act.getCount());
+          upgradeSoldierHashSet.add(act);
+        }
+        else{
+          //output.writeUTF("Please enter the action: Territory start-level count final-level");
+          //String actionInfo = input.readUTF();
+          //check the input string
+          //if(!checkActionStr(actionInfo)){
+            //valid = false;
+            //continue;
+          //}
+          if(techUpgradeMarker){
+            TechAction act = player.formTechAction();
+            techUpgarde = act;
+            techUpgradeMarker = false;
+            techUpdate = "";
+          }
+          else{
+            techUpdate = "You can only upgrade tech level once in one turn!\n";
+            //output.writeUTF("You can only upgrade tech level once in one turn!");
+          }
         }
       }
     }catch(IOException e){
@@ -252,6 +306,7 @@ public class ClientHandler extends Thread {
    */
   public void updateBoard() {
     try {
+      board.processOneTurnUpdateUnits(upgradeSoldierHashSet);
       board.processOneTurnMove(moveHashSet);
       lock.lock();
       isReady.await();
@@ -260,15 +315,17 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
-      LinkedHashSet<BasicAction> newAttackSet = board.mergeOneTurnAttack(attackHashSet);
+      HashMap<String, HashMap<String, BasicAction>> newAttackMap = board.mergeOneTurnAttackV2(attackHashSet);
       lock.lock();
       isReady.await();
       lock.unlock();
-      board.processOneTurnAttackNext(newAttackSet);
+      board.processOneTurnAttackNextV2(newAttackMap);
       lock.lock();
       isReady.await();
       lock.unlock();
       board.spawnOneUnitForPlayer(playerName);
+      board.spawnResourceForPlayer(playerName);
+      board.processUpdateTech(techUpgarde);
       lock.lock();
       isReady.await();
       lock.unlock();

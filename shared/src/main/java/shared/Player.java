@@ -150,6 +150,9 @@ public class Player {
     techLevel += 1;
   }
 
+  public void setTechLevel(int level){
+    techLevel = level;
+  }
 }                     
 
 
