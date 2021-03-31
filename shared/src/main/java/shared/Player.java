@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.function.BiFunction;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
+
 /**
  * This class correspond to one player in the game, player have access to its status, name and all the territory that belongs to her.
  * Player can .
@@ -66,6 +68,17 @@ public class Player {
         throw new IllegalArgumentException("Not a valid action.");
       }
     }
+  }
+
+  public UpgradeAction formUpgradeAction(String input) throws IOException, IllegalArgumentException{
+    if (input == null) {
+      throw new IOException();
+    }
+    return factory.createUpgrade(name, input);
+  }
+
+  public TechAction formTechAction() {
+    return factory.createTechUpgrade(name);
   }
   
   public void addTerritory(LinkedHashSet<Territory> territory) {

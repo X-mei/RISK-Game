@@ -14,7 +14,7 @@ public class UnitMovingChecker extends RuleChecker{
     if (thisAct.getCount() <= cnt) {
       theBoard.updateTempCount(thisAct.getSource(), thisAct.getLevelName(), thisAct.getCount());
       if (thisAct.getActionName() == "M") {
-        theBoard.updateTempCount(thisAct.getDestination(), thisAct.getLevelName(), -cnt);
+        theBoard.updateTempCount(thisAct.getDestination(), thisAct.getLevelName(), -thisAct.getCount());
       }
       return null;
     }

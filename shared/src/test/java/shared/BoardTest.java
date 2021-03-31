@@ -8,10 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import net.bytebuddy.dynamic.scaffold.MethodGraph.Linked;
 
 public class BoardTest {
   private Board getTestBoard() {
@@ -345,9 +342,91 @@ public class BoardTest {
     b.spawnResourceForPlayer(s);
     assertEquals(1300, b.getPlayerByName(s).getFoodResource());
     }
-
-
   }
+
+  @Test
+  public void test_checkIfActionBoolean() throws IOException, IllegalArgumentException{
+    LinkedHashSet<BasicAction> testmove = new LinkedHashSet<>();
+    LinkedHashSet<BasicAction> testattack = new LinkedHashSet<>();
+    LinkedHashSet<BasicAction> testmove1 = new LinkedHashSet<>();
+    LinkedHashSet<BasicAction> testattack1 = new LinkedHashSet<>();
+    LinkedHashSet<BasicAction> testattack2 = new LinkedHashSet<>();
+    Board b = getTestBoard();
+    b.singleTerritoryUnitSetup("Dorado", new int[]{3,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Hanamura", new int[]{5,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Hollywood", new int[]{0,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Volskaya", new int[]{5,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Ilios", new int[]{10,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Junkertown", new int[]{5,0,0,0,0,0,0});
+    BasicAction moveact1 = new Move("King", "Dorado Hollywood 3 Lv1");
+    BasicAction moveact2 = new Move("King", "Hanamura Hollywood 4 Lv1");
+    BasicAction moveact3 = new Move("King", "Hollywood Dorado 7 Lv1");
+    BasicAction moveact4 = new Move("King", "Dorado Hollywood 7 Lv1");
+    BasicAction attackact1 = new Attack("King", "Hanamura Ilios 9 Lv1");
+    BasicAction attackact2 = new Attack("King", "A B 5 Lv3");
+    BasicAction attackact3 = new Attack("King", "Dorado Ilios 3 Lv2");
+    BasicAction attackact4 = new Attack("King", "Hanamura Ilios 1 Lv1");
+    Player p = b.getPlayerByName("King");
+    b.refreshTemp("King");
+    b.refreshTemp("Red");
+    p.updateFoodResource(-800);
+    p.refreshTempFoodResource();
+    testmove.add(moveact1);
+    testmove.add(moveact2);
+    testmove.add(moveact3);
+    testmove1.add(moveact4);
+    testattack.add(attackact1);
+    testattack.add(attackact2);
+    testattack1.add(attackact3);
+    testattack2.add(attackact4);
+    String type1 = "Move";
+    String type2 = "Attack";
+    Boolean status1 = b.checkIfActionBoolean(testmove, type1);
+    Boolean status2 = b.checkIfActionBoolean(testattack, type2);
+    Boolean status3 = b.checkIfActionBoolean(testmove1, type1);
+    Boolean status4 = b.checkIfActionBoolean(testattack1, type2);
+    Boolean status5= b.checkIfActionBoolean(testattack2, type2);
+    assertEquals(true, status1);
+    assertEquals(false, status2);
+    assertEquals(false, status3);
+    assertEquals(false, status4);
+    assertEquals(true, status5);
+  }
+
+  @Test
+  public void test_checkIfUpgradeBoolean() throws IOException, IllegalArgumentException{
+    LinkedHashSet<UpgradeAction> testup1 = new LinkedHashSet<>();
+    LinkedHashSet<UpgradeAction> testup2 = new LinkedHashSet<>();
+    LinkedHashSet<UpgradeAction> testup3 = new LinkedHashSet<>();
+    Board b = getTestBoard();
+    b.singleTerritoryUnitSetup("Dorado", new int[]{3,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Hanamura", new int[]{0,10,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Hollywood", new int[]{0,0,5,0,0,0,0});
+    b.singleTerritoryUnitSetup("Volskaya", new int[]{5,0,0,0,6,0,0});
+    b.singleTerritoryUnitSetup("Ilios", new int[]{10,0,0,0,0,0,3});
+    b.singleTerritoryUnitSetup("Junkertown", new int[]{5,0,0,0,0,0,0});
+    UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv2 3 Lv3");
+    UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv2 4 Lv5");
+    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv9 4 Lv7");
+    UpgradeAction a4 = new UpgradeAction("King", "Ilios Lv3 4 Lv7");
+    UpgradeAction a5 = new UpgradeAction("King", "A Lv3 5 Lv7");
+    UpgradeAction a6 = new UpgradeAction("King", "Hanamura Lv3 3 Lv7");
+    Player p = b.getPlayerByName("King");
+    b.refreshTemp("King");
+    b.refreshTemp("Red");
+    p.updateTechResource(-700);
+    p.refreshTempTechResource();
+    testup1.add(a1);
+    testup1.add(a2);
+    testup2.add(a3);
+    testup2.add(a4);
+    testup3.add(a5);
+    testup3.add(a6);
+    assertEquals(true, b.checkIfUpgradeBoolean(testup1));
+    assertEquals(false, b.checkIfUpgradeBoolean(testup2));
+    assertEquals(false, b.checkIfUpgradeBoolean(testup3));
+  }
+  
   /*
   @Test
   public void test_getTerritory() {
@@ -457,49 +536,6 @@ public class BoardTest {
     assertEquals(0, b.getTerritory("Hanamura").getOneUnits("Basic Soldiers").getCount());
   }
   
-  @Test
-  public void test_checkIfActionBoolean()throws IOException, IllegalArgumentException{
-    HashSet<BasicAction> testmove = new HashSet<>();
-    HashSet<BasicAction> testattack = new HashSet<>();
-    HashSet<BasicAction> testmove1 = new HashSet<>();
-    HashSet<BasicAction> testattack1 = new HashSet<>();
-    HashSet<BasicAction> testattack2 = new HashSet<>();
-    Board b = getTestBoard();
-    b.singleTerritoryUnitSetup("Dorado", new int[]{5});
-    b.singleTerritoryUnitSetup("Hanamura", new int[]{10});
-    b.singleTerritoryUnitSetup("Hollywood", new int[]{5});
-    b.singleTerritoryUnitSetup("Volskaya", new int[]{5});
-    b.singleTerritoryUnitSetup("Ilios", new int[]{10});
-    b.singleTerritoryUnitSetup("Junkertown", new int[]{5});
-    BasicAction moveact1 = new Move("King", "Dorado Hollywood 1");
-    BasicAction moveact2 = new Move("King", "Hanamura Dorado 2");
-    BasicAction moveact3 = new Move("King", "A I 200");
-    BasicAction attackact1 = new Attack("King", "Hanamura B 9");
-    BasicAction attackact2 = new Attack("King", "A B 5");
-    BasicAction attackact3 = new Attack("King", "Dorado Ilios 3");
-    BasicAction attackact4 = new Attack("King", "Hollywood Ilios 3");
-    b.refreshTemp("King");
-    b.refreshTemp("Red");
-    testmove.add(moveact1);
-    testmove.add(moveact2);
-    testmove1.add(moveact3);
-    testattack.add(attackact1);
-    testattack.add(attackact2);
-    testattack1.add(attackact3);
-    testattack2.add(attackact4);
-    String type1 = "Move";
-    String type2 = "Attack";
-    Boolean status1 = b.checkIfActionBoolean(testmove, type1);
-    Boolean status2 = b.checkIfActionBoolean(testattack, type2);
-    Boolean status3 = b.checkIfActionBoolean(testmove1, type1);
-    Boolean status4 = b.checkIfActionBoolean(testattack1, type2);
-    Boolean status5= b.checkIfActionBoolean(testattack2, type2);
-    assertEquals(true, status1);
-    assertEquals(true, status5);
-    assertEquals(false, status4);
-    assertEquals(false, status3);
-    assertEquals(false, status2);
-  }
   /*
   @Test
   public void test_getTerritoryUnitsCount(){
