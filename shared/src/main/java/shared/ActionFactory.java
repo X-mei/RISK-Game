@@ -12,6 +12,10 @@ public class ActionFactory {
   public UpgradeAction createUpgrade(String name, String s) {
     return new UpgradeAction(name, s);
   }
+
+  public TechAction createTechUpgrade(String name) {
+    return new TechAction(name);
+  }
 }
 
 
