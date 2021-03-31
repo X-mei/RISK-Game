@@ -20,7 +20,7 @@ public class NeighborChecker extends RuleChecker {
       return "You cannot attack your own territory.";
     }
     Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
-    if (thisAct.getCount() > p.getFoodResource()) {
+    if (thisAct.getCount() > p.getTempFoodResource()) {
       return "No enough food to move those soldiers.";
     }
     if(theBoard.getTerritory(src).isNeighbor(theBoard.getTerritory(dest))){

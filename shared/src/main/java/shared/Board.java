@@ -73,7 +73,7 @@ public class Board {
       }
     }
     this.UnitName = new LinkedHashSet<>();
-    UnitName.add("Lv1");
+    unitNameSetup();
     this.attackRuleChecker = new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null)));
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
     this.upgradeRuleChecker = new UpgradeChecker(null);
@@ -140,6 +140,15 @@ public class Board {
     return totalUnitsNum;
   }
 
+  public void unitNameSetup() {
+    UnitName.add("Lv1");
+    UnitName.add("Lv2");
+    UnitName.add("Lv3");
+    UnitName.add("Lv4");
+    UnitName.add("Lv5");
+    UnitName.add("Lv6");
+    UnitName.add("Lv7");
+  }
   /*
   public int getFoodAmount() {
     return foodAmount;
@@ -152,7 +161,7 @@ public class Board {
   public int getTechLevel() {
     return techLevel;
   }
-  
+ 
   public Player getPlayer(String pName) {
     for (Player p : playerList) {
       if (p.getName() == pName) {
@@ -220,6 +229,9 @@ public class Board {
   }*/
 
   public Integer getTerritoryUnitsCount(String Tname, String Sname) {
+    if (tempCount.get(Tname) == null) {
+      return null;
+    }
     return tempCount.get(Tname).get(Sname);
   }
 

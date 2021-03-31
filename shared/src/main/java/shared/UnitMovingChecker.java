@@ -19,8 +19,6 @@ public class UnitMovingChecker extends RuleChecker{
       return null;
     }
     else {
-      //System.out.println(cnt);
-      //System.out.println();
       return "You do not have enough unit to move.";
     }
   }

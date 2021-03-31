@@ -3,12 +3,14 @@ package shared;
 import java.util.HashSet;
 
 public class RouteChecker extends RuleChecker{
+  private int minCost;
   RouteChecker(RuleChecker next){
     super(next);
   }
   
   @Override
   public String checkMyRule(BasicAction thisAct, Board theBoard){
+    minCost = Integer.MAX_VALUE;
     Territory src = theBoard.getTerritory(thisAct.getSource());
     if (src == null){
       return "The selected source do not exist.";
@@ -19,15 +21,16 @@ public class RouteChecker extends RuleChecker{
     }
     HashSet<Territory> visited = new HashSet<Territory>();
     Integer cost = 0;
-    Integer minCost = Integer.MAX_VALUE;
     Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
-    if(checkRoute(src, dest, cost, minCost, visited)){
-      if (cost > p.getFoodResource()) {
+    checkRoute(src, dest, cost, visited);
+    Integer totalCost = thisAct.getCount() * minCost;
+    if(minCost != Integer.MAX_VALUE){
+      if (totalCost > p.getTempFoodResource()) {
         return "No enough food to move those soldiers.";
       }
       else {
-        p.updateTempFoodResource(-minCost);
-        thisAct.setCost(minCost);
+        p.updateTempFoodResource(-totalCost);
+        thisAct.setCost(totalCost);
         return null;
       }
     }
@@ -36,22 +39,23 @@ public class RouteChecker extends RuleChecker{
     }
   }
   
-  private boolean checkRoute(Territory src, Territory dest, Integer cost, Integer minCost, HashSet<Territory> visited){
+  private void checkRoute(Territory src, Territory dest, Integer cost, HashSet<Territory> visited){
     visited.add(src);
     cost += src.getSize();
-    if(src == dest){
+    if(src.equals(dest)){
+      cost -= src.getSize();
       minCost = Math.min(minCost, cost);
-      return true;
+      visited.remove(src);
+      return;
     }
     for(Territory neighbor : src.neighboursByOneOwner()){
-      //src.neighbors:ArrayList for neighbors
-      if(!visited.contains(neighbor) && checkRoute(neighbor,dest,cost, minCost, visited)){
-        return true;
+      if(!visited.contains(neighbor)){
+        checkRoute(neighbor, dest, cost, visited);
       }
     }
     cost -= src.getSize();
     visited.remove(src);
-    return false;
+    return;
   }
 }
  

@@ -92,7 +92,7 @@ public class Player {
   public String getStatus() {
     return status;
   }
-
+  
   public int getTechResource(){
     return techResource;
   }
@@ -117,12 +117,16 @@ public class Player {
     foodResource += credits;
   }
 
+  public int getTempFoodResource() {
+    return tempFoodResource;
+  }
+  
   public void refreshTempFoodResource() {
     tempFoodResource = foodResource;
   }
   
   public void updateTempFoodResource(int credits) {
-    tempFoodResource -= credits;
+    tempFoodResource += credits;
   }
   
   public int getTechLevel(){
