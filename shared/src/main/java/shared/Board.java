@@ -790,10 +790,18 @@ private Soldiers createDiffSoldiersByName(String name){
     String ans = s1 + createDottedLine(s1.length());
     String territoryInfo = "";  
     for(Territory t : terriSet){
-      Soldiers tempS = t.getOneUnits("Lv1");
-      int SoldierNum = tempS.getCount();
+      String soldierNameString = "";
+      //Soldiers tempS = t.getOneUnits("Lv1");
+      //int SoldierNum = tempS.getCount();
       //Eg: temp = "10 Lv1 in Numbani (next to:"
-      String temp = SoldierNum + " " + tempS.getName() + " in " + t.getTerritoryName() + " (next to:";
+      String comma = "";
+      for(String s : t.getSoldiers().keySet()){
+        Soldiers tempS = t.getSoldiers().get(s);
+        int SoldierNum = tempS.getCount();
+        soldierNameString += comma + SoldierNum + " " + tempS.getName();
+        comma = ", ";
+      }
+      String temp = soldierNameString +  " Soldiers in " + t.getTerritoryName() + " (next to:";
       String space = " ";
       String tempNeighbor = "";
       for (Territory tNeighbor : t.getNeighbours()) {
