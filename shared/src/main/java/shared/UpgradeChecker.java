@@ -19,11 +19,15 @@ public class UpgradeChecker extends SpecialRuleChecker{
     if (startL == null || endL == null) {
       return "Invalid starting or ending level.";
     }
+    
     if (cnt < thisAct.getCount()) {
       return "You do not have enough soldier to upgrade.";
     }
     Integer totalCost = thisAct.getCount() * (endL.getCost() - startL.getCost());
     Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
+    if (endL.getTechReq()>p.getTechLevel()){
+      return "You tech level is not high enough.";
+    }
     if (totalCost > p.getTechResource()) {
       return "You do not have enough resources to upgrade.";
     }

@@ -23,6 +23,7 @@ public class UpgradeCheckerTest {
     UpgradeAction a5 = new UpgradeAction("King", "A Lv3 5 Lv7");
     UpgradeAction a6 = new UpgradeAction("King", "Hanamura Lv3 3 Lv7");
     Player p = b.getPlayerByName("King");
+    p.setTechLevel(6);
     b.refreshTemp("King");
     p.updateTechResource(-900);
     p.refreshTempTechResource();

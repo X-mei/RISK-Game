@@ -237,6 +237,9 @@ public class Board {
 
   public void updateTempCount(String Tname, String Sname, Integer cnt) {
     HashMap<String, Integer> temp = tempCount.get(Tname);
+    // if (temp == null){
+    //   temp.put(Sname, -cnt);
+    // }
     temp.put(Sname, temp.get(Sname) - cnt);
   }
 
@@ -495,13 +498,14 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
       defenderTerriSet.remove(destTerri);
     }
     //update soldier
-    destTerri.clearAllUnits();
+    //destTerri.clearAllUnits();
     for(String s : oneTerritoryAttackMap.keySet()){
       BasicAction bTemp = oneTerritoryAttackMap.get(s);
       //Soldiers s = new (bTemp.getLevelName(), bTemp.getCount(), soldierBonusLevelTable.get(bTemp.getLevelName()), int cost, int techReq);
-      Soldiers newSoldiers = createDiffSoldiersByName(bTemp.getLevelName());
+      Soldiers newSoldiers = getSoldiersByName(bTemp.getLevelName(), TerritoryName);
+      //Soldiers newSoldiers = createDiffSoldiersByName(bTemp.getLevelName());
       newSoldiers.updateCount(bTemp.getCount());
-      destTerri.setUnits(newSoldiers);
+      //destTerri.setUnits(newSoldiers);
     }
   }
 }
@@ -635,6 +639,9 @@ private Soldiers createDiffSoldiersByName(String name){
    * @param t
    */
   public synchronized void processUpdateTech(TechAction techUpAct) {
+    if (techUpAct == null){
+      return;
+    }
     String techUpOwner = techUpAct.getActionOwner();
     Player actionPlayer = getPlayerByName(techUpOwner);
     int currTechLevel = actionPlayer.getTechLevel();
@@ -649,6 +656,7 @@ private Soldiers createDiffSoldiersByName(String name){
     }
     actionPlayer.updateTechResource(-techUpgradeCost);
     actionPlayer.updateTechLevel();
+    System.out.println("in tech update");
   }
 
   /**
@@ -719,7 +727,7 @@ private Soldiers createDiffSoldiersByName(String name){
     processSingleBasicAttackNext(basicAct);
   }
   */
-  public Boolean checkIfActionBoolean(HashSet<BasicAction> actions, String type) {
+  public Boolean checkIfActionBoolean(LinkedHashSet<BasicAction> actions, String type) {
     for (BasicAction action : actions) {
       String output;
       if (type == "Move") {
@@ -741,7 +749,7 @@ private Soldiers createDiffSoldiersByName(String name){
     return true;
   }
 
-  public Boolean checkIfUpgradeBoolean(HashSet<UpgradeAction> actions) {
+  public Boolean checkIfUpgradeBoolean(LinkedHashSet<UpgradeAction> actions) {
     String output;
     for (UpgradeAction action : actions) {
       output = upgradeRuleChecker.checkAction(action, this);
@@ -801,12 +809,17 @@ private Soldiers createDiffSoldiersByName(String name){
   }
 
   private String displaySinlgePlayerBoard(String playerName) {
+    Player p = getPlayerByName(playerName);
+    int pFoodResource = p.getFoodResource();
+    int pTechResource = p.getTechResource();
+    int pTechLevel = p.getTechLevel();
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     String s1 = playerName + " player:\n";
+    String s2 = "Tech Level: " + pTechLevel + ", Food: " + pFoodResource + ", Tech: " + pTechResource + "\n";
     // Eg: ans = "King player:
     //            ------------
     //           "
-    String ans = s1 + createDottedLine(s1.length());
+    String ans = s1 + createDottedLine(s1.length()) + s2 + "\n";
     String territoryInfo = "";  
     for(Territory t : terriSet){
       String soldierNameString = "";
@@ -817,6 +830,9 @@ private Soldiers createDiffSoldiersByName(String name){
       for(String s : t.getSoldiers().keySet()){
         Soldiers tempS = t.getSoldiers().get(s);
         int SoldierNum = tempS.getCount();
+        if(SoldierNum == 0){
+          continue;
+        }
         soldierNameString += comma + SoldierNum + " " + tempS.getName();
         comma = ", ";
       }
