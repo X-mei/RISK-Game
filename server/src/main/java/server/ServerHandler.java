@@ -65,13 +65,19 @@ public class ServerHandler extends Thread {
 
   public void newAccount() {
     try {
-      output.writeUTF("Please input your username.");
-      String username = input.readUTF();
-      output.writeUTF("Please input your password.");
-      String password = input.readUTF();
-      userLogInfo.put(username, password);
-      this.username = username;
-      output.writeUTF("Login successfully.");
+      while(true) {
+        output.writeUTF("Please input your username.");
+        String username = input.readUTF();
+        output.writeUTF("Please input your password.");
+        String password = input.readUTF();
+        if (userLogInfo.containsKey(username)) {
+          continue;
+        }
+        userLogInfo.put(username, password);
+        this.username = username;
+        output.writeUTF("Login successfully.");
+        break;
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
