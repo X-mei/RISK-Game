@@ -259,6 +259,17 @@ public class Board {
   }
 
   /**
+   * Set all kinds of units on one territory 
+   * @param territoryName is the target territory
+   * @param count is a array contains all numbers of each kind of unit
+   */
+  public void singleTerritoryUnitSetup(String territoryName, int count) {
+    Territory t = allTerritory.get(territoryName);
+    Soldiers u = unitsCreateFunction.get("Lv1").apply(count);
+    t.setUnits(u);
+  }
+  
+  /**
    * process one turn game
    * @param actionSet the set of all actions(all same kind)
    */

@@ -25,7 +25,7 @@ public class BoardTest {
   public void test_processSingleBasicMoveV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
     BasicAction a1 = new Move("King", "Hanamura Hollywood 4 Lv1");
@@ -46,15 +46,15 @@ public class BoardTest {
   public void test_processOneTurnMoveV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     BasicAction a1 = new Move("King", "Hanamura Hollywood 4 Lv1");
     a1.setCost(80);
     BasicAction a2 = new Move("King", "Hanamura Dorado 1 Lv1");
     a2.setCost(20);
+    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
     BasicAction a4 = new Move("King", "Hanamura Dorado 2 Lv7");
     a4.setCost(40);
-    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
     b.processSingleUpdateUnit(a3);
     LinkedHashSet<BasicAction> s1 = new LinkedHashSet<>();
     s1.add(a1);
@@ -74,7 +74,7 @@ public class BoardTest {
   public void test_processSingleUpdateUnitV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv3");
     UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv1 1 Lv7");
@@ -97,7 +97,7 @@ public class BoardTest {
   public void test_processOneTurnUpdateUnitsV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv3");
     UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv1 1 Lv7");
@@ -140,7 +140,7 @@ public class BoardTest {
   public void test_processUpdateTechV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     TechAction a1 = new TechAction("King");
     TechAction a2 = new TechAction("King");
@@ -162,7 +162,7 @@ public class BoardTest {
   public void test_processSingleBasicAttackPreV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
     BasicAction a1 = new Attack("King", "Hanamura Volskaya 2 Lv1");
@@ -184,7 +184,7 @@ public class BoardTest {
   public void test_processOneTurnAttackPre(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
     BasicAction a1 = new Attack("King", "Hanamura Volskaya 2 Lv1");
@@ -208,7 +208,7 @@ public class BoardTest {
   public void test_mergeAndProcessOneTurnAttackV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
     UpgradeAction u1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
