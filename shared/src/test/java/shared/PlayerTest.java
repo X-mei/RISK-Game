@@ -17,22 +17,20 @@ public class PlayerTest {
     assertEquals("In-game", player.getStatus());
   }
 
-  // @Test
-  // public void test_formAction() throws IOException {
-  //   ActionFactory f = new ActionFactory();
-  //   Player player = new Player("player1", 1, f);
-  //   BasicAction b1 = player.formAction("M", "A B 10");
-  //   assertThrows(IOException.class, ()->player.formAction("M", null));
-  //   assertThrows(IllegalArgumentException.class, ()->player.formAction("ABC", "A B 10"));
-    
-  //   assertEquals("M", b1.getActionName());
-  //   assertEquals("player1", b1.getActionOwner());
-  //   assertEquals(10, b1.getCount());
-  //   assertEquals("A", b1.getSource());
-  //   assertEquals("B", b1.getDestination());
-
-  //   assertEquals(null, player.formAction("D", ""));
-  // }
+  @Test
+  public void test_formAction() throws IOException {
+    ActionFactory f = new ActionFactory();
+    Player player = new Player("player1", 1, f);
+    BasicAction b1 = player.formAction("M", "A B 10 Lv2");
+    assertThrows(IOException.class, ()->player.formAction("M", null));
+    assertThrows(IllegalArgumentException.class, ()->player.formAction("ABC", "A B 10"));
+    assertEquals("M", b1.getActionName());
+    assertEquals("player1", b1.getActionOwner());
+    assertEquals(10, b1.getCount());
+    assertEquals("A", b1.getSource());
+    assertEquals("B", b1.getDestination());
+    assertEquals(null, player.formAction("D", ""));
+  }
 
   @Test
   public void test_getTerritoryList() {
