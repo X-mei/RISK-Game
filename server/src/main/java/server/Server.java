@@ -22,6 +22,7 @@ public class Server {
   private HashMap<GameServer, Integer> gameIDs;
   private HashMap<Integer, Board> gameBoards;
   private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
+  private HashMap<Integer, Integer> disconnectedGames;
   
   public Server(int portNum) throws IOException {
     this.portNum = portNum;
@@ -32,9 +33,10 @@ public class Server {
     this.gameIDs = new HashMap<GameServer, Integer>();
     this.gameBoards = new HashMap<Integer, Board>();
     this.disconnectedUsers = new HashMap<Integer, HashMap<String, String>>();
+    this.disconnectedGames = new HashMap<Integer, Integer>();
     // create rooms in advance for 2-5 people
     for (int i = 2; i < 5; i++) {
-      gameRooms.put(i, new GameServer(portNum, i, gameBoards, disconnectedUsers));
+      gameRooms.put(i, new GameServer(portNum, i, gameBoards, disconnectedUsers, disconnectedGames));
     }
   }
 
@@ -46,7 +48,8 @@ public class Server {
     DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
     ServerHandler server = new ServerHandler(input, output, clientSocket, portNum, 
                                               gameRooms, userLogInfo, currentGames, 
-                                              gameIDs, gameBoards, disconnectedUsers);
+                                              gameIDs, gameBoards, disconnectedUsers,
+                                              disconnectedGames);
     server.start();
   }
 }

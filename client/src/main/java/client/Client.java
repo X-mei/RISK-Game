@@ -21,12 +21,18 @@ public class Client {
   private DataOutputStream dataOut; // send msg
   private String playerName;
   private int playerSeq;
+  private boolean reconnected;
 
   public Client(String ip, int port, BufferedReader inputSource, PrintStream out) {
     this.serverIPAddr = ip;
     this.portNum = port;
     this.inputReader = inputSource;
     this.out = out;
+    this.reconnected = false;
+  }
+
+  public boolean getReconnected() {
+    return reconnected;
   }
 
   /**
@@ -83,6 +89,7 @@ public class Client {
         String line = dataIn.readUTF(); 
         out.println(line);
         if (line.equals("Enter successfully.")) {
+          reconnected = true;
           break;
         }
         String readIn = inputReader.readLine();

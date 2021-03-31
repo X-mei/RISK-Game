@@ -38,13 +38,16 @@ public class ClientHandler extends Thread {
   final Condition isReady;
   Boolean connectFlag;
   Boolean disconnectFlag;
+  int statusFlag;
   private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
+  private HashMap<Integer, Integer> disconnectedGames;
   final String username;
   final int gameID;
 
   public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, 
                         Board b, String name, Lock lock, Condition isReady,
                         HashMap<Integer, HashMap<String, String>> disconnectedUsers,
+                        HashMap<Integer, Integer> disconnectedGames,
                         int gameID, String username){
     this.input = in;
     this.output = out;
@@ -57,6 +60,7 @@ public class ClientHandler extends Thread {
     this.playerName = name;
     this.connectFlag = true;
     this.disconnectFlag = false;
+    this.statusFlag = 1;
     this.player = getPlayer();
     this.actionSet = new HashSet<Character>();
     actionSet.add('D');
@@ -65,6 +69,7 @@ public class ClientHandler extends Thread {
     this.lock = lock;
     this.isReady = isReady;
     this.disconnectedUsers = disconnectedUsers;
+    this.disconnectedGames = disconnectedGames;
     this.gameID = gameID;
     this.username = username;
   }
@@ -77,8 +82,10 @@ public class ClientHandler extends Thread {
       // send playerInfo
       output.writeUTF(playerInfo);
       // ask client to assign territory
-      assignTerritory();
-      // send board message
+      if (statusFlag == 1) {
+        assignTerritory();
+      }
+      statusFlag = 2;
       // while loop, check if game ends
       while(!board.checkSinglePlayerLose(playerName) && board.checkGameEnd().equals("")){
         sendBoardPromptAndRecv();
@@ -113,6 +120,7 @@ public class ClientHandler extends Thread {
         disconnectedUsers.put(gameID, users);
       }
       this.disconnectFlag = true;
+      disconnectedGames.put(gameID, statusFlag);
       System.out.println(username + ": " + playerName + " in gameID: " + gameID + " disconnected.");
       //e.printStackTrace();
     } finally {
@@ -147,6 +155,10 @@ public class ClientHandler extends Thread {
 
   public boolean getDisconnectFlag() {
     return disconnectFlag;
+  }
+
+  public void setStatusFlag(int flag) {
+    this.statusFlag = flag;
   }
 
   /**
@@ -190,6 +202,7 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
+      sleep(100);
     } catch(InterruptedException e) {
       e.printStackTrace();
     }

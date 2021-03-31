@@ -35,9 +35,11 @@ public class GameServer implements Runnable {
   private int gameID;
   private HashMap<Integer, Board> gameBoards;
   private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
+  private HashMap<Integer, Integer> disconnectedGames;
 
   public GameServer(int portNum, int playerNum, HashMap<Integer, Board> gameBoards,
-                      HashMap<Integer, HashMap<String, String>> disconnectedUsers) {
+                      HashMap<Integer, HashMap<String, String>> disconnectedUsers,
+                      HashMap<Integer, Integer> disconnectedGames) {
     this.mapFac = new MapFactory();
     this.UnitsFac = new UnitsFactory();
     this.board = null;
@@ -55,6 +57,7 @@ public class GameServer implements Runnable {
     this.isReady  = lock.newCondition();
     this.gameBoards = gameBoards;
     this.disconnectedUsers = disconnectedUsers;
+    this.disconnectedGames = disconnectedGames;
   }
 
   public void setGameID(int gameID) {
@@ -101,7 +104,8 @@ public class GameServer implements Runnable {
         String name = names.get(num - 1);
         String username = usernames.get(num - 1);
         ClientHandler t = new ClientHandler(client, input, output, board, name, 
-                                              lock, isReady, disconnectedUsers, gameID, username);
+                                              lock, isReady, disconnectedUsers, 
+                                              disconnectedGames, gameID, username);
         t.start();
         threadList.add(t);
         num++;
@@ -119,9 +123,15 @@ public class GameServer implements Runnable {
       DataInputStream input = new DataInputStream(client.getInputStream());
       DataOutputStream output = new DataOutputStream(client.getOutputStream());
       ClientHandler t = new ClientHandler(client, input, output, board, name, 
-                                              lock, isReady, disconnectedUsers, gameID, username);
+                                              lock, isReady, disconnectedUsers, 
+                                              disconnectedGames, gameID, username);
+      int flag = disconnectedGames.get(gameID);
+      t.setStatusFlag(flag);
       t.start();
       threadList.add(t);
+      // remove this reconnecteduser from the map
+      HashMap<String, String> users = disconnectedUsers.get(gameID);
+      users.remove(username);
     } catch (IOException e) {
       e.printStackTrace();
     } 
@@ -165,11 +175,6 @@ public class GameServer implements Runnable {
         iterator.remove();
       }
     }
-    // for (ClientHandler t: threadList) {
-    //   if (t.getDisconnectFlag() == true) {
-    //     threadList.remove(t);
-    //   }
-    // }
     if (threadList.size() != playerNum) {
       return false;
     }

@@ -23,12 +23,14 @@ public class ServerHandler extends Thread {
   private static int gameID = 1000;
   private HashMap<Integer, Board> gameBoards;
   private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
+  private HashMap<Integer, Integer> disconnectedGames;
 
   public ServerHandler (DataInputStream input, DataOutputStream output, 
                           Socket clientSock, int portNum, HashMap<Integer, GameServer> gameRooms,
                           HashMap<String, String> userLogInfo, HashMap<Integer, HashSet<String>> currentGames,
                           HashMap<GameServer, Integer> gameIDs, HashMap<Integer, Board> gameBoards,
-                          HashMap<Integer, HashMap<String, String>> disconnectedUsers) {
+                          HashMap<Integer, HashMap<String, String>> disconnectedUsers,
+                          HashMap<Integer, Integer> disconnectedGames) {
     this.input = input;
     this.output = output;
     this.clientSocket = clientSock;
@@ -39,6 +41,7 @@ public class ServerHandler extends Thread {
     this.gameIDs = gameIDs;
     this.gameBoards = gameBoards;
     this.disconnectedUsers = disconnectedUsers;
+    this.disconnectedGames = disconnectedGames;
   }
 
   public void run () {
@@ -171,7 +174,7 @@ public class ServerHandler extends Thread {
       GameServer gameServer = gameRooms.get(playerNum);
       if (gameServer.isReadyToStart()) {
         System.out.println("Create a new room for playerNum: " + playerNum);
-        gameServer = new GameServer(portNum, playerNum, gameBoards, disconnectedUsers);
+        gameServer = new GameServer(portNum, playerNum, gameBoards, disconnectedUsers, disconnectedGames);
         gameRooms.put(playerNum, gameServer);
       }
       gameServer.addClient(clientSocket);
