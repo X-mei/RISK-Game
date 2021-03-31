@@ -882,4 +882,11 @@ private Soldiers createDiffSoldiersByName(String name){
       temp.updateCount(temp.getCount()+1);
     }
   }
+
+  public void spawnResourceForPlayer(String name){
+    Player p = getPlayerByName(name);
+    int i = p.getTerritoryList().size();
+    p.updateFoodResource(i * 100);
+    p.updateTechResource(i * 100);
+  }
 }

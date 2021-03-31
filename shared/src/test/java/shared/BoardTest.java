@@ -243,7 +243,7 @@ public class BoardTest {
   public void test_displaySinlgePlayerBoardV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10});
+      b.singleTerritoryUnitSetup(s, 10);
     }
     UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv3");
     UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv1 1 Lv7");
@@ -260,7 +260,7 @@ public class BoardTest {
   public void test_checkSinglePlayerLose() {
     Board b = getTestBoard();
     for (String s : b.getAllTerritroy().keySet()) {
-      b.singleTerritoryUnitSetup(s, new int[] { 10 });
+      b.singleTerritoryUnitSetup(s, 10);
     }
     assertEquals("", b.checkGameEnd());
     assertEquals(false, b.checkSinglePlayerLose("King"));
@@ -277,7 +277,7 @@ public class BoardTest {
   public void spawnOneUnitForPlayer() {
     Board b = getTestBoard();
     for (String s : b.getAllTerritroy().keySet()) {
-      b.singleTerritoryUnitSetup(s, new int[] { 10 });
+      b.singleTerritoryUnitSetup(s, 10);
     }
     b.spawnOneUnitForPlayer("King");
     assertEquals(11, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
@@ -334,9 +334,21 @@ public class BoardTest {
     assertEquals(expected[2], actual[2]);
   }
   
+
+  @Test 
+  public void test_spawnResourceForPlayer(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, 10);
+    }
+    for(String s : b.getBoard().keySet()){
+    b.spawnResourceForPlayer(s);
+    assertEquals(1300, b.getPlayerByName(s).getFoodResource());
+    }
+
+
+  }
   /*
-  
-  
   @Test
   public void test_getTerritory() {
     MapFactory f = new MapFactory();
