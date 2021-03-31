@@ -237,11 +237,7 @@ public class Board {
 
   public void updateTempCount(String Tname, String Sname, Integer cnt) {
     HashMap<String, Integer> temp = tempCount.get(Tname);
-    if (temp.get(Sname) == null) {
-      temp.put(Sname, -cnt);
-    } else {
-      temp.put(Sname, temp.get(Sname) - cnt);
-    }
+    temp.put(Sname, temp.get(Sname) - cnt);
   }
 
   /**

@@ -8,10 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import net.bytebuddy.dynamic.scaffold.MethodGraph.Linked;
 
 public class BoardTest {
   private Board getTestBoard() {
