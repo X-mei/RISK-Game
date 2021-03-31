@@ -20,6 +20,224 @@ public class BoardTest {
     Board b = new Board(2, f, u);
     return b;
   }
+
+  @Test 
+  public void test_processSingleBasicMoveV2(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
+    BasicAction a1 = new Move("King", "Hanamura Hollywood 4 Lv1");
+    a1.setCost(80);
+    BasicAction a2 = new Move("King", "Hanamura Dorado 1 Lv1");
+    a2.setCost(20);
+    b.processSingleBasicMove(a1);
+    assertEquals(6, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(14, b.getTerritory("Hollywood").getOneUnits("Lv1").getCount());
+    assertEquals(920, b.getPlayerByName("King").getFoodResource());
+    b.processSingleBasicMove(a2);
+    assertEquals(5, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(11, b.getTerritory("Dorado").getOneUnits("Lv1").getCount());
+    assertEquals(900, b.getPlayerByName("King").getFoodResource());
+  }
+
+  @Test
+  public void test_processOneTurnMoveV2(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    BasicAction a1 = new Move("King", "Hanamura Hollywood 4 Lv1");
+    a1.setCost(80);
+    BasicAction a2 = new Move("King", "Hanamura Dorado 1 Lv1");
+    a2.setCost(20);
+    BasicAction a4 = new Move("King", "Hanamura Dorado 2 Lv7");
+    a4.setCost(40);
+    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
+    b.processSingleUpdateUnit(a3);
+    LinkedHashSet<BasicAction> s1 = new LinkedHashSet<>();
+    s1.add(a1);
+    s1.add(a2);
+    s1.add(a4);
+    b.processOneTurnMove(s1);
+    assertEquals(440, b.getPlayerByName("King").getTechResource());
+    assertEquals(860, b.getPlayerByName("King").getFoodResource());
+    assertEquals(14, b.getTerritory("Hollywood").getOneUnits("Lv1").getCount());
+    assertEquals(11, b.getTerritory("Dorado").getOneUnits("Lv1").getCount());
+    assertEquals(2, b.getTerritory("Dorado").getOneUnits("Lv7").getCount());
+    assertEquals(1, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(2, b.getTerritory("Dorado").getOneUnits("Lv7").getCount());
+  }
+
+  @Test 
+  public void test_processSingleUpdateUnitV2(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv3");
+    UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv1 1 Lv7");
+    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv3 4 Lv7");
+    b.processSingleUpdateUnit(a1);
+    assertEquals(6, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(4, b.getTerritory("Hanamura").getOneUnits("Lv3").getCount());
+    assertEquals(956, b.getPlayerByName("King").getTechResource());
+    b.processSingleUpdateUnit(a2);
+    assertEquals(5, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(1, b.getTerritory("Hanamura").getOneUnits("Lv7").getCount());
+    assertEquals(816, b.getPlayerByName("King").getTechResource());
+    b.processSingleUpdateUnit(a3);
+    assertEquals(5, b.getTerritory("Hanamura").getOneUnits("Lv7").getCount());
+    assertEquals(0, b.getTerritory("Hanamura").getOneUnits("Lv3").getCount());
+    assertEquals(300, b.getPlayerByName("King").getTechResource());
+  }
+
+  @Test 
+  public void test_processOneTurnUpdateUnitsV2(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv3");
+    UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv1 1 Lv7");
+    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv3 4 Lv7");
+    LinkedHashSet<UpgradeAction> s1 = new LinkedHashSet<>();
+    s1.add(a1);
+    s1.add(a2);
+    s1.add(a3);
+    b.processOneTurnUpdateUnits(s1);
+    assertEquals(300, b.getPlayerByName("King").getTechResource());
+    UpgradeAction a4 = new UpgradeAction("King", "Dorado Lv1 1 Lv2");
+    UpgradeAction a5 = new UpgradeAction("King", "Dorado Lv1 1 Lv3");
+    UpgradeAction a6 = new UpgradeAction("King", "Dorado Lv1 1 Lv4");
+    UpgradeAction a7 = new UpgradeAction("King", "Dorado Lv1 1 Lv5");
+    UpgradeAction a8 = new UpgradeAction("King", "Dorado Lv1 1 Lv6");
+    UpgradeAction a9 = new UpgradeAction("King", "Dorado Lv1 1 Lv7");
+    LinkedHashSet<UpgradeAction> s2 = new LinkedHashSet<>();
+    s2.add(a4);
+    s2.add(a5);
+    s2.add(a6);
+    s2.add(a7);
+    s2.add(a8);
+    s2.add(a9);
+    b.processOneTurnUpdateUnits(s2);
+    assertEquals(5, b.getTerritory("Hanamura").getOneUnits("Lv7").getCount());
+    assertEquals(0, b.getTerritory("Hanamura").getOneUnits("Lv3").getCount());
+    assertEquals(4, b.getTerritory("Dorado").getOneUnits("Lv1").getCount());
+    assertEquals(1, b.getTerritory("Dorado").getOneUnits("Lv2").getCount());
+    assertEquals(1, b.getTerritory("Dorado").getOneUnits("Lv3").getCount());
+    assertEquals(1, b.getTerritory("Dorado").getOneUnits("Lv4").getCount());
+    assertEquals(1, b.getTerritory("Dorado").getOneUnits("Lv5").getCount());
+    assertEquals(1, b.getTerritory("Dorado").getOneUnits("Lv6").getCount());
+    assertEquals(1, b.getTerritory("Dorado").getOneUnits("Lv7").getCount());
+    TechAction t1 = new TechAction("King");
+    b.processUpdateTech(t1);
+
+  }
+
+  @Test 
+  public void test_processUpdateTechV2(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    TechAction a1 = new TechAction("King");
+    TechAction a2 = new TechAction("King");
+    TechAction a3 = new TechAction("King");
+    b.processUpdateTech(a1);
+    assertEquals(950, b.getPlayerByName("King").getTechResource());
+    b.processUpdateTech(a2);
+    assertEquals(875, b.getPlayerByName("King").getTechResource());
+    b.processUpdateTech(a3);
+    assertEquals(750, b.getPlayerByName("King").getTechResource());
+    b.processUpdateTech(a3);
+    b.processUpdateTech(a3);
+    b.processUpdateTech(a3);
+    b.processUpdateTech(a3);
+
+  }
+
+  @Test 
+  public void test_processSingleBasicAttackPreV2(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
+    BasicAction a1 = new Attack("King", "Hanamura Volskaya 2 Lv1");
+    BasicAction a2 = new Attack("King", "Hanamura Ilios 2 Lv1");
+    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 4 Lv3");
+    b.processSingleBasicAttackPre(a1);
+    assertEquals(8, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(998, b.getPlayerByName("King").getFoodResource());
+    b.processSingleBasicAttackPre(a2);
+    assertEquals(6, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(996, b.getPlayerByName("King").getFoodResource());
+    b.processSingleUpdateUnit(a3);
+    assertEquals(2, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(4, b.getTerritory("Hanamura").getOneUnits("Lv3").getCount());
+    assertEquals(956, b.getPlayerByName("King").getTechResource());
+  }
+
+  @Test 
+  public void test_processOneTurnAttackPre(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
+    BasicAction a1 = new Attack("King", "Hanamura Volskaya 2 Lv1");
+    BasicAction a2 = new Attack("King", "Hanamura Ilios 2 Lv1");
+    UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
+    BasicAction a4 = new Attack("King", "Hanamura Ilios 2 Lv7");
+    LinkedHashSet<BasicAction> s1 = new LinkedHashSet<>();
+    s1.add(a1);
+    s1.add(a2);
+    s1.add(a4);
+    b.processSingleUpdateUnit(a3);
+    b.processOneTurnAttackPre(s1);
+    assertEquals(2, b.getTerritory("Hanamura").getOneUnits("Lv1").getCount());
+    assertEquals(2, b.getTerritory("Hanamura").getOneUnits("Lv7").getCount());
+    assertEquals(994, b.getPlayerByName("King").getFoodResource());
+    assertEquals(440, b.getPlayerByName("King").getTechResource());
+  }
+
+
+@Test 
+  public void test_mergeAndProcessOneTurnAttackV2(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10});
+    }
+    //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
+    UpgradeAction u1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
+    UpgradeAction u2 = new UpgradeAction("King", "Hollywood Lv1 2 Lv7");
+    BasicAction a1 = new Attack("King", "Hanamura Volskaya 2 Lv1");
+    BasicAction a2 = new Attack("King", "Hanamura Ilios 2 Lv1");
+    BasicAction a3 = new Attack("King", "Hollywood Ilios 2 Lv7");
+    BasicAction a4 = new Attack("King", "Hanamura Ilios 2 Lv7");
+    
+    LinkedHashSet<UpgradeAction> s = new LinkedHashSet<>();
+    s.add(u1);
+    s.add(u2);
+    b.processOneTurnUpdateUnits(s);
+    b.processSingleUpdateUnit(u1);
+    LinkedHashSet<BasicAction> s1 = new LinkedHashSet<>();
+    s1.add(a1);
+    s1.add(a2);
+    s1.add(a3);
+    s1.add(a4);
+    HashMap<String, HashMap<String, BasicAction>> outMap = b.mergeOneTurnAttackV2(s1);
+    assertEquals(2, outMap.size());
+    assertEquals(2, outMap.get("Ilios").size());
+    assertEquals(2, outMap.get("Ilios").get("Lv1").getCount());
+    assertEquals(4, outMap.get("Ilios").get("Lv7").getCount());
+    assertEquals(1, outMap.get("Volskaya").size());
+    assertEquals(2, outMap.get("Volskaya").get("Lv1").getCount());
+    //b.processOneTerritoryAttackNextV2("Ilios", outMap.get("Ilios"));
+    b.processOneTurnAttackNextV2(outMap);
+  }
   /*
   @Test
   public void test_getBoard() {

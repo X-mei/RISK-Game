@@ -4,7 +4,7 @@ public class TechAction {
   protected final String owner;
   protected final String actionName;
 
-  public TechAction(String owner, String s){
+  public TechAction(String owner){
     this.owner = owner;
     this.actionName = "T";
   }
