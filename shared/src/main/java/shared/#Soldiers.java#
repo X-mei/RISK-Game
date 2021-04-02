@@ -7,19 +7,19 @@ public abstract class Soldiers implements Units{
   protected final int bonus;
   protected final int cost;
   protected final int techReq;
-  protected int count;
-  protected final Random randomGenerator;
+  // protected int count;
+  // protected final Random randomGenerator;
   
-  public Soldiers(String name, int count, int bonus, int cost, int techReq){
-    this.name = name;
-    this.count = count;
-    this.randomGenerator = new Random();
-    this.bonus = bonus;
-    this.cost = cost;
-    this.techReq = techReq;
-  }
+  // public Soldiers(String name, int count, int bonus, int cost, int techReq){
+  //   this.name = name;
+  //   this.count = count;
+  //   this.randomGenerator = new Random();
+  //   this.bonus = bonus;
+  //   this.cost = cost;
+  //   this.techReq = techReq;
+  // }
 
-  @Override
+  // @Override
   public Integer getCount(){
     return count;
   }

@@ -13,6 +13,9 @@ public class Territory {
 
   private final String territoryName;
   private String ownerName;
+  private Integer size;
+  //private int terriFoodResource;
+  //private int terriTechResource;
   private LinkedHashMap<String, Territory> neighbours;
   private LinkedHashMap<String, Soldiers> allUnits;
   /*public Territory(String tname, String oname, LinkedHashSet<Units> units){
@@ -25,6 +28,9 @@ public class Territory {
   public Territory(String tname, String oname) {
     this.territoryName = tname;
     this.ownerName = oname;
+    this.size = 10;
+    //this.terriTechResource = 1000;
+    //this.terriFoodResource = 1000;
     this.neighbours = new LinkedHashMap<String, Territory>();
     this.allUnits = new LinkedHashMap<String, Soldiers>();
   }
@@ -58,6 +64,10 @@ public class Territory {
     return ownerName;
   }
 
+  public Integer getSize() {
+    return size;
+  }
+
   public LinkedHashSet<Soldiers> getUnits() {
     LinkedHashSet<Soldiers> unitsSet = new LinkedHashSet<Soldiers>();
     for(HashMap.Entry<String, Soldiers> entry: allUnits.entrySet()) {
@@ -68,6 +78,10 @@ public class Territory {
 
   public Soldiers getOneUnits(String name) {
     return allUnits.get(name);
+  }
+
+  public LinkedHashMap<String, Soldiers> getSoldiers() {
+    return allUnits;
   }
 
   public void updateOwner(String oname) {
@@ -84,5 +98,23 @@ public class Territory {
     return neighboursOneOwner;
   }
 
+  public void clearAllUnits(){
+    allUnits.clear();
+  }
+/*
+  public int getTerriTechResource(){
+    return terriTechResource;
+  }
 
+  public void updateTerriTechResource(int credits){
+    terriTechResource += credits;
+  }
+
+  public int getTerriFoodResource(){
+    return terriFoodResource;
+  }
+
+  public void updateTerriFoodResource(int credits){
+    terriFoodResource += credits;
+  }*/
 }

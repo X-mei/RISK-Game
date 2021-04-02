@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.function.BiFunction;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
+
 /**
  * This class correspond to one player in the game, player have access to its status, name and all the territory that belongs to her.
  * Player can .
@@ -14,6 +16,11 @@ import java.util.function.BiFunction;
 public class Player {
   protected final String name;
   protected final Integer code;
+  protected int techResource;
+  protected int foodResource;
+  protected int tempTechResource;
+  protected int tempFoodResource;
+  protected int techLevel;
   protected LinkedHashSet<Territory> ownedTerritory;
   protected HashSet<String> actionSet;
   protected String status;
@@ -27,6 +34,11 @@ public class Player {
   public Player(String name, Integer code, ActionFactory factory) {
     this.name = name;
     this.code = code;
+    this.techResource = 1000;
+    this.foodResource = 1000;
+    this.tempFoodResource = foodResource;
+    this.tempTechResource = techResource;
+    this.techLevel = 1;
     this.status = "In-game";
     //TODO: add territory
     this.ownedTerritory = new LinkedHashSet<Territory>();
@@ -57,6 +69,17 @@ public class Player {
       }
     }
   }
+
+  public UpgradeAction formUpgradeAction(String input) throws IOException, IllegalArgumentException{
+    if (input == null) {
+      throw new IOException();
+    }
+    return factory.createUpgrade(name, input);
+  }
+
+  public TechAction formTechAction() {
+    return factory.createTechUpgrade(name);
+  }
   
   public void addTerritory(LinkedHashSet<Territory> territory) {
     ownedTerritory = territory;
@@ -81,6 +104,54 @@ public class Player {
 
   public String getStatus() {
     return status;
+  }
+  
+  public int getTechResource(){
+    return techResource;
+  }
+
+  public void updateTechResource(int credits){
+    techResource += credits;
+  }
+
+  public void updateTempTechResource(int credits){
+    tempTechResource += credits;
+  }
+
+  public void refreshTempTechResource() {
+    tempTechResource = techResource;
+  }
+
+  public int getFoodResource(){
+    return foodResource;
+  }
+
+  public void updateFoodResource(int credits){
+    foodResource += credits;
+  }
+
+  public int getTempFoodResource() {
+    return tempFoodResource;
+  }
+  
+  public void refreshTempFoodResource() {
+    tempFoodResource = foodResource;
+  }
+  
+  public void updateTempFoodResource(int credits) {
+    tempFoodResource += credits;
+  }
+  
+  public int getTechLevel(){
+    return techLevel;
+  }
+
+  public void updateTechLevel(){
+    techLevel += 1;
+  }
+
+  public void setTechLevel(int level){
+    techLevel = level;
   }
 }                     
 
