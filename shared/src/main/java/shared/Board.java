@@ -503,6 +503,8 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
       BasicAction bTemp = oneTerritoryAttackMap.get(s);
       //Soldiers s = new (bTemp.getLevelName(), bTemp.getCount(), soldierBonusLevelTable.get(bTemp.getLevelName()), int cost, int techReq);
       Soldiers newSoldiers = getSoldiersByName(bTemp.getLevelName(), TerritoryName);
+      
+      System.out.println(newSoldiers.getName());
       //Soldiers newSoldiers = createDiffSoldiersByName(bTemp.getLevelName());
       newSoldiers.updateCount(bTemp.getCount());
       //destTerri.setUnits(newSoldiers);
@@ -510,7 +512,7 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
   }
 }
 
-private Soldiers createDiffSoldiersByName(String name){
+public Soldiers createDiffSoldiersByName(String name){
   if(name.equals("Lv1")){
     return new Level1Soldiers(1);
   }
@@ -830,9 +832,9 @@ private Soldiers createDiffSoldiersByName(String name){
       for(String s : t.getSoldiers().keySet()){
         Soldiers tempS = t.getSoldiers().get(s);
         int SoldierNum = tempS.getCount();
-        if(SoldierNum == 0){
-          continue;
-        }
+        // if(SoldierNum == 0){
+        //   continue;
+        // }
         soldierNameString += comma + SoldierNum + " " + tempS.getName();
         comma = ", ";
       }
