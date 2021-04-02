@@ -1,9 +1,12 @@
 package shared;
-
+/**
+ * 
+ */
 public class NeighborChecker extends RuleChecker {
   NeighborChecker(RuleChecker next){
     super(next);
   }
+  
   @Override
   protected String checkMyRule(BasicAction thisAct, Board theBoard) {
     String src = thisAct.getSource();

@@ -1,7 +1,9 @@
 package shared;
 
 import java.util.Random;
-
+/**
+ * 
+ */
 public abstract class Soldiers implements Units{
   protected final String name;
   protected final int bonus;
@@ -10,6 +12,14 @@ public abstract class Soldiers implements Units{
   protected int count;
   protected final Random randomGenerator;
   
+  /**
+   * 
+   * @param name
+   * @param count
+   * @param bonus
+   * @param cost
+   * @param techReq
+   */
   public Soldiers(String name, int count, int bonus, int cost, int techReq){
     this.name = name;
     this.count = count;
@@ -49,6 +59,10 @@ public abstract class Soldiers implements Units{
     return this.techReq;
   }
   
+  /**
+   * 
+   * @return
+   */
   public Integer randomNum(){
     return randomGenerator.nextInt((20 - 1) + 1) + 1;
   }

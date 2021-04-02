@@ -1,5 +1,7 @@
 package shared;
-
+/**
+ * 
+ */
 public class OwnerChecker extends RuleChecker {
   public OwnerChecker(RuleChecker next){
     super(next);

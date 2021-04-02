@@ -1,5 +1,7 @@
 package shared;
-
+/**
+ * 
+ */
 public class UpgradeChecker extends SpecialRuleChecker{
   public UpgradeChecker(SpecialRuleChecker next){
     super(next);
