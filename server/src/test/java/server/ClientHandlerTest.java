@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -28,7 +29,11 @@ public class ClientHandlerTest {
     Board board = new Board(2, mapFac, UnitsFac);  
     Lock lock = new ReentrantLock();
     Condition isReady  = lock.newCondition();
-    ClientHandler t = new ClientHandler(clientSocket, input, output, board, "King", lock, isReady);
+    HashMap<Integer, HashMap<String, String>> disconnectedUsers = new HashMap<Integer, HashMap<String, String>>();
+    HashMap<Integer, Integer> disconnectedGames = new HashMap<Integer, Integer>();
+    ClientHandler t = new ClientHandler(clientSocket, input, output, board, "King", 
+                                        lock, isReady, disconnectedUsers, disconnectedGames,
+                                        1000, "mm");
     return t;
   }
 

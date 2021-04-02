@@ -21,12 +21,24 @@ public class Client {
   private DataOutputStream dataOut; // send msg
   private String playerName;
   private int playerSeq;
+  private boolean reconnected;
+  private int startStatus;
 
   public Client(String ip, int port, BufferedReader inputSource, PrintStream out) {
     this.serverIPAddr = ip;
     this.portNum = port;
     this.inputReader = inputSource;
     this.out = out;
+    this.reconnected = false;
+    this.startStatus = 1;
+  }
+
+  public boolean getReconnected() {
+    return reconnected;
+  }
+
+  public int getStartStatus() {
+    return startStatus;
   }
 
   /**
@@ -42,6 +54,56 @@ public class Client {
       
     } catch(IOException e) {
       out.println("Cannot connect to host " + serverIPAddr + " :" + portNum);
+    }
+  }
+
+  public void login() {
+    try {
+      while(true) {
+        String line = dataIn.readUTF(); 
+        out.println(line);
+        if (line.equals("Login successfully.")) {
+          break;
+        }
+        String readIn = inputReader.readLine();
+        dataOut.writeUTF(readIn);
+      }
+    } catch (IOException e) {
+      out.println("Receive failed.");
+    }
+  }
+
+  public void answerInfo() {
+    try {
+      String line = dataIn.readUTF(); 
+      out.println(line);
+      String readIn = inputReader.readLine();
+      dataOut.writeUTF(readIn);
+      if (readIn.equals("p")) {
+        sendRoomID();
+      } else {
+        sendGameRoom();
+      }
+    } catch (IOException e) {
+      out.println("Receive failed.");
+    }
+  }
+
+  public void sendRoomID() {
+    try {
+      while(true) {
+        String line = dataIn.readUTF(); 
+        out.println(line);
+        if (line.equals("Enter successfully.")) {
+          reconnected = true;
+          break;
+        }
+        String readIn = inputReader.readLine();
+        dataOut.writeUTF(readIn);
+        // enter successfully
+      }
+    } catch (IOException e) {
+      out.println("Receive failed.");
     }
   }
 
@@ -72,8 +134,18 @@ public class Client {
   public void recvNameAndSeq() throws IOException {
     try {
       String line = dataIn.readUTF(); 
-      out.println(line);
       this.playerName = line;
+      String prompt = dataIn.readUTF();
+      out.println(prompt);
+    } catch (IOException e){
+      out.println("Receive failed.");
+    }
+  }
+
+  public void recvStartStatus() {
+    try {
+      String line = dataIn.readUTF(); 
+      this.startStatus = Integer.parseInt(line);
     } catch (IOException e){
       out.println("Receive failed.");
     }

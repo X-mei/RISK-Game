@@ -41,9 +41,18 @@ public class ClientHandler extends Thread {
   final Lock lock;
   final Condition isReady;
   Boolean connectFlag;
-  //private Boolean techUpgradeMarker;
+  Boolean disconnectFlag;
+  int statusFlag;
+  private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
+  private HashMap<Integer, Integer> disconnectedGames;
+  final String username;
+  final int gameID;
 
-  public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, Board b, String name, Lock lock, Condition isReady){
+  public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, 
+                        Board b, String name, Lock lock, Condition isReady,
+                        HashMap<Integer, HashMap<String, String>> disconnectedUsers,
+                        HashMap<Integer, Integer> disconnectedGames,
+                        int gameID, String username){
     this.input = in;
     this.output = out;
     this.socket = s;
@@ -56,6 +65,8 @@ public class ClientHandler extends Thread {
     this.board = b;
     this.playerName = name;
     this.connectFlag = true;
+    this.disconnectFlag = false;
+    this.statusFlag = 1;
     this.player = getPlayer();
     this.actionSet = new HashSet<Character>();
     actionSet.add('D');
@@ -65,19 +76,26 @@ public class ClientHandler extends Thread {
     actionSet.add('T');
     this.lock = lock;
     this.isReady = isReady;
-    //this.techUpgradeMarker = true;
+    this.disconnectedUsers = disconnectedUsers;
+    this.disconnectedGames = disconnectedGames;
+    this.gameID = gameID;
+    this.username = username;
   }
 
   @Override
   public void run(){
-    String playerInfo;
-    playerInfo = playerName;
+    String playerInfo = playerName;
     try{
       // send playerInfo
       output.writeUTF(playerInfo);
+      output.writeUTF("Hi, You are player " + playerName + ", and this gameID is " + gameID);
+      output.writeUTF(Integer.toString(statusFlag));
+      
       // ask client to assign territory
-      assignTerritory();
-      // send board message
+      if (statusFlag == 1) {
+        assignTerritory();
+      }
+      statusFlag = 2;
       // while loop, check if game ends
       while(!board.checkSinglePlayerLose(playerName) && board.checkGameEnd().equals("")){
         sendBoardPromptAndRecv();
@@ -92,7 +110,8 @@ public class ClientHandler extends Thread {
           // only send board msg
           sendBoardMsg();
           sendGameEndMsg();
-        } else {
+        } 
+        else {
           connectFlag = false;
         }
       } else {
@@ -100,10 +119,21 @@ public class ClientHandler extends Thread {
         sendGameEndMsg();
       }
       connectFlag = false;
-      closeConnection();
-    }catch(IOException e){
-      e.printStackTrace();
-    }finally {
+    } catch(IOException e){
+      // disconnect
+      if (disconnectedUsers.containsKey(gameID)) {
+        HashMap<String, String> users = disconnectedUsers.get(gameID);
+        users.put(username, playerName);
+      } else {
+        HashMap<String, String> users = new HashMap<String, String>();
+        users.put(username, playerName);
+        disconnectedUsers.put(gameID, users);
+      }
+      this.disconnectFlag = true;
+      disconnectedGames.put(gameID, statusFlag);
+      System.out.println(username + ": " + playerName + " in gameID: " + gameID + " disconnected. StatusFlag = " + statusFlag);
+      //e.printStackTrace();
+    } finally {
       //close connection when game over
       closeConnection();
     }
@@ -131,6 +161,14 @@ public class ClientHandler extends Thread {
    */
   public boolean getConnectFlag() {
     return connectFlag;
+  }
+
+  public boolean getDisconnectFlag() {
+    return disconnectFlag;
+  }
+
+  public void setStatusFlag(int flag) {
+    this.statusFlag = flag;
   }
 
   /**
@@ -174,8 +212,6 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
-    } catch(IOException e){
-      e.printStackTrace();
     } catch(InterruptedException e) {
       e.printStackTrace();
     }
@@ -293,9 +329,7 @@ public class ClientHandler extends Thread {
           }
         }
       }
-    }catch(IOException e){
-      e.printStackTrace();
-    }catch(InterruptedException e) {
+    } catch(InterruptedException e) {
       e.printStackTrace();
     }
   }

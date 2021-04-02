@@ -8,6 +8,10 @@ import shared.UnitsFactory;
 
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -23,12 +27,19 @@ public class GameServer implements Runnable {
   private int playerNum;
   Board board;
   private ArrayList<String> names;
-  private ArrayList<ClientHandler> threadList;
+  private List<ClientHandler> threadList;
   private ArrayList<Socket> clientSocks;
+  private ArrayList<String> usernames;
   final Lock lock;
   final Condition isReady;
+  private int gameID;
+  private HashMap<Integer, Board> gameBoards;
+  private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
+  private HashMap<Integer, Integer> disconnectedGames;
 
-  public GameServer(int portNum, int playerNum) {
+  public GameServer(int portNum, int playerNum, HashMap<Integer, Board> gameBoards,
+                      HashMap<Integer, HashMap<String, String>> disconnectedUsers,
+                      HashMap<Integer, Integer> disconnectedGames) {
     this.mapFac = new MapFactory();
     this.UnitsFac = new UnitsFactory();
     this.board = null;
@@ -39,10 +50,18 @@ public class GameServer implements Runnable {
     names.add("Pink");
     names.add("Blue");
     names.add("Green");
-    this.threadList = new ArrayList<ClientHandler>();
+    this.threadList = Collections.synchronizedList(new ArrayList<ClientHandler>());
     this.clientSocks = new ArrayList<Socket>();
+    this.usernames = new ArrayList<String>();
     this.lock = new ReentrantLock();
     this.isReady  = lock.newCondition();
+    this.gameBoards = gameBoards;
+    this.disconnectedUsers = disconnectedUsers;
+    this.disconnectedGames = disconnectedGames;
+  }
+
+  public void setGameID(int gameID) {
+    this.gameID = gameID;
   }
 
   /**
@@ -52,6 +71,9 @@ public class GameServer implements Runnable {
     clientSocks.add(clientSock);
   }
 
+  public void addUsername(String username) {
+    this.usernames.add(username);
+  }
   /**
    * This function checks if all the players are entered in
    * this game room and ready to start.
@@ -74,11 +96,16 @@ public class GameServer implements Runnable {
     try {
       int num = 1;
       Board board = new Board(playerNum, mapFac, UnitsFac);  
+      this.board = board;
+      gameBoards.put(gameID, board);
       for (Socket client: clientSocks) {
         DataInputStream input = new DataInputStream(client.getInputStream());
         DataOutputStream output = new DataOutputStream(client.getOutputStream());
-        String name = names.get(num-1);
-        ClientHandler t = new ClientHandler(client, input, output, board, name, lock, isReady);
+        String name = names.get(num - 1);
+        String username = usernames.get(num - 1);
+        ClientHandler t = new ClientHandler(client, input, output, board, name, 
+                                              lock, isReady, disconnectedUsers, 
+                                              disconnectedGames, gameID, username);
         t.start();
         threadList.add(t);
         num++;
@@ -89,6 +116,25 @@ public class GameServer implements Runnable {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+  }
+
+  public void reconnectUser(Socket client, String name, String username) {
+    try {
+      DataInputStream input = new DataInputStream(client.getInputStream());
+      DataOutputStream output = new DataOutputStream(client.getOutputStream());
+      ClientHandler t = new ClientHandler(client, input, output, board, name, 
+                                              lock, isReady, disconnectedUsers, 
+                                              disconnectedGames, gameID, username);
+      int flag = disconnectedGames.get(gameID);
+      t.setStatusFlag(flag);
+      t.start();
+      threadList.add(t);
+      // remove this reconnecteduser from the map
+      HashMap<String, String> users = disconnectedUsers.get(gameID);
+      users.remove(username);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } 
   }
 
   /**
@@ -122,6 +168,16 @@ public class GameServer implements Runnable {
    * @return boolean
    */
   public boolean areAllWaiting() {
+    Iterator<ClientHandler> iterator = threadList.iterator();
+    for (; iterator.hasNext();) {
+      ClientHandler t = iterator.next();
+      if (t.getDisconnectFlag() == true) {
+        iterator.remove();
+      }
+    }
+    if (threadList.size() != playerNum) {
+      return false;
+    }
     for (ClientHandler t: threadList) {
       if (t.getState() != State.WAITING && t.getConnectFlag() == true) {
         return false;
