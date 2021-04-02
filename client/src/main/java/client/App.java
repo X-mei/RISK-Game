@@ -6,32 +6,85 @@ package client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import javafx.application.Application;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 
-public class App {
+public class App extends Application {
 
     public static void main(String[] args) {
-      try {
-        Client client = new Client(/*"dku-vcm-1221.vm.duke.edu"*/"127.0.0.1"/*"127.0.0.1"*/, 12345, new BufferedReader(new InputStreamReader(System.in)), System.out);
-        client.connectToServer();
-        client.login();
-        client.answerInfo();
-        client.recvNameAndSeq();
-        client.recvStartStatus();
-        if (client.getStartStatus() == 1) {
-          client.recvAssignTerritory();
-        }
-        while(true) {
-          if (!client.recvBoardPromptAndSend()) {
-            break;
-          }
-        }
-        if (client.exitOrContinue()) {
-          client.recvMsg();
-        }
-        client.closeConnection();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+//      try {
+//        Client client = new Client("127.0.0.1", 12345,
+//                new BufferedReader(new InputStreamReader(System.in)), System.out);
+//        client.connectToServer();
+//        client.login();
+//        client.answerInfo();
+//        client.recvNameAndSeq();
+//        client.recvStartStatus();
+//        if (client.getStartStatus() == 1) {
+//          client.recvAssignTerritory();
+//        }
+//        while(true) {
+//          if (!client.recvBoardPromptAndSend()) {
+//            break;
+//          }
+//        }
+//        if (client.exitOrContinue()) {
+//          client.recvMsg();
+//        }
+//        client.closeConnection();
+//      } catch (IOException e) {
+//        e.printStackTrace();
+//      }
+      launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        AnchorPane ap = new AnchorPane();
+        Label username = new Label();
+        username.setLayoutX(20);
+        username.setLayoutY(75);
+        username.setText("username: ");
+        ap.getChildren().add(username);
+
+        TextField text = new TextField();
+//        text.setText("username");
+        text.setLayoutX(90);
+        text.setLayoutY(70);
+        text.setPromptText("please input username");
+        text.setFocusTraversable(false);
+        ap.getChildren().add(text);
+
+        Label pwd = new Label();
+        pwd.setLayoutX(20);
+        pwd.setLayoutY(135);
+        pwd.setText("password: ");
+        ap.getChildren().add(pwd);
+
+        PasswordField password = new PasswordField();
+        password.setLayoutX(90);
+        password.setLayoutY(130);
+        ap.getChildren().add(password);
+
+        Button submit = new Button("submit");
+        submit.setLayoutX(90);
+        submit.setLayoutY(200);
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println(text.getCharacters());
+                System.out.println(password.getCharacters());
+            }
+        });
+        ap.getChildren().add(submit);
+
+        Scene scene = new Scene(ap, 300, 400);
+
+        primaryStage.setTitle("Hello World");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
     }
 }
