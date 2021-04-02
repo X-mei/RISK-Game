@@ -77,23 +77,25 @@ public class Client {
     }
   }
 
-  public void answerInfo() {
+  public void answerInfo(String choice) {
     try {
       String line = dataIn.readUTF(); 
       out.println(line);
-      String readIn = inputReader.readLine();
-      dataOut.writeUTF(readIn);
-      if (readIn.equals("p")) {
-        sendRoomID();
+      //String readIn = inputReader.readLine();
+      dataOut.writeUTF(choice);
+      if (choice.equals("p")) {
+        out.println("choose previous game.");
+        //sendRoomID();
       } else {
-        sendGameRoom();
+        out.println("create a new game.");
+        //sendGameRoom();
       }
     } catch (IOException e) {
       out.println("Receive failed.");
     }
   }
 
-  public void sendRoomID() {
+  public void sendRoomID(String choice) {
     try {
       while(true) {
         String line = dataIn.readUTF(); 
@@ -102,8 +104,7 @@ public class Client {
           reconnected = true;
           break;
         }
-        String readIn = inputReader.readLine();
-        dataOut.writeUTF(readIn);
+        dataOut.writeUTF(choice);
         // enter successfully
       }
     } catch (IOException e) {
@@ -115,17 +116,12 @@ public class Client {
    * This function tells the server which game room
    * @throws IOException
    */  
-  public void sendGameRoom() throws IOException {
+  public void sendGameRoom(String choice) {
     try {
-      while(true) {
-        String line = dataIn.readUTF(); 
-        out.println(line);
-        if (line.equals("Wait for other players to join.")) {
-          break;
-        }
-        String readIn = inputReader.readLine();
-        dataOut.writeUTF(readIn);
-      }
+      String line = dataIn.readUTF();
+      out.println(line);
+      out.println("my room choice: " + choice);
+      dataOut.writeUTF(choice);
     } catch (IOException e) {
       out.println("Receive failed.");
     }

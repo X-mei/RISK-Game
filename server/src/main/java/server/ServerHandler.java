@@ -160,22 +160,16 @@ public class ServerHandler extends Thread {
   public void assignRoom() {
     try {
       int playerNum = 0;
-      while (true) {
-        // TODO: check the input
-        output.writeUTF("Which game room do you want to enter? Input 2-5.");
-        String received = input.readUTF();
-        System.out.println("receive the data: " + received);
-        try {
-          playerNum = Integer.parseInt(received);
-          if (playerNum < 2 || playerNum > 5) {
-            continue;
-          }
-          output.writeUTF("Wait for other players to join.");
-        } catch(NumberFormatException e) {
-          continue;
-        }
-        break;
+      output.writeUTF("Which game room do you want to enter? Input 2-5.");
+      String received = input.readUTF();
+      System.out.println("receive the data: " + received);
+      try {
+        playerNum = Integer.parseInt(received);
+        output.writeUTF("Wait for other players to join.");
+      } catch(NumberFormatException e) {
+        e.printStackTrace();
       }
+
       System.out.println("Get a room for playerNum: " + playerNum);
       GameServer gameServer = gameRooms.get(playerNum);
       if (gameServer.isReadyToStart()) {

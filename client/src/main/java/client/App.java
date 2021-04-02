@@ -20,6 +20,18 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
+    static AnchorPane root;
+    LoginView loginView;
+    EnterGameView enterGameView;
+    ChooseRoomView chooseRoomView;
+
+    public App() {
+        this.root = new AnchorPane();
+        this.loginView = new LoginView();
+        this.enterGameView = new EnterGameView();
+        this.chooseRoomView = new ChooseRoomView();
+    }
+
     public static void main(String[] args) {
 //      try {
 //        Client client = new Client("127.0.0.1", 12345,
@@ -50,67 +62,30 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        AnchorPane ap = new AnchorPane();
-        Label username = new Label();
-        username.setLayoutX(20);
-        username.setLayoutY(75);
-        username.setText("username: ");
-        ap.getChildren().add(username);
-
-        TextField text = new TextField();
-//        text.setText("username");
-        text.setLayoutX(100);
-        text.setLayoutY(70);
-        text.setPromptText("please input username");
-        text.setFocusTraversable(false);
-        ap.getChildren().add(text);
-
-        Label pwd = new Label();
-        pwd.setLayoutX(20);
-        pwd.setLayoutY(135);
-        pwd.setText("password: ");
-        ap.getChildren().add(pwd);
-
-        PasswordField password = new PasswordField();
-        password.setLayoutX(100);
-        password.setLayoutY(130);
-        ap.getChildren().add(password);
-
-        Button register = new Button("register");
-        register.setLayoutX(200);
-        register.setLayoutY(200);
-
-        Button login = new Button("login");
-        login.setLayoutX(300);
-        login.setLayoutY(200);
-
-        ap.getChildren().add(register);
-        ap.getChildren().add(login);
-
-        Scene scene = new Scene(ap, 800, 800);
-
-        primaryStage.setTitle("Welcome to RISC");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        // connect to server
         Client client = new Client("127.0.0.1", 12345,
                 new BufferedReader(new InputStreamReader(System.in)), System.out);
         client.connectToServer();
 
-        register.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                client.login("r", text.getText(), password.getText());
-                System.out.println(text.getCharacters());
-                System.out.println(password.getCharacters());
-            }
-        });
-        login.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                client.login("l", text.getText(), password.getText());
-                System.out.println(text.getCharacters());
-                System.out.println(password.getCharacters());
-            }
-        });
+
+        // login
+        loginView.init();
+        root.getChildren().add(loginView.loginPane);
+        LoginController loginController = new LoginController(loginView, enterGameView, client);
+
+        // enterGame
+        //EnterGameController enterGameController = new EnterGameController(enterGameView, client);
+
+        // chooseRoom
+        //ChooseRoomController chooseRoomController = new ChooseRoomController(chooseRoomView, client);
+
+        // set scene
+        Scene scene = new Scene(root, 800, 800);
+        primaryStage.setTitle("Welcome to RISC");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+
+
     }
 }
