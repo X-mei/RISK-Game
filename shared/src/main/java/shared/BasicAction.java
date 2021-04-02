@@ -9,6 +9,13 @@ public abstract class BasicAction implements Action {
   protected final String LevelName;
   protected int cost;
   
+  /**
+   * 
+   * @param owner
+   * @param actionName
+   * @param s
+   * @throws IllegalArgumentException
+   */
   public BasicAction(String owner, String actionName, String s) throws IllegalArgumentException{
     String[] sections = s.split(" ", 0);
     if (sections.length != 4) {
