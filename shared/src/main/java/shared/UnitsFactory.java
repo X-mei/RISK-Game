@@ -1,6 +1,6 @@
 package shared;
 /**
- * 
+ * This is the factory to create all level of unit.
  */
 public class UnitsFactory {
   public Soldiers createLevel1Soldiers(int count) {

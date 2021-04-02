@@ -1,6 +1,6 @@
 package shared;
 /**
- * 
+ * This is the subclass that checks whether the move or attack action is indeed owned by the issuing player.
  */
 public class OwnerChecker extends RuleChecker {
   public OwnerChecker(RuleChecker next){

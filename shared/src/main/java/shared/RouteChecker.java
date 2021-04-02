@@ -2,7 +2,7 @@ package shared;
 
 import java.util.HashSet;
 /**
- * 
+ * This is the subclass that checks whether the move action is correct. More specifically, is there a path from src to dest. It also update the minimum cost field in the action.
  */
 public class RouteChecker extends RuleChecker{
   private int minCost;

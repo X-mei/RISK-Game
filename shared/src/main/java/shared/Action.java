@@ -1,66 +1,56 @@
 package shared;
 
 /**
- * This interface represents any type of Action in our RISK game.
+ * This interface represents any basic type of Action in our RISK game.
  */
 public interface Action {
   /**
-   * 
-   * @return
+   * @return the name of the owner of action
    */
   public String getActionOwner();
 
   /**
-   * 
-   * @return
+   * @return the name of the action
    */
   public String getActionName();
 
   /**
-   * 
-   * @return
+   * @return the name of the source
    */
   public String getSource();
 
   /**
-   * 
-   * @return
+   * @return the name of destination
    */
   public String getDestination();
 
   /**
-   * 
-   * @return
+   * @return the count
    */
   public int getCount();
 
   /**
-   * 
-   * @return
+   * @return the food cost of action
    */
   public int getCost();
 
   /**
-   * 
-   * @return
+   * @return the name of the level to move
    */
   public String getLevelName();
 
   /**
-   * 
-   * @param i
+   * @param the new value as count
    */
   public void modifyCount(int i);
 
   /**
-   * 
-   * @param cost
+   * @param the new value as cost
    */
   public void setCost(int cost);
 
   /**
-   * 
-   * @return
+   * @return the food consumption
    */
   public int getFoodConsume();
 }

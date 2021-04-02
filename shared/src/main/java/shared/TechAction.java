@@ -1,14 +1,14 @@
 package shared;
 /**
- * 
+ * This class contains all fields and actions of a tech upgrade action.
  */
 public class TechAction {
   protected final String owner;
   protected final String actionName;
 
   /**
-   * 
-   * @param owner
+   * Constructor of this class
+   * @param owner is the owner of the action
    */
   public TechAction(String owner){
     this.owner = owner;
@@ -16,16 +16,16 @@ public class TechAction {
   }
 
   /**
-   * 
-   * @return
+   * This function returns the owner name of the action
+   * @return the name of the action owner
    */
   public String getActionOwner() {
     return owner;
   }
 
   /**
-   * 
-   * @return
+   * This function returns the name of the action
+   * @return the name of the action
    */
   public String getActionName() {
     return actionName;

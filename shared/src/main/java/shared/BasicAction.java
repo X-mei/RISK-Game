@@ -1,5 +1,8 @@
 package shared;
 
+/**
+ * This abstract class is the base class for all basic actions.
+ */
 public abstract class BasicAction implements Action {
   protected final String dest;
   protected final String src;
@@ -10,11 +13,11 @@ public abstract class BasicAction implements Action {
   protected int cost;
   
   /**
-   * 
-   * @param owner
-   * @param actionName
-   * @param s
-   * @throws IllegalArgumentException
+   * Constructor
+   * @param owner is the owner of the action
+   * @param actionName is the name of the action
+   * @param s is the input string to parse to get all fields
+   * @throws IllegalArgumentException is thrown when s cannot be parsed correctly
    */
   public BasicAction(String owner, String actionName, String s) throws IllegalArgumentException{
     String[] sections = s.split(" ", 0);
