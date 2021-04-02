@@ -57,16 +57,20 @@ public class Client {
     }
   }
 
-  public void login() {
+  public void login(String choice, String username, String password) {
     try {
+      String line = dataIn.readUTF();
+      out.println(line);
+      dataOut.writeUTF(choice);
       while(true) {
-        String line = dataIn.readUTF(); 
+        line = dataIn.readUTF();
         out.println(line);
         if (line.equals("Login successfully.")) {
           break;
         }
-        String readIn = inputReader.readLine();
-        dataOut.writeUTF(readIn);
+        dataOut.writeUTF(username);
+        dataOut.writeUTF(password);
+        //String readIn = inputReader.readLine();
       }
     } catch (IOException e) {
       out.println("Receive failed.");

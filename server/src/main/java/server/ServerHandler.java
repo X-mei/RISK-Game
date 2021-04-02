@@ -66,9 +66,9 @@ public class ServerHandler extends Thread {
   public void newAccount() {
     try {
       while(true) {
-        output.writeUTF("Please input your username.");
+        output.writeUTF("Please input your username and password.");
         String username = input.readUTF();
-        output.writeUTF("Please input your password.");
+        //output.writeUTF("Please input your password.");
         String password = input.readUTF();
         if (userLogInfo.containsKey(username)) {
           continue;
@@ -86,9 +86,9 @@ public class ServerHandler extends Thread {
   public void authAccount() {
     try {
       while(true) {
-        output.writeUTF("Please input your username.");
+        //output.writeUTF("Please input your username.");
         String username = input.readUTF();
-        output.writeUTF("Please input your password.");
+        //output.writeUTF("Please input your password.");
         String password = input.readUTF();
         if (userLogInfo.containsKey(username)) {
           if (userLogInfo.get(username).equals(password)) {

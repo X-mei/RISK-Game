@@ -7,6 +7,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -42,6 +49,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         AnchorPane ap = new AnchorPane();
         Label username = new Label();
         username.setLayoutX(20);
@@ -51,7 +59,7 @@ public class App extends Application {
 
         TextField text = new TextField();
 //        text.setText("username");
-        text.setLayoutX(90);
+        text.setLayoutX(100);
         text.setLayoutY(70);
         text.setPromptText("please input username");
         text.setFocusTraversable(false);
@@ -64,27 +72,45 @@ public class App extends Application {
         ap.getChildren().add(pwd);
 
         PasswordField password = new PasswordField();
-        password.setLayoutX(90);
+        password.setLayoutX(100);
         password.setLayoutY(130);
         ap.getChildren().add(password);
 
-        Button submit = new Button("submit");
-        submit.setLayoutX(90);
-        submit.setLayoutY(200);
-        submit.setOnAction(new EventHandler<ActionEvent>() {
+        Button register = new Button("register");
+        register.setLayoutX(200);
+        register.setLayoutY(200);
+
+        Button login = new Button("login");
+        login.setLayoutX(300);
+        login.setLayoutY(200);
+
+        ap.getChildren().add(register);
+        ap.getChildren().add(login);
+
+        Scene scene = new Scene(ap, 800, 800);
+
+        primaryStage.setTitle("Welcome to RISC");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        Client client = new Client("127.0.0.1", 12345,
+                new BufferedReader(new InputStreamReader(System.in)), System.out);
+        client.connectToServer();
+
+        register.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                client.login("r", text.getText(), password.getText());
                 System.out.println(text.getCharacters());
                 System.out.println(password.getCharacters());
             }
         });
-        ap.getChildren().add(submit);
-
-        Scene scene = new Scene(ap, 300, 400);
-
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
+        login.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                client.login("l", text.getText(), password.getText());
+                System.out.println(text.getCharacters());
+                System.out.println(password.getCharacters());
+            }
+        });
     }
 }
