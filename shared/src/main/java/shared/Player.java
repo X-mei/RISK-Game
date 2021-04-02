@@ -27,6 +27,7 @@ public class Player {
   protected ActionFactory factory;
   protected HashMap<String, BiFunction<String, String, BasicAction>> actionCreationFns;
 
+
   /**
    * This constructor initialize all the field in the player class.
    * @param name of the player,  the place to read input from and the place to dump output to.
