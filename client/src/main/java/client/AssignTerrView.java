@@ -14,19 +14,26 @@ public class AssignTerrView {
     AnchorPane assignTerrPane;
     Label prompt1;
     Label prompt2;
-    Image map;
-    TextField input;
+    Label prompt3;
+    Label error;
+    TextField input1;
+    TextField input2;
+    TextField input3;
     Button submit;
 
     public AssignTerrView() {
         this.assignTerrPane = new AnchorPane();
         this.prompt1 = new Label();
         this.prompt2 = new Label();
-        this.input = new TextField();
+        this.prompt3 = new Label();
+        this.error = new Label();
+        this.input1 = new TextField();
+        this.input2 = new TextField();
+        this.input3 = new TextField();
         this.submit = new Button();
     }
 
-    public void init() {
+    public void init(String playerNum) {
         // show img
         try {
             FileInputStream imageStream = new FileInputStream("/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/lena.bmp");
@@ -46,6 +53,13 @@ public class AssignTerrView {
         prompt1.setLayoutY(75);
         prompt1.setText("Wait for other players to join...");
         assignTerrPane.getChildren().add(prompt1);
+
+        // error
+        error.setLayoutX(600);
+        error.setLayoutY(400);
+        error.setText("Wrong, please enter again");
+        error.setVisible(false);
+        assignTerrPane.getChildren().add(error);
     }
 
     public void addPrompt2(String prompt) {
@@ -55,5 +69,29 @@ public class AssignTerrView {
         prompt2.setLayoutY(75);
         prompt2.setText(prompt);
         assignTerrPane.getChildren().add(prompt2);
+    }
+
+    public void addPrompt3(String prompt) {
+        prompt3.setLayoutX(600);
+        prompt3.setLayoutY(150);
+        prompt3.setText(prompt);
+        assignTerrPane.getChildren().add(prompt3);
+
+        input1.setLayoutX(600);
+        input1.setLayoutY(200);
+        assignTerrPane.getChildren().add(input1);
+
+        input2.setLayoutX(600);
+        input2.setLayoutY(250);
+        assignTerrPane.getChildren().add(input2);
+
+        input3.setLayoutX(600);
+        input3.setLayoutY(300);
+        assignTerrPane.getChildren().add(input3);
+
+        submit.setLayoutX(600);
+        submit.setLayoutY(350);
+        submit.setText("submit");
+        assignTerrPane.getChildren().add(submit);
     }
 }

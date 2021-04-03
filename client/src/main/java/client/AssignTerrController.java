@@ -2,16 +2,36 @@ package client;
 
 public class AssignTerrController {
     AssignTerrView assignTerrView;
+    PlayGameView playGameView;
     Client client;
-    String prompt;
-
-    public String change(Client client){
-        String prompt = client.recvNameAndSeq();
-        return prompt;
-    }
 
     public AssignTerrController(AssignTerrView assignTerrView, Client client) {
         this.assignTerrView = assignTerrView;
+        this.playGameView = new PlayGameView();
+        playGameView.init();
         this.client = client;
+        submitAction();
+    }
+
+    public void submitAction() {
+        assignTerrView.submit.setOnAction(e -> {
+
+            System.out.println(assignTerrView.input1.getText() + "," +
+                    assignTerrView.input2.getText() + "," +
+                    assignTerrView.input3.getText());
+            if (client.sendAssignTerritory(assignTerrView.input1.getText(),
+                    assignTerrView.input2.getText(),
+                    assignTerrView.input3.getText())) {
+                String boardMsg = client.recvBoardPrompt();
+                String instructionMsg = client.recvInstruction();
+                playGameView.addPrompt(boardMsg);
+                playGameView.addPrompt2(instructionMsg);
+                App.root.getChildren().remove(assignTerrView.assignTerrPane);
+                App.root.getChildren().add(playGameView.playGamePane);
+            } else {
+                assignTerrView.error.setVisible(true);
+            }
+
+        });
     }
 }

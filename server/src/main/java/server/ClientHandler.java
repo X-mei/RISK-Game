@@ -184,21 +184,25 @@ public class ClientHandler extends Thread {
       int[] unitsAssign = new int[promptMsg.length];
       int i = 0;
       output.writeUTF("You have total " + totalUnits + " to set up in your territories.");
-      while(i < promptMsg.length) {
-        output.writeUTF(promptMsg[i] + "You have " + (totalUnits - unitsSetup) + " units left.");
-        String received = input.readUTF();
-        int unitsNum;
+      while(true) {
+        String recv1 = input.readUTF();
+        String recv2 = input.readUTF();
+        String recv3 = input.readUTF();
         try {
-          unitsNum = Integer.parseInt(received);
+          int unitsNum1 = Integer.parseInt(recv1);
+          int unitsNum2 = Integer.parseInt(recv2);
+          int unitsNum3 = Integer.parseInt(recv3);
+          if (unitsNum1 + unitsNum2 + unitsNum3 > totalUnits) {
+            output.writeUTF("input again");
+            continue;
+          } else {
+            unitsAssign[0] = unitsNum1;
+            unitsAssign[1] = unitsNum2;
+            unitsAssign[2] = unitsNum3;
+            break;
+          }
         } catch(NumberFormatException e) {
-          continue;
-        }
-        if (unitsNum + unitsSetup > totalUnits) {
-          continue;
-        } else {
-          unitsSetup += unitsNum;
-          unitsAssign[i] = unitsNum;
-          i++;
+          output.writeUTF("input again");
         }
       }
       int j = 0;
@@ -243,7 +247,7 @@ public class ClientHandler extends Thread {
           prompt += "Invalid action! Please input all actions you want again.\n";
         }
         prompt += techUpdate;
-        prompt += "You are the " + playerName + " player, what would you like to do?\n(U)pgrade Soldier\n(M)ove\n(A)ttack\n(T)ech Upgrade\n(D)one";
+        prompt += "You are the " + playerName + " player, what would you like to do?";
         valid = true;
         actionValid = true;
         techUpdate = "";

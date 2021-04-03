@@ -149,13 +149,25 @@ public class Client {
     return prompt;
   }
 
-  public void recvStartStatus() {
+  public int recvStartStatus() {
     try {
       String line = dataIn.readUTF(); 
       this.startStatus = Integer.parseInt(line);
     } catch (IOException e){
       out.println("Receive failed.");
     }
+    return startStatus;
+  }
+
+  public String recvAssignPrompt() {
+    String promptMsg = null;
+    try {
+      promptMsg = dataIn.readUTF();
+      out.println(promptMsg);
+    } catch (IOException e) {
+      out.println("receive failed.");
+    }
+    return promptMsg;
   }
 
   /**
@@ -163,22 +175,42 @@ public class Client {
    * the territory and send the message.
    * @throws IOException
    */
-  public void recvAssignTerritory() throws IOException {
+  public boolean sendAssignTerritory(String input1, String input2, String input3) {
     try {
-      String promptMsg = dataIn.readUTF(); 
-      out.println(promptMsg);
-      while(true) {
+        dataOut.writeUTF(input1);
+        dataOut.writeUTF(input2);
+        dataOut.writeUTF(input3);
         String line = dataIn.readUTF(); 
         out.println(line);
         if (line.equals("Wait for other players to assign the units...")) {
-          break;
+          return true;
         }
-        String readIn = inputReader.readLine();
-        dataOut.writeUTF(readIn);
-      }
     } catch (IOException e) {
       out.println("Receive failed.");
     }
+    return false;
+  }
+
+  public String recvBoardPrompt() {
+    String boardMsg = null;
+    try {
+      boardMsg = dataIn.readUTF();
+      out.println(boardMsg);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return boardMsg;
+  }
+
+  public String recvInstruction() {
+    String instructionMsg = null;
+    try {
+      instructionMsg = dataIn.readUTF();
+      out.println(instructionMsg);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return instructionMsg;
   }
 
   /**

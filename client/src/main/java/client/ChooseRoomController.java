@@ -16,7 +16,6 @@ public class ChooseRoomController {
     public ChooseRoomController(ChooseRoomView chooseRoomView, Client client) {
         this.chooseRoomView = chooseRoomView;
         this.assignTerrView = new AssignTerrView();
-        assignTerrView.init();
         this.client = client;
         chooseAction();
         confirmAction();
@@ -35,17 +34,25 @@ public class ChooseRoomController {
     }
 
     public void confirmAction() {
-        chooseRoomView.confirm.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        chooseRoomView.confirm.setOnAction(e -> {
+
                 System.out.println(choice.substring(0, 1));
                 client.sendGameRoom(choice.substring(0, 1));
+                assignTerrView.init(choice.substring(0, 1));
                 App.root.getChildren().remove(chooseRoomView.chooseRoomPane);
                 App.root.getChildren().add(assignTerrView.assignTerrPane);
 
                 String prompt = client.recvNameAndSeq();
-                assignTerrView.addPrompt2(prompt);
-            }
+                int status = client.recvStartStatus();
+                if (status == 1) {
+                    String promptAssign = client.recvAssignPrompt();
+                    assignTerrView.addPrompt2(prompt);
+                    assignTerrView.addPrompt3(promptAssign);
+                    AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client);
+                } else {
+                    //assignTerrView.addPrompt2(prompt);
+                }
+
         });
     }
 
