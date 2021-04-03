@@ -44,6 +44,7 @@ public class EnterGameView {
         // confirm button
         confirm.setLayoutX(200);
         confirm.setLayoutY(200);
+        confirm.setText("confirm");
         enterGamePane.getChildren().add(confirm);
 
     }

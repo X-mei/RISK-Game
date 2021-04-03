@@ -213,6 +213,15 @@ public class Client {
     return instructionMsg;
   }
 
+  public void sendInstruction(String action) {
+    try {
+      dataOut.writeUTF(action);
+      out.println(action);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   /**
    * This function recv the board prompt and send action
    */

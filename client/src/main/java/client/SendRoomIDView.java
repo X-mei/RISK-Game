@@ -37,6 +37,7 @@ public class SendRoomIDView {
         // confirm button
         confirm.setLayoutX(200);
         confirm.setLayoutY(200);
+        confirm.setText("confirm");
         roomIDPane.getChildren().add(confirm);
 
         // error

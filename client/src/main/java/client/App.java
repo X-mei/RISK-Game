@@ -73,7 +73,7 @@ public class App extends Application {
         LoginController loginController = new LoginController(loginView, enterGameView, client);
 
         // set scene
-        Scene scene = new Scene(root, 800, 800);
+        Scene scene = new Scene(root, 800, 1500);
         primaryStage.setTitle("Welcome to RISC");
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -2,6 +2,7 @@ package client;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 public class PlayGameView {
     AnchorPane playGamePane;
+    Label prompt0;
     Label prompt1;
     Label prompt2;
     Button upgrade;
@@ -18,9 +20,12 @@ public class PlayGameView {
     Button attack;
     Button tech;
     Button done;
+    TextField input;
+    Button confirm;
 
-    public PlayGameView() {
+    public PlayGameView(String userInfo) {
         this.playGamePane = new AnchorPane();
+        this.prompt0 = new Label(userInfo);
         this.prompt1 = new Label();
         this.prompt2 = new Label();
         this.upgrade = new Button();
@@ -28,6 +33,8 @@ public class PlayGameView {
         this.attack = new Button();
         this.tech = new Button();
         this.done = new Button();
+        this.input = new TextField();
+        this.confirm = new Button();
     }
 
     public void init() {
@@ -44,9 +51,23 @@ public class PlayGameView {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        input.setLayoutX(600);
+        input.setLayoutY(750);
+        input.setVisible(false);
+        playGamePane.getChildren().add(input);
+
+        confirm.setLayoutX(600);
+        confirm.setLayoutY(780);
+        confirm.setVisible(false);
+        confirm.setText("confrim");
+        playGamePane.getChildren().add(confirm);
     }
 
     public void addPrompt(String prompt) {
+        prompt0.setLayoutX(600);
+        prompt0.setLayoutY(50);
+        playGamePane.getChildren().add(prompt0);
+
         prompt1.setLayoutX(600);
         prompt1.setLayoutY(75);
         prompt1.setText(prompt);

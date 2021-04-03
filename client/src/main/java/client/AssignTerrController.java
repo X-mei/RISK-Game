@@ -7,7 +7,7 @@ public class AssignTerrController {
 
     public AssignTerrController(AssignTerrView assignTerrView, Client client) {
         this.assignTerrView = assignTerrView;
-        this.playGameView = new PlayGameView();
+        this.playGameView = new PlayGameView(assignTerrView.prompt2.getText());
         playGameView.init();
         this.client = client;
         submitAction();
@@ -28,6 +28,7 @@ public class AssignTerrController {
                 playGameView.addPrompt2(instructionMsg);
                 App.root.getChildren().remove(assignTerrView.assignTerrPane);
                 App.root.getChildren().add(playGameView.playGamePane);
+                PlayGameController playGameController = new PlayGameController(playGameView, client);
             } else {
                 assignTerrView.error.setVisible(true);
             }

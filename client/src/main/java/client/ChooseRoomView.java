@@ -55,6 +55,7 @@ public class ChooseRoomView {
         // confirm button
         confirm.setLayoutX(200);
         confirm.setLayoutY(400);
+        confirm.setText("confirm");
         chooseRoomPane.getChildren().add(confirm);
 
     }
