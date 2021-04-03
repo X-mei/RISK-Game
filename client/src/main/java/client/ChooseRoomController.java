@@ -44,14 +44,11 @@ public class ChooseRoomController {
 
             String prompt = client.recvNameAndSeq();
             int status = client.recvStartStatus();
-            if (status == 1) {
-                String promptAssign = client.recvAssignPrompt();
-                assignTerrView.addPrompt2(prompt);
-                assignTerrView.addPrompt3(promptAssign);
-                AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client);
-            } else {
-                //assignTerrView.addPrompt2(prompt);
-            }
+
+            String promptAssign = client.recvAssignPrompt();
+            assignTerrView.addPrompt2(prompt);
+            assignTerrView.addPrompt3(promptAssign);
+            AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client);
 
         });
     }

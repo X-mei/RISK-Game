@@ -54,10 +54,17 @@ public class PlayGameController {
             client.sendInstruction(playGameView.done.getText().substring(0, 1));
             String prompt = client.recvInstruction();
             if (prompt.equals("Wait for other players to perform the action...")) {
-                String prompt1 = client.recvAssignPrompt();
-                String prompt2 = client.recvInstruction();
-                playGameView.prompt1.setText(prompt1);
-                playGameView.prompt2.setText(prompt2);
+                String prompt1 = client.recvBoardPrompt();
+                // TODO: continue watching
+                if (prompt1.equals("You lost all your territories!")) {
+                    String info = client.recvBoardPrompt();
+                    playGameView.prompt1.setText(prompt1);
+                    playGameView.prompt2.setText(info);
+                } else {
+                    String prompt2 = client.recvInstruction();
+                    playGameView.prompt1.setText(prompt1);
+                    playGameView.prompt2.setText(prompt2);
+                }
             } else {
                 playGameView.prompt2.setText(prompt);
             }
