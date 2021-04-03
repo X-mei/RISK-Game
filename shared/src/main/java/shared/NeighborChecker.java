@@ -1,6 +1,8 @@
 package shared;
+
 /**
- * 
+ * This is the subclass that checks whether the attack action is correct. More
+ * specifically, is the dest the direct neighbor of src. 
  */
 public class NeighborChecker extends RuleChecker {
   NeighborChecker(RuleChecker next){
@@ -17,8 +19,6 @@ public class NeighborChecker extends RuleChecker {
     if(theBoard.getTerritory(dest) == null){
       return "The selected destination do not exist.";
     }
-    // System.out.println(thisAct.getActionOwner());
-    // System.out.println(theBoard.getTerritory(dest).getOwner());
     if (thisAct.getActionOwner().equals(theBoard.getTerritory(dest).getOwner())) {
       return "You cannot attack your own territory.";
     }

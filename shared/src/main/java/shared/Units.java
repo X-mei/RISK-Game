@@ -1,41 +1,35 @@
 package shared;
 /**
- * 
+ * This is the interface class for all unit class
  */
 public interface Units {
   /**
-   * 
-   * @return
+   * @return the count of unit
    */
   public Integer getCount();
 
   /**
-   * 
-   * @param num
+   * @param num is the num to add to the current count
    */
   public void updateCount(int num);
 
   /**
-   * 
-   * @return
+   * @return the name of the units
    */
   public String getName();
 
   /**
-   * 
-   * @return
+   * @return the bonus when fighting
    */
   public int getBonus();
 
   /**
-   * 
-   * @return
+   * @return the total cost to upgrade to this level of soldier
    */
   public int getCost();
 
   /**
-   * 
-   * @return
+   * @return the tech level requirement to upgrade to this level
    */
   public int getTechReq();
 }
