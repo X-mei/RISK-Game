@@ -1,6 +1,7 @@
 package shared;
+
 /**
- * 
+ * This is the class that contains all the fields and method for the upgrade action.
  */
 public class UpgradeAction{
   protected final String src;
@@ -11,10 +12,10 @@ public class UpgradeAction{
   protected final String actionName;
 
   /**
-   * 
-   * @param owner
-   * @param s
-   * @throws IllegalArgumentException
+   * The constructor for this class
+   * @param owner the owner of action
+   * @param s the string to parse into a action
+   * @throws IllegalArgumentException when the input string is not valid for parse
    */
   public UpgradeAction(String owner, String s) throws IllegalArgumentException {
     String[] sections = s.split(" ", 0);
@@ -35,47 +36,42 @@ public class UpgradeAction{
   }
 
   /**
-   * 
-   * @return
+   * @return the owner of the action
    */
   public String getActionOwner() {
     return owner;
   }
 
   /**
-   * 
-   * @return
+   * @return the name of the action
    */
   public String getActionName() {
     return actionName;
   }
-/**
- * 
- * @return
- */
+
+  /**
+   * @return the name of the source territory
+   */
   public String getSource() {
     return src;
   }
 
   /**
-   * 
-   * @return
+   * @return the name of the starting level
    */
   public String getsLevel() {
     return sLevel;
   }
 
   /**
-   * 
-   * @return
+   * @return the name of the final level
    */
   public String getfLevel() {
     return fLevel;
   }
 
   /**
-   * 
-   * @return
+   * @return the count of unit
    */
   public int getCount() {
     return count;

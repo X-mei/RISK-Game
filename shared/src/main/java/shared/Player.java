@@ -42,17 +42,19 @@ public class Player {
     this.techLevel = 1;
     this.status = "In-game";
     //TODO: add territory
-    this.ownedTerritory = new LinkedHashSet<Territory>();
-    this.actionCreationFns = new HashMap<String, BiFunction<String, String, BasicAction>>();
+    this.ownedTerritory = new LinkedHashSet<>();
+    this.actionCreationFns = new HashMap<>();
     this.factory = factory;
     setUpActionCreationMap();
   }
-    
+
   /**
-   * This function generate a action type.
-   * @param the action and the input to parse.
+   *
+   * @param action the action name to parse.
+   * @param input the string to parse.
    * @return the Action after the conversion.
    * @throws IOException if the input readline fails, IllegalArgumentException if the input is invalid.
+   * @throws IllegalArgumentException if the string is not a valid string to parse.
    */
   public BasicAction formAction(String action, String input) throws IOException, IllegalArgumentException{
     if (action.equals("D")){
