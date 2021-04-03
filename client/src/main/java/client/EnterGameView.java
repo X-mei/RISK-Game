@@ -13,6 +13,7 @@ public class EnterGameView {
     RadioButton r2;
     ToggleGroup tg;
     Button confirm;
+    Label error;
 
     public EnterGameView() {
         this.enterGamePane = new AnchorPane();
@@ -44,5 +45,6 @@ public class EnterGameView {
         confirm.setLayoutX(200);
         confirm.setLayoutY(200);
         enterGamePane.getChildren().add(confirm);
+
     }
 }

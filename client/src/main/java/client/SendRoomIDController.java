@@ -23,7 +23,12 @@ public class SendRoomIDController {
             @Override
             public void handle(ActionEvent event) {
                 choice = sendRoomIDView.roomID.getText();
-                client.sendRoomID(choice);
+                if (client.sendRoomID(choice)) {
+                    // enter the game
+                } else {
+                    // error pop
+                    sendRoomIDView.error.setVisible(true);
+                }
             }
         });
     }

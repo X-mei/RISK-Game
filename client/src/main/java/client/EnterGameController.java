@@ -17,6 +17,7 @@ public class EnterGameController {
     public EnterGameController(EnterGameView enterGameView, Client client) {
         this.enterGameView = enterGameView;
         this.client = client;
+        this.choice = null;
         this.chooseRoomView = new ChooseRoomView();
         chooseRoomView.init();
         this.sendRoomIDView = new SendRoomIDView();

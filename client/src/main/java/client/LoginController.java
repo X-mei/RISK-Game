@@ -21,10 +21,14 @@ public class LoginController {
         loginView.register.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                client.login("r", loginView.text.getText(), loginView.password.getText());
-                App.root.getChildren().remove(loginView.loginPane);
-                App.root.getChildren().add(enterGameView.enterGamePane);
-                EnterGameController enterGameController = new EnterGameController(enterGameView, client);
+                client.loginOrReg("r");
+                if (client.login(loginView.text.getText(), loginView.password.getText())) {
+                    App.root.getChildren().remove(loginView.loginPane);
+                    App.root.getChildren().add(enterGameView.enterGamePane);
+                    EnterGameController enterGameController = new EnterGameController(enterGameView, client);
+                } else {
+                    loginView.error.setVisible(true);
+                }
             }
         });
     }
@@ -33,10 +37,14 @@ public class LoginController {
         loginView.login.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                client.login("l", loginView.text.getText(), loginView.password.getText());
-                App.root.getChildren().remove(loginView.loginPane);
-                App.root.getChildren().add(enterGameView.enterGamePane);
-                EnterGameController enterGameController = new EnterGameController(enterGameView, client);
+                client.loginOrReg("l");
+                if (client.login(loginView.text.getText(), loginView.password.getText())) {
+                    App.root.getChildren().remove(loginView.loginPane);
+                    App.root.getChildren().add(enterGameView.enterGamePane);
+                    EnterGameController enterGameController = new EnterGameController(enterGameView, client);
+                } else {
+                    loginView.error.setVisible(true);
+                }
             }
         });
     }

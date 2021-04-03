@@ -57,24 +57,29 @@ public class Client {
     }
   }
 
-  public void login(String choice, String username, String password) {
+  public void loginOrReg(String choice) {
     try {
       String line = dataIn.readUTF();
       out.println(line);
       dataOut.writeUTF(choice);
-      while(true) {
-        line = dataIn.readUTF();
-        out.println(line);
-        if (line.equals("Login successfully.")) {
-          break;
-        }
-        dataOut.writeUTF(username);
-        dataOut.writeUTF(password);
-        //String readIn = inputReader.readLine();
+    } catch (IOException e) {
+      out.println("Receive failed.");
+    }
+  }
+
+  public boolean login(String username, String password) {
+    try {
+      dataOut.writeUTF(username);
+      dataOut.writeUTF(password);
+      String line = dataIn.readUTF();
+      out.println(line);
+      if (line.equals("Login successfully.")) {
+        return true;
       }
     } catch (IOException e) {
       out.println("Receive failed.");
     }
+    return false;
   }
 
   public void answerInfo(String choice) {
@@ -95,21 +100,19 @@ public class Client {
     }
   }
 
-  public void sendRoomID(String choice) {
+  public boolean sendRoomID(String choice) {
     try {
-      while(true) {
-        String line = dataIn.readUTF(); 
-        out.println(line);
-        if (line.equals("Enter successfully.")) {
-          reconnected = true;
-          break;
-        }
-        dataOut.writeUTF(choice);
-        // enter successfully
+      dataOut.writeUTF(choice);
+      String line = dataIn.readUTF();
+      out.println(line);
+      if (line.equals("Enter successfully.")) {
+        reconnected = true;
+        return true;
       }
     } catch (IOException e) {
       out.println("Receive failed.");
     }
+    return false;
   }
 
   /**
@@ -122,6 +125,8 @@ public class Client {
       out.println(line);
       out.println("my room choice: " + choice);
       dataOut.writeUTF(choice);
+      line = dataIn.readUTF();
+      out.println(line);
     } catch (IOException e) {
       out.println("Receive failed.");
     }
@@ -131,15 +136,17 @@ public class Client {
   /**
    * This function receives playerName and playerSeq
    */
-  public void recvNameAndSeq() throws IOException {
+  public String recvNameAndSeq() {
+    String prompt = null;
     try {
       String line = dataIn.readUTF(); 
       this.playerName = line;
-      String prompt = dataIn.readUTF();
+      prompt = dataIn.readUTF();
       out.println(prompt);
     } catch (IOException e){
       out.println("Receive failed.");
     }
+    return prompt;
   }
 
   public void recvStartStatus() {

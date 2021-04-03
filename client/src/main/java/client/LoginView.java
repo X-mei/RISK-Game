@@ -14,6 +14,7 @@ public class LoginView {
     PasswordField password;
     Button register;
     Button login;
+    Label error;
 
     public LoginView() {
         this.loginPane = new AnchorPane();
@@ -23,6 +24,7 @@ public class LoginView {
         this.password = new PasswordField();
         this.register = new Button();
         this.login = new Button();
+        this.error = new Label();
     }
 
     public void init() {
@@ -60,5 +62,13 @@ public class LoginView {
         login.setLayoutX(300);
         login.setLayoutY(200);
         loginPane.getChildren().add(login);
+
+        // error
+        error.setLayoutX(200);
+        error.setLayoutY(250);
+        error.setText("Error! Please enter again.");
+        error.setVisible(false);
+        loginPane.getChildren().add(error);
     }
+
 }

@@ -56,7 +56,7 @@ public class App extends Application {
 //      } catch (IOException e) {
 //        e.printStackTrace();
 //      }
-      launch(args);
+        launch(args);
     }
 
     @Override
@@ -67,25 +67,16 @@ public class App extends Application {
                 new BufferedReader(new InputStreamReader(System.in)), System.out);
         client.connectToServer();
 
-
         // login
         loginView.init();
         root.getChildren().add(loginView.loginPane);
         LoginController loginController = new LoginController(loginView, enterGameView, client);
-
-        // enterGame
-        //EnterGameController enterGameController = new EnterGameController(enterGameView, client);
-
-        // chooseRoom
-        //ChooseRoomController chooseRoomController = new ChooseRoomController(chooseRoomView, client);
 
         // set scene
         Scene scene = new Scene(root, 800, 800);
         primaryStage.setTitle("Welcome to RISC");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
 
     }
 }

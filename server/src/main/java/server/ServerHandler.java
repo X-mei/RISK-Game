@@ -51,49 +51,15 @@ public class ServerHandler extends Thread {
 
   public void login() {
     try {
-      output.writeUTF("Register or Log in ? Input r to register, other to login.");
-      String received = input.readUTF();
-      if (received.equals("r")) {
-        newAccount();
-      } else {
-        authAccount();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void newAccount() {
-    try {
       while(true) {
-        output.writeUTF("Please input your username and password.");
-        String username = input.readUTF();
-        //output.writeUTF("Please input your password.");
-        String password = input.readUTF();
-        if (userLogInfo.containsKey(username)) {
-          continue;
-        }
-        userLogInfo.put(username, password);
-        this.username = username;
-        output.writeUTF("Login successfully.");
-        break;
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public void authAccount() {
-    try {
-      while(true) {
-        //output.writeUTF("Please input your username.");
-        String username = input.readUTF();
-        //output.writeUTF("Please input your password.");
-        String password = input.readUTF();
-        if (userLogInfo.containsKey(username)) {
-          if (userLogInfo.get(username).equals(password)) {
-            this.username = username;
-            output.writeUTF("Login successfully.");
+        output.writeUTF("Register or Log in ? Input r to register, other to login.");
+        String received = input.readUTF();
+        if (received.equals("r")) {
+          if (newAccount()) {
+            break;
+          }
+        } else {
+          if (authAccount()) {
             break;
           }
         }
@@ -101,6 +67,45 @@ public class ServerHandler extends Thread {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public boolean newAccount() {
+    try {
+      //output.writeUTF("Please input your username and password.");
+      String username = input.readUTF();
+      //output.writeUTF("Please input your password.");
+      String password = input.readUTF();
+      if (userLogInfo.containsKey(username)) {
+        output.writeUTF("Enter again.");
+        return false;
+      }
+      userLogInfo.put(username, password);
+      this.username = username;
+      output.writeUTF("Login successfully.");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return true;
+  }
+
+  public boolean authAccount() {
+    try {
+      //output.writeUTF("Please input your username.");
+      String username = input.readUTF();
+      //output.writeUTF("Please input your password.");
+      String password = input.readUTF();
+      if (userLogInfo.containsKey(username)) {
+        if (userLogInfo.get(username).equals(password)) {
+          this.username = username;
+          output.writeUTF("Login successfully.");
+          return true;
+        }
+      }
+      output.writeUTF("Enter again.");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   public void askInfo() {
@@ -122,19 +127,21 @@ public class ServerHandler extends Thread {
       String name = null;
       int room = 0;
       while(true) {
-        output.writeUTF("Please input room id.");
         String roomID = input.readUTF();
         try {
           room = Integer.parseInt(roomID);
         } catch(NumberFormatException e) {
+          output.writeUTF("Wrong roomID.");
           continue;
         }
         // check the room id
         if (!disconnectedUsers.containsKey(room)) {
+          output.writeUTF("Wrong roomID.");
           continue;
         } else {
           HashMap<String, String> users = disconnectedUsers.get(room);
           if (!users.containsKey(username)) {
+            output.writeUTF("Wrong roomID.");
             continue;
           } else {
             name = users.get(username);
@@ -143,7 +150,6 @@ public class ServerHandler extends Thread {
         output.writeUTF("Enter successfully.");
         break;
       }
-      // TODO: assign old room
       // get the old gameServer
       for (HashMap.Entry<GameServer, Integer> entry : gameIDs.entrySet()) {
         if (entry.getValue() == room) {

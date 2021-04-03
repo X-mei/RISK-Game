@@ -10,12 +10,14 @@ public class SendRoomIDView {
     Label prompt;
     TextField roomID;
     Button confirm;
+    Label error;
 
     public SendRoomIDView() {
         this.roomIDPane = new AnchorPane();
         this.prompt = new Label();
         this.roomID = new TextField();
         this.confirm = new Button();
+        this.error = new Label();
     }
 
     public void init() {
@@ -36,5 +38,12 @@ public class SendRoomIDView {
         confirm.setLayoutX(200);
         confirm.setLayoutY(200);
         roomIDPane.getChildren().add(confirm);
+
+        // error
+        error.setLayoutX(200);
+        error.setLayoutY(250);
+        error.setText("Wrong room id.");
+        error.setVisible(false);
+        roomIDPane.getChildren().add(error);
     }
 }

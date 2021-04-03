@@ -9,11 +9,14 @@ import javafx.scene.control.Toggle;
 
 public class ChooseRoomController {
     ChooseRoomView chooseRoomView;
+    AssignTerrView assignTerrView;
     Client client;
     String choice;
 
     public ChooseRoomController(ChooseRoomView chooseRoomView, Client client) {
         this.chooseRoomView = chooseRoomView;
+        this.assignTerrView = new AssignTerrView();
+        assignTerrView.init();
         this.client = client;
         chooseAction();
         confirmAction();
@@ -35,7 +38,13 @@ public class ChooseRoomController {
         chooseRoomView.confirm.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                System.out.println(choice.substring(0, 1));
                 client.sendGameRoom(choice.substring(0, 1));
+                App.root.getChildren().remove(chooseRoomView.chooseRoomPane);
+                App.root.getChildren().add(assignTerrView.assignTerrPane);
+
+                String prompt = client.recvNameAndSeq();
+                assignTerrView.addPrompt2(prompt);
             }
         });
     }
