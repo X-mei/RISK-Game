@@ -85,9 +85,11 @@ public class ClientHandler extends Thread {
   @Override
   public void run(){
     String playerInfo = playerName;
+    int playerNum = board.getPlayerNum();
     try{
       // send playerInfo
       output.writeUTF(playerInfo);
+      output.writeUTF(Integer.toString(playerNum));
       output.writeUTF("Hi, You are player " + playerName + ", and this gameID is " + gameID);
       output.writeUTF(Integer.toString(statusFlag));
       
@@ -104,7 +106,6 @@ public class ClientHandler extends Thread {
       if (board.checkSinglePlayerLose(playerName) && board.checkGameEnd().equals("")) {
         output.writeUTF("You lost all your territories!");
         output.writeUTF("Do you want to exit or continue watching the game? Input c to continue or else to exit.");
-        // TODO : check lowercase or uppercase, both okay
         String isContinue = input.readUTF();
         if (isContinue.equals("c")) {
           // only send board msg

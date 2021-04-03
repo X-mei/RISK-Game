@@ -1,5 +1,7 @@
 package client;
 
+import javafx.stage.Stage;
+
 public class PlayGameController {
     PlayGameView playGameView;
     Client client;
@@ -13,6 +15,8 @@ public class PlayGameController {
         techAction();
         doneAction();
         confirmAction();
+        continueAction();
+        exitAction();
     }
 
     public void upgradeAction() {
@@ -21,6 +25,11 @@ public class PlayGameController {
             String prompt = client.recvInstruction();
             playGameView.input.setVisible(true);
             playGameView.confirm.setVisible(true);
+            playGameView.upgrade.setVisible(false);
+            playGameView.move.setVisible(false);
+            playGameView.attack.setVisible(false);
+            playGameView.tech.setVisible(false);
+            playGameView.done.setVisible(false);
         });
     }
 
@@ -30,6 +39,11 @@ public class PlayGameController {
             String prompt = client.recvInstruction();
             playGameView.input.setVisible(true);
             playGameView.confirm.setVisible(true);
+            playGameView.upgrade.setVisible(false);
+            playGameView.move.setVisible(false);
+            playGameView.attack.setVisible(false);
+            playGameView.tech.setVisible(false);
+            playGameView.done.setVisible(false);
         });
     }
 
@@ -39,6 +53,11 @@ public class PlayGameController {
             String prompt = client.recvInstruction();
             playGameView.input.setVisible(true);
             playGameView.confirm.setVisible(true);
+            playGameView.upgrade.setVisible(false);
+            playGameView.move.setVisible(false);
+            playGameView.attack.setVisible(false);
+            playGameView.tech.setVisible(false);
+            playGameView.done.setVisible(false);
         });
     }
 
@@ -60,6 +79,7 @@ public class PlayGameController {
                     String info = client.recvBoardPrompt();
                     playGameView.prompt1.setText(prompt1);
                     playGameView.prompt2.setText(info);
+                    playGameView.exitOrContinue();
                 } else {
                     String prompt2 = client.recvInstruction();
                     playGameView.prompt1.setText(prompt1);
@@ -78,6 +98,26 @@ public class PlayGameController {
             playGameView.prompt2.setText(prompt2);
             playGameView.input.setVisible(false);
             playGameView.confirm.setVisible(false);
+            playGameView.upgrade.setVisible(true);
+            playGameView.move.setVisible(true);
+            playGameView.attack.setVisible(true);
+            playGameView.tech.setVisible(true);
+            playGameView.done.setVisible(true);
+        });
+    }
+
+    public void continueAction() {
+        playGameView.continueWatch.setOnAction(e -> {
+            client.sendInstruction("c");
+        });
+    }
+
+    public void exitAction() {
+        playGameView.exitGame.setOnAction(e -> {
+            client.sendInstruction("e");
+            // close the window
+            Stage stage = (Stage) playGameView.exitGame.getScene().getWindow();
+            stage.close();
         });
     }
 }

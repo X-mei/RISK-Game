@@ -16,8 +16,6 @@ public class SendRoomIDController {
     public SendRoomIDController(SendRoomIDView sendRoomIDView, Client client) {
         this.sendRoomIDView = sendRoomIDView;
         this.assignTerrView = new AssignTerrView();
-        // TODO: playerNUM
-        assignTerrView.init("2");
 
         this.client = client;
         confirmAction();
@@ -30,10 +28,12 @@ public class SendRoomIDController {
                 choice = sendRoomIDView.roomID.getText();
                 if (client.sendRoomID(choice)) {
                     // enter the game
-                    String prompt = client.recvNameAndSeq();
+                    String playerNum = client.recvNameAndNum();
+                    String prompt = client.recvPrompt();
                     int status = client.recvStartStatus();
                     if (status == 1) {
                         String promptAssign = client.recvAssignPrompt();
+                        assignTerrView.init(playerNum);
                         assignTerrView.addPrompt2(prompt);
                         assignTerrView.addPrompt3(promptAssign);
                         App.root.getChildren().remove(sendRoomIDView.roomIDPane);
@@ -41,7 +41,7 @@ public class SendRoomIDController {
                         AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client);
                     } else {
                         PlayGameView playGameView = new PlayGameView(prompt);
-                        playGameView.init();
+                        playGameView.init(playerNum);
                         String boardMsg = client.recvBoardPrompt();
                         String instructionMsg = client.recvInstruction();
                         playGameView.addPrompt(boardMsg);

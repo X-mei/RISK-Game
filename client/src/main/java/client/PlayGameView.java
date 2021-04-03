@@ -22,6 +22,8 @@ public class PlayGameView {
     Button done;
     TextField input;
     Button confirm;
+    Button continueWatch;
+    Button exitGame;
 
     public PlayGameView(String userInfo) {
         this.playGamePane = new AnchorPane();
@@ -35,12 +37,24 @@ public class PlayGameView {
         this.done = new Button();
         this.input = new TextField();
         this.confirm = new Button();
+        this.continueWatch = new Button();
+        this.exitGame = new Button();
     }
 
-    public void init() {
+    public void init(String playerNum) {
         // show img
         try {
-            FileInputStream imageStream = new FileInputStream("/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/lena.bmp");
+            String path = null;
+            if (playerNum.equals("2")) {
+                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/2P.JPG";
+            } else if (playerNum.equals("3")) {
+                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/3P.JPG";
+            } else if (playerNum.equals("4")) {
+                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/4P.JPG";
+            } else {
+                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/5P.JPG";
+            }
+            FileInputStream imageStream = new FileInputStream(path);
             Image image = new Image(imageStream);
             ImageView imageView = new ImageView(image);
             imageView.setX(50);
@@ -52,14 +66,14 @@ public class PlayGameView {
             e.printStackTrace();
         }
         input.setLayoutX(600);
-        input.setLayoutY(750);
+        input.setLayoutY(700);
         input.setVisible(false);
         playGamePane.getChildren().add(input);
 
         confirm.setLayoutX(600);
-        confirm.setLayoutY(780);
+        confirm.setLayoutY(750);
         confirm.setVisible(false);
-        confirm.setText("confrim");
+        confirm.setText("confirm");
         playGamePane.getChildren().add(confirm);
     }
 
@@ -105,6 +119,24 @@ public class PlayGameView {
         done.setText("Done");
         playGamePane.getChildren().add(done);
 
+    }
+
+    public void exitOrContinue() {
+        continueWatch.setLayoutX(600);
+        continueWatch.setLayoutY(450);
+        continueWatch.setText("continue");
+        playGamePane.getChildren().add(continueWatch);
+
+        exitGame.setLayoutX(600);
+        exitGame.setLayoutY(500);
+        exitGame.setText("exit");
+        playGamePane.getChildren().add(exitGame);
+
+        upgrade.setVisible(false);
+        move.setVisible(false);
+        attack.setVisible(false);
+        tech.setVisible(false);
+        done.setVisible(false);
     }
 
 }

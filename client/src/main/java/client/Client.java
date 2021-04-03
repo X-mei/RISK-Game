@@ -136,11 +136,22 @@ public class Client {
   /**
    * This function receives playerName and playerSeq
    */
-  public String recvNameAndSeq() {
-    String prompt = null;
+  public String recvNameAndNum() {
+    String playerNum = null;
     try {
       String line = dataIn.readUTF(); 
       this.playerName = line;
+      playerNum = dataIn.readUTF();
+      out.println(playerNum);
+    } catch (IOException e){
+      out.println("Receive failed.");
+    }
+    return playerNum;
+  }
+
+  public String recvPrompt() {
+    String prompt = null;
+    try {
       prompt = dataIn.readUTF();
       out.println(prompt);
     } catch (IOException e){
@@ -177,14 +188,14 @@ public class Client {
    */
   public boolean sendAssignTerritory(String input1, String input2, String input3) {
     try {
-        dataOut.writeUTF(input1);
-        dataOut.writeUTF(input2);
-        dataOut.writeUTF(input3);
-        String line = dataIn.readUTF(); 
-        out.println(line);
-        if (line.equals("Wait for other players to assign the units...")) {
-          return true;
-        }
+      dataOut.writeUTF(input1);
+      dataOut.writeUTF(input2);
+      dataOut.writeUTF(input3);
+      String line = dataIn.readUTF();
+      out.println(line);
+      if (line.equals("Wait for other players to assign the units...")) {
+        return true;
+      }
     } catch (IOException e) {
       out.println("Receive failed.");
     }

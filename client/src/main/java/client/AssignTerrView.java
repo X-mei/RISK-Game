@@ -20,6 +20,7 @@ public class AssignTerrView {
     TextField input2;
     TextField input3;
     Button submit;
+    String playerNum;
 
     public AssignTerrView() {
         this.assignTerrPane = new AnchorPane();
@@ -35,8 +36,19 @@ public class AssignTerrView {
 
     public void init(String playerNum) {
         // show img
+        this.playerNum = playerNum;
         try {
-            FileInputStream imageStream = new FileInputStream("/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/lena.bmp");
+            String path = null;
+            if (playerNum.equals("2")) {
+                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/2P.JPG";
+            } else if (playerNum.equals("3")) {
+                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/3P.JPG";
+            } else if (playerNum.equals("4")) {
+                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/4P.JPG";
+            } else {
+                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/5P.JPG";
+            }
+            FileInputStream imageStream = new FileInputStream(path);
             Image image = new Image(imageStream);
             ImageView imageView = new ImageView(image);
             imageView.setX(50);

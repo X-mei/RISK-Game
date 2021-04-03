@@ -8,7 +8,7 @@ public class AssignTerrController {
     public AssignTerrController(AssignTerrView assignTerrView, Client client) {
         this.assignTerrView = assignTerrView;
         this.playGameView = new PlayGameView(assignTerrView.prompt2.getText());
-        playGameView.init();
+        playGameView.init(assignTerrView.playerNum);
         this.client = client;
         submitAction();
     }

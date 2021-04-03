@@ -42,7 +42,8 @@ public class ChooseRoomController {
             App.root.getChildren().remove(chooseRoomView.chooseRoomPane);
             App.root.getChildren().add(assignTerrView.assignTerrPane);
 
-            String prompt = client.recvNameAndSeq();
+            String playerNum = client.recvNameAndNum();
+            String prompt = client.recvPrompt();
             int status = client.recvStartStatus();
 
             String promptAssign = client.recvAssignPrompt();
