@@ -52,13 +52,13 @@ public class PlayGameView {
         try {
             String path = null;
             if (playerNum.equals("2")) {
-                path = "/Users/liruiqi/Downloads/F/ECE651/2P.JPG";
+                path = "./client/src/main/resources/2P.JPG";
             } else if (playerNum.equals("3")) {
-                path = "/Users/liruiqi/Downloads/F/ECE651/3P.JPG";
+                path = "./client/src/main/resources/3P.JPG";
             } else if (playerNum.equals("4")) {
-                path = "/Users/liruiqi/Downloads/F/ECE651/4P.JPG";
+                path = "./client/src/main/resources/4P.JPG";
             } else {
-                path = "/Users/liruiqi/Downloads/F/ECE651/5P.JPG";
+                path = "./client/src/main/resources/5P.JPG";
             }
             FileInputStream imageStream = new FileInputStream(path);
             Image image = new Image(imageStream);
