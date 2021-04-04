@@ -353,21 +353,17 @@ public class Client {
     if(str == null){
       return false;
     }
-    int pos1 = str.indexOf(" ");
-    if(pos1 == -1){
+    String[] sections = str.split(" ", 0);
+    if(sections.length != 4){
       return false;
     }
-    int pos2 = str.indexOf(" ", pos1 + 1);
-    if(pos2 == -1){
-      return false;
+    for(int i = 0; i < sections.length; i++){
+      if(sections[i] == null){
+        return false;
+      }
     }
-    int pos3 = str.indexOf(" ", pos2 + 1);
-    if(pos3 == -1){
-      return false;
-    }
-    String substr= str.substring(pos2 + 1, pos3);
-    for(int i = 0; i < substr.length(); i++){
-      if(!Character.isDigit(substr.charAt(i))){
+    for(int i = 0; i < sections[2].length(); i++){
+      if(!Character.isDigit(sections[2].charAt(i))){
         return false;
       }
     }
