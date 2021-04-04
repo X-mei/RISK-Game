@@ -80,6 +80,12 @@ public class PlayGameController {
                     playGameView.prompt1.setText(prompt1);
                     playGameView.prompt2.setText(info);
                     playGameView.exitOrContinue();
+                } else if (prompt1.equals("The game ends.")) {
+                    String info = client.recvBoardPrompt();
+                    playGameView.prompt1.setText(prompt1);
+                    playGameView.prompt2.setText(info);
+                    playGameView.exitOrContinue();
+                    playGameView.continueWatch.setVisible(false);
                 } else {
                     String prompt2 = client.recvInstruction();
                     playGameView.prompt1.setText(prompt1);

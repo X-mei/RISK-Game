@@ -33,7 +33,7 @@ public class ClientHandler extends Thread {
   final LinkedHashSet<BasicAction> moveHashSet;
   final LinkedHashSet<BasicAction> attackHashSet;
   final LinkedHashSet<UpgradeAction> upgradeSoldierHashSet;
-  private TechAction techUpgarde;
+  private TechAction techUpgrade;
   final Board board;
   final String playerName;
   final Player player;
@@ -61,7 +61,7 @@ public class ClientHandler extends Thread {
     this.moveHashSet = new LinkedHashSet<BasicAction>();
     this.attackHashSet = new LinkedHashSet<BasicAction>();
     this.upgradeSoldierHashSet = new LinkedHashSet<UpgradeAction>();
-    this.techUpgarde = null;
+    this.techUpgrade = null;
     this.board = b;
     this.playerName = name;
     this.connectFlag = true;
@@ -231,7 +231,7 @@ public class ClientHandler extends Thread {
       moveHashSet.clear();
       attackHashSet.clear();
       upgradeSoldierHashSet.clear();
-      techUpgarde = null;
+      techUpgrade = null;
       String boardMsg = board.displayAllPlayerAllBoard();
       output.writeUTF(boardMsg);
       Boolean valid = true;
@@ -280,7 +280,7 @@ public class ClientHandler extends Thread {
             moveHashSet.clear();
             attackHashSet.clear();
             upgradeSoldierHashSet.clear();
-            techUpgarde = null;
+            techUpgrade = null;
             actionValid = false;
             continue;
           }
@@ -324,7 +324,7 @@ public class ClientHandler extends Thread {
           //}
           if(techUpgradeMarker){
             TechAction act = player.formTechAction();
-            techUpgarde = act;
+            techUpgrade = act;
             techUpgradeMarker = false;
             techUpdate = "";
           }
@@ -364,7 +364,7 @@ public class ClientHandler extends Thread {
       lock.unlock();
       board.spawnOneUnitForPlayer(playerName);
       board.spawnResourceForPlayer(playerName);
-      board.processUpdateTech(techUpgarde);
+      board.processUpdateTech(techUpgrade);
       lock.lock();
       isReady.await();
       lock.unlock();
