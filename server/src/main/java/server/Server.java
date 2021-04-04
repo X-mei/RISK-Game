@@ -1,5 +1,7 @@
 package server;
 
+import shared.Board;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,8 +9,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import shared.Board;
 
 /**
  * This is a class which manages all the games.
@@ -35,7 +35,7 @@ public class Server {
     this.disconnectedUsers = new HashMap<Integer, HashMap<String, String>>();
     this.disconnectedGames = new HashMap<Integer, Integer>();
     // create rooms in advance for 2-5 people
-    for (int i = 2; i < 5; i++) {
+    for (int i = 2; i <= 5; i++) {
       gameRooms.put(i, new GameServer(portNum, i, gameBoards, disconnectedUsers, disconnectedGames));
     }
   }

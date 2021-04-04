@@ -42,8 +42,8 @@ public class EnterGameView {
         enterGamePane.getChildren().add(r2);
 
         // confirm button
-        confirm.setLayoutX(200);
-        confirm.setLayoutY(200);
+        confirm.setLayoutX(40);
+        confirm.setLayoutY(300);
         confirm.setText("confirm");
         enterGamePane.getChildren().add(confirm);
 

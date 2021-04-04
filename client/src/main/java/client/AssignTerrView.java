@@ -40,34 +40,34 @@ public class AssignTerrView {
         try {
             String path = null;
             if (playerNum.equals("2")) {
-                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/2P.JPG";
+                path = "/Users/liruiqi/Downloads/F/ECE651/2P.JPG";
             } else if (playerNum.equals("3")) {
-                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/3P.JPG";
+                path = "/Users/liruiqi/Downloads/F/ECE651/3P.JPG";
             } else if (playerNum.equals("4")) {
-                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/4P.JPG";
+                path = "/Users/liruiqi/Downloads/F/ECE651/4P.JPG";
             } else {
-                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/5P.JPG";
+                path = "/Users/liruiqi/Downloads/F/ECE651/5P.JPG";
             }
             FileInputStream imageStream = new FileInputStream(path);
             Image image = new Image(imageStream);
             ImageView imageView = new ImageView(image);
-            imageView.setX(50);
+            imageView.setX(40);
             imageView.setY(25);
-            imageView.setFitHeight(455);
-            imageView.setFitWidth(500);
+            imageView.setFitHeight(540);
+            imageView.setFitWidth(960);
             assignTerrPane.getChildren().add(imageView);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // prompt: wait
-        prompt1.setLayoutX(600);
+        prompt1.setLayoutX(1010);
         prompt1.setLayoutY(75);
         prompt1.setText("Wait for other players to join...");
         assignTerrPane.getChildren().add(prompt1);
 
         // error
-        error.setLayoutX(600);
+        error.setLayoutX(1010);
         error.setLayoutY(400);
         error.setText("Wrong, please enter again");
         error.setVisible(false);
@@ -77,31 +77,35 @@ public class AssignTerrView {
     public void addPrompt2(String prompt) {
         // add prompt2
         prompt1.setVisible(false);
-        prompt2.setLayoutX(600);
+        prompt2.setLayoutX(1010);
         prompt2.setLayoutY(75);
         prompt2.setText(prompt);
         assignTerrPane.getChildren().add(prompt2);
     }
 
     public void addPrompt3(String prompt) {
-        prompt3.setLayoutX(600);
+        prompt3.setLayoutX(1010);
         prompt3.setLayoutY(150);
         prompt3.setText(prompt);
         assignTerrPane.getChildren().add(prompt3);
 
-        input1.setLayoutX(600);
+        input1.setLayoutX(1010);
         input1.setLayoutY(200);
         assignTerrPane.getChildren().add(input1);
 
-        input2.setLayoutX(600);
+        input2.setLayoutX(1010);
         input2.setLayoutY(250);
         assignTerrPane.getChildren().add(input2);
 
-        input3.setLayoutX(600);
+        input3.setLayoutX(1010);
         input3.setLayoutY(300);
         assignTerrPane.getChildren().add(input3);
 
-        submit.setLayoutX(600);
+        if (playerNum.equals("4") || playerNum.equals("5")) {
+            input3.setVisible(false);
+        }
+
+        submit.setLayoutX(1010);
         submit.setLayoutY(350);
         submit.setText("submit");
         assignTerrPane.getChildren().add(submit);

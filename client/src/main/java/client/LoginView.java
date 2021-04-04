@@ -54,13 +54,13 @@ public class LoginView {
         loginPane.getChildren().add(password);
 
         // button register
-        register.setLayoutX(200);
+        register.setLayoutX(100);
         register.setLayoutY(200);
         register.setText("register");
         loginPane.getChildren().add(register);
 
         // button login
-        login.setLayoutX(300);
+        login.setLayoutX(200);
         login.setLayoutY(200);
         login.setText("login");
         loginPane.getChildren().add(login);

@@ -3,8 +3,6 @@ package client;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 
@@ -52,11 +50,13 @@ public class ChooseRoomController {
                 prompt = client.recvPrompt();
                 int status = client.recvStartStatus();
                 promptAssign = client.recvAssignPrompt();
+                //TODO: add prompts
+                String[] prompts = client.recvPrompts();
 
                 Platform.runLater(() -> {
                     assignTerrView.addPrompt2(prompt);
                     assignTerrView.addPrompt3(promptAssign);
-                    AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client);
+                    AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client, choice.substring(0,1));
                 });
             }, 200);
 

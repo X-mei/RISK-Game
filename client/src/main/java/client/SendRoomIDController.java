@@ -1,11 +1,7 @@
 package client;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 
 public class SendRoomIDController {
     SendRoomIDView sendRoomIDView;
@@ -33,12 +29,14 @@ public class SendRoomIDController {
                     int status = client.recvStartStatus();
                     if (status == 1) {
                         String promptAssign = client.recvAssignPrompt();
+                        //TODO: add prompts
+                        String[] prompts = client.recvPrompts();
                         assignTerrView.init(playerNum);
                         assignTerrView.addPrompt2(prompt);
                         assignTerrView.addPrompt3(promptAssign);
                         App.root.getChildren().remove(sendRoomIDView.roomIDPane);
                         App.root.getChildren().add(assignTerrView.assignTerrPane);
-                        AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client);
+                        AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client, playerNum);
                     } else {
                         PlayGameView playGameView = new PlayGameView(prompt);
                         playGameView.init(playerNum);

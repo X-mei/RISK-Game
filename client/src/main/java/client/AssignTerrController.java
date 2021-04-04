@@ -8,12 +8,14 @@ public class AssignTerrController {
     Client client;
     String boardMsg;
     String instructionMsg;
+    String playerNum;
 
-    public AssignTerrController(AssignTerrView assignTerrView, Client client) {
+    public AssignTerrController(AssignTerrView assignTerrView, Client client, String playerNum) {
         this.assignTerrView = assignTerrView;
         this.playGameView = new PlayGameView(assignTerrView.prompt2.getText());
         playGameView.init(assignTerrView.playerNum);
         this.client = client;
+        this.playerNum = playerNum;
         boardMsg = "";
         instructionMsg = "";
         submitAction();
@@ -25,9 +27,19 @@ public class AssignTerrController {
             System.out.println(assignTerrView.input1.getText() + "," +
                     assignTerrView.input2.getText() + "," +
                     assignTerrView.input3.getText());
-            if (client.sendAssignTerritory(assignTerrView.input1.getText(),
-                    assignTerrView.input2.getText(),
-                    assignTerrView.input3.getText())) {
+            String[] inputs;
+            if (playerNum.equals("2") || playerNum.equals("3")) {
+                inputs = new String[3];
+                inputs[0] = assignTerrView.input1.getText();
+                inputs[1] = assignTerrView.input2.getText();
+                inputs[2] = assignTerrView.input3.getText();
+            } else {
+                inputs = new String[2];
+                inputs[0] = assignTerrView.input1.getText();
+                inputs[1] = assignTerrView.input2.getText();
+            }
+
+            if (client.sendAssignTerritory(inputs)) {
 
                 assignTerrView.waitPlayer();
                 App.setTimeout(() -> {

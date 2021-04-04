@@ -1,5 +1,7 @@
 package server;
 
+import shared.*;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,15 +12,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-
-import shared.BasicAction;
-import shared.Board;
-import shared.MapFactory;
-import shared.Player;
-import shared.TechAction;
-import shared.Territory;
-import shared.UnitsFactory;
-import shared.UpgradeAction;
 
 /**
  * ClientHandler class extends from thread and
@@ -180,26 +173,27 @@ public class ClientHandler extends Thread {
   public void assignTerritory() throws IOException {
     try {
       int totalUnits = board.getTotalUnits();
-      int unitsSetup = 0;
       String[] promptMsg = board.askUnitSetup(playerName);
       int[] unitsAssign = new int[promptMsg.length];
-      int i = 0;
       output.writeUTF("You have total " + totalUnits + " to set up in your territories.");
       while(true) {
-        String recv1 = input.readUTF();
-        String recv2 = input.readUTF();
-        String recv3 = input.readUTF();
+        String[] recv = new String[promptMsg.length];
+        for(int k = 0; k < promptMsg.length; k++) {
+          output.writeUTF(promptMsg[k]);
+        }
+        for(int k = 0; k < promptMsg.length; k++) {
+          recv[k] = input.readUTF();
+        }
         try {
-          int unitsNum1 = Integer.parseInt(recv1);
-          int unitsNum2 = Integer.parseInt(recv2);
-          int unitsNum3 = Integer.parseInt(recv3);
-          if (unitsNum1 + unitsNum2 + unitsNum3 > totalUnits) {
+          int sum = 0;
+          for(int k = 0; k < promptMsg.length; k++) {
+            unitsAssign[k] = Integer.parseInt(recv[k]);
+            sum += unitsAssign[k];
+          }
+          if (sum > totalUnits) {
             output.writeUTF("input again");
             continue;
           } else {
-            unitsAssign[0] = unitsNum1;
-            unitsAssign[1] = unitsNum2;
-            unitsAssign[2] = unitsNum3;
             break;
           }
         } catch(NumberFormatException e) {
@@ -436,8 +430,13 @@ public class ClientHandler extends Thread {
       return false;
     }
     String substr2 = substr1.substring(pos2 + 1);
-    for(int i = 0; i < substr2.length(); i++){
-      if(!Character.isDigit(substr2.charAt(i))){
+    int pos3 = substr2.indexOf(" ");
+    if(pos3 == -1){
+      return false;
+    }
+    String substr3= substr1.substring(pos2 + 1, pos3);
+    for(int i = 0; i < substr3.length(); i++){
+      if(!Character.isDigit(substr3.charAt(i))){
         return false;
       }
     }

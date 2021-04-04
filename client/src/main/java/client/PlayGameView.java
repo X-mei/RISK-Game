@@ -15,6 +15,8 @@ public class PlayGameView {
     Label prompt0;
     Label prompt1;
     Label prompt2;
+    Label promptAM;
+    Label promptUpdate;
     Button upgrade;
     Button move;
     Button attack;
@@ -24,12 +26,15 @@ public class PlayGameView {
     Button confirm;
     Button continueWatch;
     Button exitGame;
+    Label error;
 
     public PlayGameView(String userInfo) {
         this.playGamePane = new AnchorPane();
         this.prompt0 = new Label(userInfo);
         this.prompt1 = new Label();
         this.prompt2 = new Label();
+        this.promptAM = new Label();
+        this.promptUpdate = new Label();
         this.upgrade = new Button();
         this.move = new Button();
         this.attack = new Button();
@@ -39,6 +44,7 @@ public class PlayGameView {
         this.confirm = new Button();
         this.continueWatch = new Button();
         this.exitGame = new Button();
+        this.error = new Label();
     }
 
     public void init(String playerNum) {
@@ -46,89 +52,114 @@ public class PlayGameView {
         try {
             String path = null;
             if (playerNum.equals("2")) {
-                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/2P.JPG";
+                path = "/Users/liruiqi/Downloads/F/ECE651/2P.JPG";
             } else if (playerNum.equals("3")) {
-                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/3P.JPG";
+                path = "/Users/liruiqi/Downloads/F/ECE651/3P.JPG";
             } else if (playerNum.equals("4")) {
-                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/4P.JPG";
+                path = "/Users/liruiqi/Downloads/F/ECE651/4P.JPG";
             } else {
-                path = "/Users/pudding/Documents/duke/2021spring/ECE651/ece651-spr21-risc-group6/client/src/main/resources/5P.JPG";
+                path = "/Users/liruiqi/Downloads/F/ECE651/5P.JPG";
             }
             FileInputStream imageStream = new FileInputStream(path);
             Image image = new Image(imageStream);
             ImageView imageView = new ImageView(image);
-            imageView.setX(50);
+            imageView.setX(40);
             imageView.setY(25);
-            imageView.setFitHeight(455);
-            imageView.setFitWidth(500);
+            imageView.setFitHeight(540);
+            imageView.setFitWidth(960);
             playGamePane.getChildren().add(imageView);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        input.setLayoutX(600);
-        input.setLayoutY(700);
+        promptAM.setLayoutX(40);
+        promptAM.setLayoutY(655);
+        promptAM.setText("Please enter the action: src dest count Level.");
+        promptAM.setVisible(false);
+        playGamePane.getChildren().add(promptAM);
+
+        promptUpdate.setLayoutX(40);
+        promptUpdate.setLayoutY(655);
+        promptUpdate.setText("Please enter the action: Territory start-level count final-level.");
+        promptUpdate.setVisible(false);
+        playGamePane.getChildren().add(promptUpdate);
+
+        input.setLayoutX(40);
+        input.setLayoutY(685);
         input.setVisible(false);
         playGamePane.getChildren().add(input);
 
-        confirm.setLayoutX(600);
-        confirm.setLayoutY(750);
+        confirm.setLayoutX(40);
+        confirm.setLayoutY(725);
         confirm.setVisible(false);
         confirm.setText("confirm");
         playGamePane.getChildren().add(confirm);
 
-        continueWatch.setLayoutX(600);
-        continueWatch.setLayoutY(450);
+        continueWatch.setLayoutX(40);
+        continueWatch.setLayoutY(485);
         continueWatch.setText("continue");
         continueWatch.setVisible(false);
         playGamePane.getChildren().add(continueWatch);
 
-        exitGame.setLayoutX(600);
-        exitGame.setLayoutY(500);
+        exitGame.setLayoutX(40);
+        exitGame.setLayoutY(725);
         exitGame.setText("exit");
+        exitGame.setVisible(false);
         continueWatch.setVisible(false);
         playGamePane.getChildren().add(exitGame);
+
+        error.setLayoutX(40);
+        error.setLayoutY(775);
+        error.setText("Error! Please enter again.");
+        error.setVisible(false);
+        playGamePane.getChildren().add(error);
+
     }
 
     public void addPrompt(String prompt) {
-        prompt0.setLayoutX(600);
-        prompt0.setLayoutY(50);
+        prompt0.setLayoutX(1010);
+        prompt0.setLayoutY(60);
         playGamePane.getChildren().add(prompt0);
 
-        prompt1.setLayoutX(600);
-        prompt1.setLayoutY(75);
+        prompt1.setLayoutX(1010);
+        prompt1.setLayoutY(80);
         prompt1.setText(prompt);
         playGamePane.getChildren().add(prompt1);
     }
 
     public void addPrompt2(String prompt) {
-        prompt2.setLayoutX(600);
-        prompt2.setLayoutY(400);
+        prompt2.setLayoutX(40);
+        prompt2.setLayoutY(610);
         prompt2.setText(prompt);
         playGamePane.getChildren().add(prompt2);
 
-        upgrade.setLayoutX(600);
-        upgrade.setLayoutY(450);
+        upgrade.setLayoutX(40);
+        upgrade.setLayoutY(660);
         upgrade.setText("Upgrade Soldiers");
+        upgrade.setPrefWidth(200);
         playGamePane.getChildren().add(upgrade);
 
-        move.setLayoutX(600);
-        move.setLayoutY(500);
-        move.setText("Move");
-        playGamePane.getChildren().add(move);
-
-        attack.setLayoutX(600);
-        attack.setLayoutY(550);
-        attack.setText("Attack");
-        playGamePane.getChildren().add(attack);
-
-        tech.setLayoutX(600);
-        tech.setLayoutY(600);
+        tech.setLayoutX(40);
+        tech.setLayoutY(700);
         tech.setText("Technical Upgrade");
+        tech.setPrefWidth(200);
         playGamePane.getChildren().add(tech);
 
-        done.setLayoutX(600);
-        done.setLayoutY(650);
+        attack.setLayoutX(40);
+        attack.setLayoutY(740);
+        attack.setText("Attack");
+        attack.setPrefWidth(200);
+        playGamePane.getChildren().add(attack);
+
+        move.setLayoutX(40);
+        move.setLayoutY(780);
+        move.setText("Move");
+        move.setPrefWidth(200);
+        playGamePane.getChildren().add(move);
+
+        done.setLayoutX(40);
+        done.setLayoutY(820);
         done.setText("Done");
+        done.setPrefWidth(200);
         playGamePane.getChildren().add(done);
 
     }

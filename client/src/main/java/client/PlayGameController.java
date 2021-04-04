@@ -28,8 +28,10 @@ public class PlayGameController {
         playGameView.upgrade.setOnAction(e -> {
             client.sendInstruction(playGameView.upgrade.getText().substring(0, 1));
             String prompt = client.recvInstruction();
+            playGameView.promptUpdate.setVisible(true);
             playGameView.input.setVisible(true);
             playGameView.confirm.setVisible(true);
+            playGameView.error.setVisible(false);
             playGameView.upgrade.setVisible(false);
             playGameView.move.setVisible(false);
             playGameView.attack.setVisible(false);
@@ -42,8 +44,10 @@ public class PlayGameController {
         playGameView.move.setOnAction(e -> {
             client.sendInstruction(playGameView.move.getText().substring(0, 1));
             String prompt = client.recvInstruction();
+            playGameView.promptAM.setVisible(true);
             playGameView.input.setVisible(true);
             playGameView.confirm.setVisible(true);
+            playGameView.error.setVisible(false);
             playGameView.upgrade.setVisible(false);
             playGameView.move.setVisible(false);
             playGameView.attack.setVisible(false);
@@ -56,8 +60,10 @@ public class PlayGameController {
         playGameView.attack.setOnAction(e -> {
             client.sendInstruction(playGameView.attack.getText().substring(0, 1));
             String prompt = client.recvInstruction();
+            playGameView.promptAM.setVisible(true);
             playGameView.input.setVisible(true);
             playGameView.confirm.setVisible(true);
+            playGameView.error.setVisible(false);
             playGameView.upgrade.setVisible(false);
             playGameView.move.setVisible(false);
             playGameView.attack.setVisible(false);
@@ -70,6 +76,7 @@ public class PlayGameController {
         playGameView.tech.setOnAction(e -> {
             client.sendInstruction(playGameView.tech.getText().substring(0, 1));
             String prompt = client.recvInstruction();
+            playGameView.error.setVisible(false);
         });
     }
 
@@ -117,16 +124,25 @@ public class PlayGameController {
 
     public void confirmAction() {
         playGameView.confirm.setOnAction(e -> {
-            client.sendInstruction(playGameView.input.getText());
-            String prompt2 = client.recvInstruction();
-            playGameView.prompt2.setText(prompt2);
-            playGameView.input.setVisible(false);
-            playGameView.confirm.setVisible(false);
-            playGameView.upgrade.setVisible(true);
-            playGameView.move.setVisible(true);
-            playGameView.attack.setVisible(true);
-            playGameView.tech.setVisible(true);
-            playGameView.done.setVisible(true);
+            String str = playGameView.input.getText();
+            if(client.checkActionStr(str)){
+                client.sendInstruction(str);
+                String prompt2 = client.recvInstruction();
+                playGameView.prompt2.setText(prompt2);
+                playGameView.input.setVisible(false);
+                playGameView.confirm.setVisible(false);
+                playGameView.promptAM.setVisible(false);
+                playGameView.error.setVisible(false);
+                playGameView.promptUpdate.setVisible(false);
+                playGameView.upgrade.setVisible(true);
+                playGameView.move.setVisible(true);
+                playGameView.attack.setVisible(true);
+                playGameView.tech.setVisible(true);
+                playGameView.done.setVisible(true);
+            }
+            else{
+                playGameView.error.setVisible(true);
+            }
         });
     }
 

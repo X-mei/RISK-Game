@@ -1,11 +1,6 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -23,6 +18,8 @@ public class Client {
   private int playerSeq;
   private boolean reconnected;
   private int startStatus;
+  private int playerNumber;
+  private int terriNum;
 
   public Client(String ip, int port, BufferedReader inputSource, PrintStream out) {
     this.serverIPAddr = ip;
@@ -143,6 +140,7 @@ public class Client {
       this.playerName = line;
       playerNum = dataIn.readUTF();
       out.println(playerNum);
+      this.playerNumber = Integer.parseInt(playerNum);
     } catch (IOException e){
       out.println("Receive failed.");
     }
@@ -181,16 +179,32 @@ public class Client {
     return promptMsg;
   }
 
+  public String[] recvPrompts() {
+    this.terriNum = 2;
+    if (playerNumber == 2 || playerNumber == 3) {
+      this.terriNum = 3;
+    }
+    String[] prompt = new String[terriNum];
+    try {
+      for (int i = 0; i < terriNum; i++) {
+        prompt[i] = dataIn.readUTF();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return prompt;
+  }
+
   /**
    * This function receives the prompt about assigning
    * the territory and send the message.
    * @throws IOException
    */
-  public boolean sendAssignTerritory(String input1, String input2, String input3) {
+  public boolean sendAssignTerritory(String[] input) {
     try {
-      dataOut.writeUTF(input1);
-      dataOut.writeUTF(input2);
-      dataOut.writeUTF(input3);
+      for(int i = 0; i < terriNum; i++) {
+        dataOut.writeUTF(input[i]);
+      }
       String line = dataIn.readUTF();
       out.println(line);
       if (line.equals("Wait for other players to assign the units...")) {
@@ -329,7 +343,35 @@ public class Client {
       e.printStackTrace();
     }
   }
-  
-  
+
+  /**
+   * This function checks if the input string is
+   * valid to form an action.
+   * @return boolean
+   */
+  public Boolean checkActionStr(String str){
+    if(str == null){
+      return false;
+    }
+    int pos1 = str.indexOf(" ");
+    if(pos1 == -1){
+      return false;
+    }
+    int pos2 = str.indexOf(" ", pos1 + 1);
+    if(pos2 == -1){
+      return false;
+    }
+    int pos3 = str.indexOf(" ", pos2 + 1);
+    if(pos3 == -1){
+      return false;
+    }
+    String substr= str.substring(pos2 + 1, pos3);
+    for(int i = 0; i < substr.length(); i++){
+      if(!Character.isDigit(substr.charAt(i))){
+        return false;
+      }
+    }
+    return true;
+  }
 
 }
