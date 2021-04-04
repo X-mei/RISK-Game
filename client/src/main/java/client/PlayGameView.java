@@ -75,6 +75,18 @@ public class PlayGameView {
         confirm.setVisible(false);
         confirm.setText("confirm");
         playGamePane.getChildren().add(confirm);
+
+        continueWatch.setLayoutX(600);
+        continueWatch.setLayoutY(450);
+        continueWatch.setText("continue");
+        continueWatch.setVisible(false);
+        playGamePane.getChildren().add(continueWatch);
+
+        exitGame.setLayoutX(600);
+        exitGame.setLayoutY(500);
+        exitGame.setText("exit");
+        continueWatch.setVisible(false);
+        playGamePane.getChildren().add(exitGame);
     }
 
     public void addPrompt(String prompt) {
@@ -122,21 +134,40 @@ public class PlayGameView {
     }
 
     public void exitOrContinue() {
-        continueWatch.setLayoutX(600);
-        continueWatch.setLayoutY(450);
-        continueWatch.setText("continue");
-        playGamePane.getChildren().add(continueWatch);
 
-        exitGame.setLayoutX(600);
-        exitGame.setLayoutY(500);
-        exitGame.setText("exit");
-        playGamePane.getChildren().add(exitGame);
+        continueWatch.setVisible(true);
+        exitGame.setVisible(true);
 
         upgrade.setVisible(false);
         move.setVisible(false);
         attack.setVisible(false);
         tech.setVisible(false);
         done.setVisible(false);
+    }
+
+    public void deactivateAll() {
+        prompt1.setVisible(true);
+        prompt1.setText("Wait for other players to perform the action...");
+
+        prompt2.setVisible(false);
+        upgrade.setVisible(false);
+        move.setVisible(false);
+        attack.setVisible(false);
+        tech.setVisible(false);
+        done.setVisible(false);
+        continueWatch.setVisible(false);
+        exitGame.setVisible(false);
+        input.setVisible(false);
+        confirm.setVisible(false);
+    }
+
+    public void activateAll() {
+        prompt2.setVisible(true);
+        upgrade.setVisible(true);
+        move.setVisible(true);
+        attack.setVisible(true);
+        tech.setVisible(true);
+        done.setVisible(true);
     }
 
 }

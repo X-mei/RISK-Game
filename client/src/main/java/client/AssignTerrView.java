@@ -106,4 +106,17 @@ public class AssignTerrView {
         submit.setText("submit");
         assignTerrPane.getChildren().add(submit);
     }
+
+    public void waitPlayer() {
+        prompt1.setVisible(true);
+        prompt1.setText("Wait for other players to assign units...");
+
+        prompt2.setVisible(false);
+        prompt3.setVisible(false);
+        input1.setVisible(false);
+        input2.setVisible(false);
+        input3.setVisible(false);
+        submit.setVisible(false);
+        error.setVisible(false);
+    }
 }

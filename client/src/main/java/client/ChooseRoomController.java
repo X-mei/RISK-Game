@@ -13,11 +13,15 @@ public class ChooseRoomController {
     AssignTerrView assignTerrView;
     Client client;
     String choice;
+    String prompt;
+    String promptAssign;
 
     public ChooseRoomController(ChooseRoomView chooseRoomView, Client client) {
         this.chooseRoomView = chooseRoomView;
         this.assignTerrView = new AssignTerrView();
         this.client = client;
+        prompt = "";
+        prompt = "";
         chooseAction();
         confirmAction();
     }
@@ -43,14 +47,19 @@ public class ChooseRoomController {
             App.root.getChildren().remove(chooseRoomView.chooseRoomPane);
             App.root.getChildren().add(assignTerrView.assignTerrPane);
 
-            String playerNum = client.recvNameAndNum();
-            String prompt = client.recvPrompt();
-            int status = client.recvStartStatus();
+            App.setTimeout(() -> {
+                String playerNum = client.recvNameAndNum();
+                prompt = client.recvPrompt();
+                int status = client.recvStartStatus();
+                promptAssign = client.recvAssignPrompt();
 
-            String promptAssign = client.recvAssignPrompt();
-            assignTerrView.addPrompt2(prompt);
-            assignTerrView.addPrompt3(promptAssign);
-            AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client);
+                Platform.runLater(() -> {
+                    assignTerrView.addPrompt2(prompt);
+                    assignTerrView.addPrompt3(promptAssign);
+                    AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client);
+                });
+            }, 200);
+
 
         });
     }

@@ -1,14 +1,19 @@
 package client;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class PlayGameController {
     PlayGameView playGameView;
     Client client;
+    String promptMsg;
+    String promptInstruction;
 
     PlayGameController(PlayGameView playGameView, Client client) {
         this.playGameView = playGameView;
         this.client = client;
+        promptMsg = "";
+        promptInstruction = "";
         upgradeAction();
         moveAction();
         attackAction();
@@ -73,24 +78,37 @@ public class PlayGameController {
             client.sendInstruction(playGameView.done.getText().substring(0, 1));
             String prompt = client.recvInstruction();
             if (prompt.equals("Wait for other players to perform the action...")) {
-                String prompt1 = client.recvBoardPrompt();
-                // TODO: continue watching
-                if (prompt1.equals("You lost all your territories!")) {
-                    String info = client.recvBoardPrompt();
-                    playGameView.prompt1.setText(prompt1);
-                    playGameView.prompt2.setText(info);
-                    playGameView.exitOrContinue();
-                } else if (prompt1.equals("The game ends.")) {
-                    String info = client.recvBoardPrompt();
-                    playGameView.prompt1.setText(prompt1);
-                    playGameView.prompt2.setText(info);
-                    playGameView.exitOrContinue();
-                    playGameView.continueWatch.setVisible(false);
-                } else {
-                    String prompt2 = client.recvInstruction();
-                    playGameView.prompt1.setText(prompt1);
-                    playGameView.prompt2.setText(prompt2);
-                }
+
+                // set wait scene, deactivate all buttons
+                playGameView.deactivateAll();
+
+                App.setTimeout(() -> {
+                    promptMsg = client.recvBoardPrompt();
+                    promptInstruction = client.recvBoardPrompt();
+                    if (promptMsg.equals("You lost all your territories!")) {
+                        Platform.runLater(() -> {
+                            playGameView.prompt1.setText(promptMsg);
+                            playGameView.prompt2.setVisible(true);
+                            playGameView.prompt2.setText(promptInstruction);
+                            playGameView.exitOrContinue();
+                        });
+                    } else if (promptMsg.equals("The game ends.")) {
+                        Platform.runLater(() -> {
+                            playGameView.prompt1.setText(promptMsg);
+                            playGameView.prompt2.setVisible(true);
+                            playGameView.prompt2.setText(promptInstruction);
+                            playGameView.exitOrContinue();
+                            playGameView.continueWatch.setVisible(false);
+                        });
+                    } else {
+                        Platform.runLater(() -> {
+                            playGameView.activateAll();
+                            playGameView.prompt1.setText(promptMsg);
+                            playGameView.prompt2.setText(promptInstruction);
+                        });
+                    }
+                }, 200);
+
             } else {
                 playGameView.prompt2.setText(prompt);
             }
@@ -115,6 +133,32 @@ public class PlayGameController {
     public void continueAction() {
         playGameView.continueWatch.setOnAction(e -> {
             client.sendInstruction("c");
+            promptMsg = client.recvBoardPrompt();
+            playGameView.continueWatch.setVisible(false);
+            playGameView.prompt1.setText(promptMsg);
+            playGameView.prompt2.setVisible(false);
+
+            App.setTimeout(() -> {
+                while (true) {
+                    promptMsg = client.recvBoardPrompt();
+                    if (promptMsg.equals("The game ends.")) {
+                        Platform.runLater(() -> {
+                            promptInstruction = client.recvBoardPrompt();
+                            playGameView.prompt1.setText(promptMsg);
+                            playGameView.prompt2.setText(promptInstruction);
+                            playGameView.prompt2.setVisible(true);
+                            playGameView.exitOrContinue();
+                            playGameView.continueWatch.setVisible(false);
+                        });
+                        break;
+                    } else {
+                        Platform.runLater(() -> {
+                            playGameView.prompt1.setText(promptMsg);
+                        });
+                    }
+                }
+
+            }, 200);
         });
     }
 
