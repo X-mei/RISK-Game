@@ -1,15 +1,7 @@
 package shared;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Function; 
-import java.util.Comparator;
+import java.util.*;
+import java.util.function.Function;
 
 public class Board {
   protected int playerNum; //number of player
@@ -360,7 +352,7 @@ public class Board {
 
   /**
   * Version2 attack phase
-  * @param actionSet version 2 merged attack set
+  * @param actionMap version 2 merged attack set
   */
   public synchronized void processOneTurnAttackNextV2(HashMap<String, HashMap<String, BasicAction>> actionMap) {
     for (String s : actionMap.keySet()) {
@@ -636,7 +628,7 @@ private Soldiers createDiffSoldiersByName(String name){
   /**
    * Upgrade tech level, only once per round
    * Also check if the tech upgrade is valid
-   * @param t
+   * @param techUpAct
    */
   public synchronized void processUpdateTech(TechAction techUpAct) {
     if (techUpAct == null){

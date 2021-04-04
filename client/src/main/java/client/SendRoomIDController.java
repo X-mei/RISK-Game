@@ -34,6 +34,7 @@ public class SendRoomIDController {
                         assignTerrView.init(playerNum);
                         assignTerrView.addPrompt2(prompt);
                         assignTerrView.addPrompt3(promptAssign);
+                        assignTerrView.addPromptOfTerritory(prompts);
                         App.root.getChildren().remove(sendRoomIDView.roomIDPane);
                         App.root.getChildren().add(assignTerrView.assignTerrPane);
                         AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client, playerNum);

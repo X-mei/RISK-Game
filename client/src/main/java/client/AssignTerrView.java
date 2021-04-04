@@ -15,6 +15,9 @@ public class AssignTerrView {
     Label prompt1;
     Label prompt2;
     Label prompt3;
+    Label promptTerri1;
+    Label promptTerri2;
+    Label promptTerri3;
     Label error;
     TextField input1;
     TextField input2;
@@ -27,6 +30,9 @@ public class AssignTerrView {
         this.prompt1 = new Label();
         this.prompt2 = new Label();
         this.prompt3 = new Label();
+        this.promptTerri1 = new Label();
+        this.promptTerri2 = new Label();
+        this.promptTerri3 = new Label();
         this.error = new Label();
         this.input1 = new TextField();
         this.input2 = new TextField();
@@ -68,10 +74,29 @@ public class AssignTerrView {
 
         // error
         error.setLayoutX(1010);
-        error.setLayoutY(400);
+        error.setLayoutY(500);
         error.setText("Wrong, please enter again");
         error.setVisible(false);
         assignTerrPane.getChildren().add(error);
+    }
+
+    public void addPromptOfTerritory(String[] prompts){
+        promptTerri1.setLayoutX(1010);
+        promptTerri1.setLayoutY(200);
+        promptTerri1.setText(prompts[0]);
+        assignTerrPane.getChildren().add(promptTerri1);
+
+        promptTerri2.setLayoutX(1010);
+        promptTerri2.setLayoutY(300);
+        promptTerri2.setText(prompts[1]);
+        assignTerrPane.getChildren().add(promptTerri2);
+
+        if(prompts.length == 3){
+            promptTerri3.setLayoutX(1010);
+            promptTerri3.setLayoutY(400);
+            promptTerri3.setText(prompts[2]);
+            assignTerrPane.getChildren().add(promptTerri3);
+        }
     }
 
     public void addPrompt2(String prompt) {
@@ -89,16 +114,17 @@ public class AssignTerrView {
         prompt3.setText(prompt);
         assignTerrPane.getChildren().add(prompt3);
 
+
         input1.setLayoutX(1010);
-        input1.setLayoutY(200);
+        input1.setLayoutY(250);
         assignTerrPane.getChildren().add(input1);
 
         input2.setLayoutX(1010);
-        input2.setLayoutY(250);
+        input2.setLayoutY(350);
         assignTerrPane.getChildren().add(input2);
 
         input3.setLayoutX(1010);
-        input3.setLayoutY(300);
+        input3.setLayoutY(450);
         assignTerrPane.getChildren().add(input3);
 
         if (playerNum.equals("4") || playerNum.equals("5")) {
@@ -106,7 +132,7 @@ public class AssignTerrView {
         }
 
         submit.setLayoutX(1010);
-        submit.setLayoutY(350);
+        submit.setLayoutY(550);
         submit.setText("submit");
         assignTerrPane.getChildren().add(submit);
     }
@@ -117,6 +143,9 @@ public class AssignTerrView {
 
         prompt2.setVisible(false);
         prompt3.setVisible(false);
+        promptTerri1.setVisible(false);
+        promptTerri2.setVisible(false);
+        promptTerri3.setVisible(false);
         input1.setVisible(false);
         input2.setVisible(false);
         input3.setVisible(false);

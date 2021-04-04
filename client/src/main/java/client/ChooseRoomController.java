@@ -52,10 +52,10 @@ public class ChooseRoomController {
                 promptAssign = client.recvAssignPrompt();
                 //TODO: add prompts
                 String[] prompts = client.recvPrompts();
-
                 Platform.runLater(() -> {
                     assignTerrView.addPrompt2(prompt);
                     assignTerrView.addPrompt3(promptAssign);
+                    assignTerrView.addPromptOfTerritory(prompts);
                     AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client, choice.substring(0,1));
                 });
             }, 200);

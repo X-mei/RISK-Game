@@ -56,6 +56,7 @@ public class AssignTerrController {
                 }, 200);
 
             } else {
+                String[] prompts = client.recvPrompts();
                 assignTerrView.error.setVisible(true);
             }
 
