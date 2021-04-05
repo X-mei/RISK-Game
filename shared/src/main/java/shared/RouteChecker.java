@@ -1,7 +1,9 @@
 package shared;
 
 import java.util.HashSet;
-
+/**
+ * This is the subclass that checks whether the move action is correct. More specifically, is there a path from src to dest. It also update the minimum cost field in the action.
+ */
 public class RouteChecker extends RuleChecker{
   private int minCost;
   RouteChecker(RuleChecker next){
@@ -39,6 +41,13 @@ public class RouteChecker extends RuleChecker{
     }
   }
   
+  /**
+   * 
+   * @param src
+   * @param dest
+   * @param cost
+   * @param visited
+   */
   private void checkRoute(Territory src, Territory dest, Integer cost, HashSet<Territory> visited){
     visited.add(src);
     cost += src.getSize();

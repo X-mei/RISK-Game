@@ -1,5 +1,7 @@
 package shared;
-
+/**
+ * This is the subclass that checks whether the attack or move action have enough unit of the specified level.
+ */
 public class UnitMovingChecker extends RuleChecker{
   public UnitMovingChecker(RuleChecker next){
     super(next);

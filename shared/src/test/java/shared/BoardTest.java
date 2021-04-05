@@ -22,7 +22,7 @@ public class BoardTest {
   public void test_processSingleBasicMoveV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, 10);
+      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0});
     }
     //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
     BasicAction a1 = new Move("King", "Hanamura Hollywood 4 Lv1");
@@ -205,8 +205,10 @@ public class BoardTest {
   public void test_mergeAndProcessOneTurnAttackV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, 10);
+      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0});
     }
+    Player King = b.getPlayerByName("King");
+    King.updateTechResource(100000);
     //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
     UpgradeAction u1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
     UpgradeAction u2 = new UpgradeAction("King", "Hollywood Lv1 2 Lv7");
@@ -250,7 +252,7 @@ public class BoardTest {
     s1.add(a2);
     s1.add(a3);
     b.processOneTurnUpdateUnits(s1);
-    assertEquals("", b.displayAllPlayerAllBoard());
+    //assertEquals("", b.displayAllPlayerAllBoard());
     b.displayAllPlayerAllBoard();
   }
 
@@ -394,6 +396,7 @@ public class BoardTest {
     assertEquals(true, status5);
   }
 
+  
   @Test
   public void test_checkIfUpgradeBoolean() throws IOException, IllegalArgumentException{
     LinkedHashSet<UpgradeAction> testup1 = new LinkedHashSet<>();
@@ -405,6 +408,7 @@ public class BoardTest {
     b.singleTerritoryUnitSetup("Hollywood", new int[]{0,0,5,0,0,0,0});
     b.singleTerritoryUnitSetup("Volskaya", new int[]{5,0,0,0,6,0,0});
     b.singleTerritoryUnitSetup("Ilios", new int[]{10,0,0,0,0,0,3});
+    
     b.singleTerritoryUnitSetup("Junkertown", new int[]{5,0,0,0,0,0,0});
     UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv2 3 Lv3");
     UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv2 4 Lv5");
@@ -415,6 +419,12 @@ public class BoardTest {
     Player p = b.getPlayerByName("King");
     b.refreshTemp("King");
     b.refreshTemp("Red");
+    b.createDiffSoldiersByName("Lv1");
+    p.updateTechResource(100000);
+    for(int i = 0; i < 6; i ++){
+      p.updateTechLevel();
+    }
+    b.processUpdateTech(null);
     p.updateTechResource(-700);
     p.refreshTempTechResource();
     testup1.add(a1);

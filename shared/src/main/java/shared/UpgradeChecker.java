@@ -1,5 +1,7 @@
 package shared;
-
+/**
+ * This is the subclass that checks whether the upgrade action is doable. It checks the tech resource remaining, the tech level to determine if update is allowed.
+ */
 public class UpgradeChecker extends SpecialRuleChecker{
   public UpgradeChecker(SpecialRuleChecker next){
     super(next);
