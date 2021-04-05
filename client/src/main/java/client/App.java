@@ -56,7 +56,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // connect to server
-        Client client = new Client("10.200.72.3", 12345,
+        Client client = new Client("127.0.0.1", 12345,
                 new BufferedReader(new InputStreamReader(System.in)), System.out);
         client.connectToServer();
 
