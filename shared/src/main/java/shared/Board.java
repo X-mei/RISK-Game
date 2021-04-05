@@ -6,10 +6,6 @@ import java.util.function.Function;
 public class Board {
   protected int playerNum; //number of player
   protected int remainedPlayerNum;
-  //protected int foodAmount;
-  //protected int techPoint;
-  //protected int techLevel;
-  //protected int tempTechPoint;
   protected int totalUnitsNum; //number of units for each player; 
   protected HashMap<String, LinkedHashSet<Territory>> gameBoard; //the map
   protected MapFactory mapF; //map factory to create the map
@@ -30,14 +26,6 @@ public class Board {
   //Soldier Level Name-Integer reference table
   private HashMap<String, Integer> soldierBonusLevelTable;
   protected SoldierReferenceTable soldierRefTable;
-  //private  HashMap<Integer, String> soldierBonusLevelTableReverse;
-
-  //techUpgradetable.put(1, 0);
-  // techUpgradetable.put(2, 50);
-  // techUpgradetable.put(3, 75);
-  // techUpgradetable.put(4, 125);
-  // techUpgradetable.put(5, 200);
-  // techUpgradetable.put(6, 300);
 
   /**
    * Constrcut a board
@@ -49,9 +37,6 @@ public class Board {
     this.playerNum = num;
     this.remainedPlayerNum = num;
     this.totalUnitsNum = 20;
-    //this.foodAmount = 100;
-    //this.techPoint = 100;
-    //this.techLevel = 1;
     this.mapF = mapFac;
     this.gameBoard = mapF.getMap(num);
     this.UnitsF = UnitsFac;
@@ -70,7 +55,6 @@ public class Board {
     this.moveRuleChecker = new OwnerChecker(new RouteChecker(new UnitMovingChecker(null)));
     this.upgradeRuleChecker = new UpgradeChecker(null);
     this.tempCount = new HashMap<String, HashMap<String, Integer>>();
-    //this.tempTechPoint = techPoint;
     //create a tech upgrade reference table
     techUpgradetable = new HashMap<>();
     for (int i = 2; i < 7; i++) {
@@ -84,16 +68,7 @@ public class Board {
     soldierBonusLevelTable.put("Lv4", 5);
     soldierBonusLevelTable.put("Lv5", 8);
     soldierBonusLevelTable.put("Lv6", 11);
-    soldierBonusLevelTable.put("Lv7", 15);  
-
-    // soldierBonusLevelTableReverse = new HashMap<>();
-    // soldierBonusLevelTableReverse.put(0, "Lv1");
-    // soldierBonusLevelTableReverse.put(1, "Lv2");
-    // soldierBonusLevelTableReverse.put(3, "Lv3");
-    // soldierBonusLevelTableReverse.put(5, "Lv4");
-    // soldierBonusLevelTableReverse.put(8, "Lv5");
-    // soldierBonusLevelTableReverse.put(11, "Lv6");
-    // soldierBonusLevelTableReverse.put(15, "Lv7"); 
+    soldierBonusLevelTable.put("Lv7", 15); 
 
     this.boardRandomGenerator = new Random();
     this.soldierRefTable = new SoldierReferenceTable();
@@ -141,29 +116,8 @@ public class Board {
     UnitName.add("Lv6");
     UnitName.add("Lv7");
   }
-  /*
-  public int getFoodAmount() {
-    return foodAmount;
-  }
   
-  public int getTechPoint() {
-    return techPoint;
-  }
   
-  public int getTechLevel() {
-    return techLevel;
-  }
- 
-  public Player getPlayer(String pName) {
-    for (Player p : playerList) {
-      if (p.getName() == pName) {
-        return p;
-      }
-    }
-    return null;
-  }
-  
-  */
   /**
    * Ask one player how they want to place his units in each of his territory
    * For a player with n territories, he will be asked for n times since each question for a territory
@@ -495,6 +449,8 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
       BasicAction bTemp = oneTerritoryAttackMap.get(s);
       //Soldiers s = new (bTemp.getLevelName(), bTemp.getCount(), soldierBonusLevelTable.get(bTemp.getLevelName()), int cost, int techReq);
       Soldiers newSoldiers = getSoldiersByName(bTemp.getLevelName(), TerritoryName);
+      
+      System.out.println(newSoldiers.getName());
       //Soldiers newSoldiers = createDiffSoldiersByName(bTemp.getLevelName());
       newSoldiers.updateCount(bTemp.getCount());
       //destTerri.setUnits(newSoldiers);
@@ -502,7 +458,7 @@ public synchronized void processOneTerritoryAttackNextV2(String TerritoryName, H
   }
 }
 
-private Soldiers createDiffSoldiersByName(String name){
+public Soldiers createDiffSoldiersByName(String name){
   if(name.equals("Lv1")){
     return new Level1Soldiers(1);
   }
@@ -822,9 +778,9 @@ private Soldiers createDiffSoldiersByName(String name){
       for(String s : t.getSoldiers().keySet()){
         Soldiers tempS = t.getSoldiers().get(s);
         int SoldierNum = tempS.getCount();
-        if(SoldierNum == 0){
-          continue;
-        }
+        // if(SoldierNum == 0){
+        //   continue;
+        // }
         soldierNameString += comma + SoldierNum + " " + tempS.getName();
         comma = ", ";
       }
