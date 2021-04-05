@@ -282,11 +282,6 @@ public class ClientHandler extends Thread {
         else if(chr == 'M' || chr == 'A'){
           output.writeUTF("Please enter the action: src dest count Level");
           String actionInfo = input.readUTF();
-          //check the input string
-          /*if(!checkActionStr(actionInfo)){
-            valid = false;
-            continue;
-          }*/
           BasicAction act = player.formAction(received, actionInfo);
           if(act.getActionName().equals("M")){
             moveHashSet.add(act);
@@ -298,24 +293,11 @@ public class ClientHandler extends Thread {
         else if(chr == 'U'){
           output.writeUTF("Please enter the action: Territory start-level count final-level");
           String actionInfo = input.readUTF();
-          //check the input string
-          /*if(!checkActionStr(actionInfo)){
-            System.out.println("checkActionStr(actionInfo): " + checkActionStr(actionInfo));
-            valid = false;
-            continue;
-          }*/
           UpgradeAction act = player.formUpgradeAction(actionInfo);
           System.out.println(act.getfLevel() + " " + act.getsLevel() + " " + act.getCount());
           upgradeSoldierHashSet.add(act);
         }
         else{
-          //output.writeUTF("Please enter the action: Territory start-level count final-level");
-          //String actionInfo = input.readUTF();
-          //check the input string
-          //if(!checkActionStr(actionInfo)){
-            //valid = false;
-            //continue;
-          //}
           if(techUpgradeMarker){
             TechAction act = player.formTechAction();
             techUpgrade = act;
@@ -324,7 +306,6 @@ public class ClientHandler extends Thread {
           }
           else{
             techUpdate = "You can only upgrade tech level once in one turn!\n";
-            //output.writeUTF("You can only upgrade tech level once in one turn!");
           }
         }
       }

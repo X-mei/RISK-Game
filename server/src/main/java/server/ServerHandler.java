@@ -9,6 +9,9 @@ import java.util.HashSet;
 
 import shared.Board;
 
+/**
+ * This class is a thread connects to each client
+ */
 public class ServerHandler extends Thread {
 
   private DataInputStream input;
@@ -49,6 +52,9 @@ public class ServerHandler extends Thread {
     askInfo();
   }
 
+  /**
+   * This function asks the client whether to login or register
+   */
   public void login() {
     try {
       while(true) {
@@ -69,6 +75,10 @@ public class ServerHandler extends Thread {
     }
   }
 
+  /**
+   * This function creates an new account for the user
+   * @return true or false whether the username repeats
+   */
   public boolean newAccount() {
     try {
       //output.writeUTF("Please input your username and password.");
@@ -88,6 +98,11 @@ public class ServerHandler extends Thread {
     return true;
   }
 
+  /**
+   * This function validates the username and password when
+   * the user choose to login
+   * @return true or false whether it is authenticated
+   */
   public boolean authAccount() {
     try {
       //output.writeUTF("Please input your username.");
@@ -108,6 +123,10 @@ public class ServerHandler extends Thread {
     return false;
   }
 
+  /**
+   * This function asks the client whether wants to enter
+   * an old game or choose a new game
+   */
   public void askInfo() {
     try {
       output.writeUTF("Do you want to enter a previous game or enter a new game? Input p to select previous, others to create new.");
@@ -122,6 +141,9 @@ public class ServerHandler extends Thread {
     }
   }
 
+  /**
+   * This validates the roomID the user inputs
+   */
   public void enterRoom() {
     try {
       String name = null;
@@ -163,6 +185,9 @@ public class ServerHandler extends Thread {
     }
   }
 
+  /**
+   * This spawns a new thread for the game
+   */
   public void assignRoom() {
     try {
       int playerNum = 0;
@@ -185,7 +210,7 @@ public class ServerHandler extends Thread {
       }
       gameServer.addClient(clientSocket);
       gameServer.addUsername(username);
-      // store current gameid and player username
+      // store current gameID and player username
       if (currentGames.containsKey(gameID)) {
         currentGames.get(gameID).add(username);
       } else {

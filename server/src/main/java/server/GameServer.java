@@ -118,6 +118,12 @@ public class GameServer implements Runnable {
     }
   }
 
+  /**
+   * This function reconnects this user back to the game
+   * @param client
+   * @param name
+   * @param username
+   */
   public void reconnectUser(Socket client, String name, String username) {
     try {
       DataInputStream input = new DataInputStream(client.getInputStream());
@@ -129,7 +135,7 @@ public class GameServer implements Runnable {
       t.setStatusFlag(flag);
       t.start();
       threadList.add(t);
-      // remove this reconnecteduser from the map
+      // remove this reconnectedUser from the map
       HashMap<String, String> users = disconnectedUsers.get(gameID);
       users.remove(username);
     } catch (IOException e) {

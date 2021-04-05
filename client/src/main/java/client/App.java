@@ -27,36 +27,13 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-//      try {
-//        Client client = new Client("127.0.0.1", 12345,
-//                new BufferedReader(new InputStreamReader(System.in)), System.out);
-//        client.connectToServer();
-//        client.login();
-//        client.answerInfo();
-//        client.recvNameAndSeq();
-//        client.recvStartStatus();
-//        if (client.getStartStatus() == 1) {
-//          client.recvAssignTerritory();
-//        }
-//        while(true) {
-//          if (!client.recvBoardPromptAndSend()) {
-//            break;
-//          }
-//        }
-//        if (client.exitOrContinue()) {
-//          client.recvMsg();
-//        }
-//        client.closeConnection();
-//      } catch (IOException e) {
-//        e.printStackTrace();
-//      }
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // connect to server
-        Client client = new Client("10.200.72.3", 12345,
+        Client client = new Client("127.0.0.1", 12345,
                 new BufferedReader(new InputStreamReader(System.in)), System.out);
         client.connectToServer();
 
@@ -73,6 +50,11 @@ public class App extends Application {
 
     }
 
+    /**
+     * spawn a new thread to run at background
+     * @param runnable
+     * @param delay
+     */
     public static void setTimeout(Runnable runnable, int delay){
         new Thread(() -> {
             try {
