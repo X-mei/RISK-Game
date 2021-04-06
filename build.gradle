@@ -22,6 +22,9 @@ subprojects{
     apply plugin: "java"
     apply plugin: "com.bmuschko.clover"
     
+    repositories {
+        jcenter()
+    }
 
     dependencies {
         implementation 'com.google.guava:guava:28.0-jre'
