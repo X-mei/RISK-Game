@@ -63,12 +63,6 @@ public abstract class BasicAction implements Action {
     return count;
   }
 
-
-  @Override
-  public int getCost() {
-    return cost;
-  }
-
   @Override
   public void modifyCount(int i){
     count += i;

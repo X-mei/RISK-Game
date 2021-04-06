@@ -19,11 +19,11 @@ public class RouteCheckerTest {
     Player p = b.getPlayerByName("King");
     p.updateFoodResource(-900);
     p.refreshTempFoodResource();
-    assertEquals(null, c.checkMyRule(b1, b));
-    assertEquals(60, b1.getCost());
+    assertNull(null, c.checkMyRule(b1, b));
+    assertEquals(60, b1.getFoodConsume());
     //System.out.println(p.getTempFoodResource());
-    assertEquals(null, c.checkMyRule(b2, b));
-    assertEquals(40, b2.getCost());
+    assertNull(null, c.checkMyRule(b2, b));
+    assertEquals(40, b2.getFoodConsume());
     //System.out.println(p.getTempFoodResource());
     assertEquals("No enough food to move those soldiers.", c.checkMyRule(b6, b));
     assertEquals("No existing route between source and destination!", c.checkMyRule(b3, b));

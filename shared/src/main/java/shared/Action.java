@@ -7,52 +7,47 @@ public interface Action {
   /**
    * @return the name of the owner of action
    */
-  public String getActionOwner();
+  String getActionOwner();
 
   /**
    * @return the name of the action
    */
-  public String getActionName();
+  String getActionName();
 
   /**
    * @return the name of the source
    */
-  public String getSource();
+  String getSource();
 
   /**
    * @return the name of destination
    */
-  public String getDestination();
+  String getDestination();
 
   /**
    * @return the count
    */
-  public int getCount();
-
-  /**
-   * @return the food cost of action
-   */
-  public int getCost();
+  int getCount();
 
   /**
    * @return the name of the level to move
    */
-  public String getLevelName();
+  String getLevelName();
 
   /**
-   * @param the new value as count
+   * @param i new value as count
    */
-  public void modifyCount(int i);
+  void modifyCount(int i);
 
   /**
-   * @param the new value as cost
+   * @param cost the new value as cost
    */
-  public void setCost(int cost);
+  void setCost(int cost);
 
   /**
    * @return the food consumption
    */
-  public int getFoodConsume();
+  int getFoodConsume();
 }
 
 
