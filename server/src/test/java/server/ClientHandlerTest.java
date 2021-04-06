@@ -57,19 +57,19 @@ public class ClientHandlerTest {
     t.closeConnection();
   }
  
-  @Test
-  public void test_checkActionStr() {
-    ClientHandler t = getTestClientHandler();
-    String testStr = null;
-    assertEquals(false, t.checkActionStr(testStr));
-    testStr = "abcd";
-    assertEquals(false, t.checkActionStr(testStr));
-    testStr = "abcd efg";
-    assertEquals(false, t.checkActionStr(testStr));
-    testStr = "abcd efg hi";
-    assertEquals(false, t.checkActionStr(testStr));
-    testStr = "abcd efg 3";
-    assertEquals(true, t.checkActionStr(testStr));
-  }
+  // @Test
+  // public void test_checkActionStr() {
+  //   ClientHandler t = getTestClientHandler();
+  //   String testStr = null;
+  //   assertEquals(false, t.checkActionStr(testStr));
+  //   testStr = "abcd";
+  //   assertEquals(false, t.checkActionStr(testStr));
+  //   testStr = "abcd efg";
+  //   assertEquals(false, t.checkActionStr(testStr));
+  //   testStr = "abcd efg hi";
+  //   assertEquals(false, t.checkActionStr(testStr));
+  //   testStr = "abcd efg 3";
+  //   assertEquals(true, t.checkActionStr(testStr));
+  // }
 
 }
