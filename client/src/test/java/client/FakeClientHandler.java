@@ -91,7 +91,7 @@ public class FakeClientHandler extends Thread {
       }
       statusFlag = 2;
       // while loop, check if game ends
-      // sendBoardPromptAndRecv();
+      sendBoardPromptAndRecv();
       // updateBoard();
     } catch(IOException e) {
       e.printStackTrace();

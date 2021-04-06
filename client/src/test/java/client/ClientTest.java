@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 
 import org.junit.jupiter.api.Test;
 
+import jdk.jfr.Timestamp;
+
 public class ClientTest {
 
   @Test
@@ -46,6 +48,12 @@ public class ClientTest {
       String[] assign2 = new String[3];
       client1.sendAssignTerritory(assign1);
       client2.sendAssignTerritory(assign1);
+      client1.recvBoardPrompt();
+      client1.recvInstruction();
+      client1.sendInstruction("D");
+      client2.recvBoardPrompt();
+      client2.recvInstruction();
+      client2.sendInstruction("D");
 
 
       // three players
@@ -85,6 +93,15 @@ public class ClientTest {
       client3.sendAssignTerritory(assign1);
       client4.sendAssignTerritory(assign1);
       client5.sendAssignTerritory(assign1);
+      client3.recvBoardPrompt();
+      client3.recvInstruction();
+      client3.sendInstruction("D");
+      client4.recvBoardPrompt();
+      client4.recvInstruction();
+      client4.sendInstruction("D");
+      client5.recvBoardPrompt();
+      client5.recvInstruction();
+      client5.sendInstruction("D");
 
       // four players
       Client client6 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
@@ -138,9 +155,92 @@ public class ClientTest {
       client7.sendAssignTerritory(assign3);
       client8.sendAssignTerritory(assign3);
       client9.sendAssignTerritory(assign3);
+      client6.recvBoardPrompt();
+      client6.recvInstruction();
+      client6.sendInstruction("D");
+      client7.recvBoardPrompt();
+      client7.recvInstruction();
+      client7.sendInstruction("D");
+      client8.recvBoardPrompt();
+      client8.recvInstruction();
+      client8.sendInstruction("D");
+      client9.recvBoardPrompt();
+      client9.recvInstruction();
+      client9.sendInstruction("D");
 
       // five players
+      // Client clientA = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
+      // clientA.connectToServer();
+      // clientA.loginOrReg("l");
+      // assertEquals(true, clientA.login("11", "aa"));
+      // Client clientB = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
+      // clientB.connectToServer();
+      // clientB.loginOrReg("l");
+      // assertEquals(true, clientB.login("44", "11"));
+      // Client clientC = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
+      // clientC.connectToServer();
+      // clientC.loginOrReg("l");
+      // assertEquals(true, clientC.login("55", "11"));
+      // Client clientD = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
+      // clientD.connectToServer();
+      // clientD.loginOrReg("l");
+      // assertEquals(true, clientD.login("66", "11"));
+      // Client clientE = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
+      // clientE.connectToServer();
+      // clientE.loginOrReg("r");
+      // assertEquals(true, clientE.login("00", "11"));
+      // clientA.answerInfo("c");
+      // clientB.answerInfo("c");
+      // clientC.answerInfo("c");
+      // clientD.answerInfo("c");
+      // clientE.answerInfo("c");
+      // clientA.sendGameRoom("5");
+      // clientB.sendGameRoom("5");
+      // clientC.sendGameRoom("5");
+      // clientD.sendGameRoom("5");
+      // clientE.sendGameRoom("5");
+      // client6.recvNameAndNum();
+      // client7.recvNameAndNum();
+      // client8.recvNameAndNum();
+      // client9.recvNameAndNum();
+      // client6.recvPrompt();
+      // client7.recvPrompt();
+      // client8.recvPrompt();
+      // client9.recvPrompt();
+      // client6.recvStartStatus();
+      // client7.recvStartStatus();
+      // client8.recvStartStatus();
+      // client9.recvStartStatus();
+      // client6.recvAssignPrompt();
+      // client7.recvAssignPrompt();
+      // client8.recvAssignPrompt();
+      // client9.recvAssignPrompt();
+      // prompts = client6.recvPrompts();
+      // prompts2 = client7.recvPrompts();
+      // prompts3 = client8.recvPrompts();
+      // String[] prompts4 = client9.recvPrompts();
+      // String[] assign3 = new String[2];
+      // assign3[0] = "4";
+      // assign3[1] = "4";
+      // client6.sendAssignTerritory(assign3);
+      // client7.sendAssignTerritory(assign3);
+      // client8.sendAssignTerritory(assign3);
+      // client9.sendAssignTerritory(assign3);
+  }
 
+  @Test
+  public void test_checkActionStr() {
+    Client client = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
+    String str = null;
+    assertEquals(false, client.checkActionStr(str));
+    str = "d dd f";
+    assertEquals(false, client.checkActionStr(str));
+    str = "d  dd d";
+    assertEquals(false, client.checkActionStr(str));
+    str = "d d d d";
+    assertEquals(false, client.checkActionStr(str));
+    str = "d d 1 d";
+    assertEquals(true, client.checkActionStr(str));
   }
 
   
