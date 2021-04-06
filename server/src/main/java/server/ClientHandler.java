@@ -392,35 +392,4 @@ public class ClientHandler extends Thread {
     }
   }
 
-  /**
-   * This function checks if the input string is
-   * valid to form an action.
-   * @return boolean
-   */
-  Boolean checkActionStr(String str){
-    if(str == null){
-      return false;
-    }
-    int pos1 = str.indexOf(" ");
-    if(pos1 == -1){
-      return false;
-    }
-    String substr1 = str.substring(pos1 + 1);
-    int pos2 = substr1.indexOf(" ");
-    if(pos2 == -1){
-      return false;
-    }
-    String substr2 = substr1.substring(pos2 + 1);
-    int pos3 = substr2.indexOf(" ");
-    if(pos3 == -1){
-      return false;
-    }
-    String substr3= substr1.substring(pos2 + 1, pos3);
-    for(int i = 0; i < substr3.length(); i++){
-      if(!Character.isDigit(substr3.charAt(i))){
-        return false;
-      }
-    }
-    return true;
-  }
 }

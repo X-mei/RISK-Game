@@ -22,8 +22,9 @@ public class FakeClient2 extends Thread {
   private int playerNumber;
   private int terriNum;
   private String username;
+  private boolean newFlag;
 
-  public FakeClient2(String ip, int port, BufferedReader inputSource, PrintStream out, String username) {
+  public FakeClient2(String ip, int port, BufferedReader inputSource, PrintStream out, String username, boolean newFlag) {
     this.serverIPAddr = ip;
     this.portNum = port;
     this.inputReader = inputSource;
@@ -31,61 +32,84 @@ public class FakeClient2 extends Thread {
     this.reconnected = false;
     this.startStatus = 1;
     this.username = username;
+    this.newFlag = newFlag;
   }
 
   public void run() {
-    connectToServer();
-    loginOrReg("r");
-    login(username, "111");
-    answerInfo("c");
-    sendGameRoom("2");
-    String info = recvNameAndNum();
-    String prompt = recvPrompt();
-    int status = recvStartStatus();
-    prompt = recvAssignPrompt();
-    String[] prompts = recvPrompts();
-    String[] assign1 = new String[3];
-    assign1[0] = "3";
-    assign1[1] = "3";
-    assign1[2] = "3";
-    sendAssignTerritory(assign1);
-    recvBoardPrompt();
-    recvInstruction();
-    sendInstruction("T");
-    sendInstruction("U");
-    recvInstruction();
-    sendInstruction("Ilios Lv1 2 Lv2");
-    sendInstruction("D");
-    recvBoardPrompt();
-    recvInstruction();
-    sendInstruction("A");
-    recvInstruction();
-    sendInstruction("Volskaya Ilios 1 Lv1");
-    sendInstruction("D");
-    recvInstruction();
-    sendInstruction("A");
-    recvInstruction();
-    sendInstruction("Volskaya Hanamura 3 Lv1");
-    sendInstruction("D");
-    recvBoardPrompt();
-    sendInstruction("A");
-    recvInstruction();
-    sendInstruction("Ilios Hollywood 2 Lv2");
-    sendInstruction("D");
-    recvBoardPrompt();
-    sendInstruction("M");
-    recvInstruction();
-    sendInstruction("Junkertown Ilios 3 Lv1");
-    sendInstruction("D");
-    recvBoardPrompt();
-    sendInstruction("M");
-    recvInstruction();
-    sendInstruction("Ilios Hollywood 3 Lv1");
-    recvInstruction();
-    sendInstruction("A");
-    recvInstruction();
-    sendInstruction("Hollywood Dorado 3 Lv1");
-    sendInstruction("D");
+    if (newFlag) {
+      connectToServer();
+      loginOrReg("r");
+      login(username, "111");
+      answerInfo("c");
+      sendGameRoom("2");
+      String info = recvNameAndNum();
+      String prompt = recvPrompt();
+      int status = recvStartStatus();
+      prompt = recvAssignPrompt();
+      String[] prompts = recvPrompts();
+      String[] assign1 = new String[3];
+      assign1[0] = "3";
+      assign1[1] = "3";
+      assign1[2] = "3";
+      sendAssignTerritory(assign1);
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("T");
+      recvInstruction();
+      sendInstruction("U");
+      recvInstruction();
+      sendInstruction("Ilios Lv1 2 Lv2");
+      recvInstruction();
+      sendInstruction("D");
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("A");
+      recvInstruction();
+      sendInstruction("Volskaya Ilios 1 Lv1");
+      recvInstruction();
+      sendInstruction("D");
+      recvInstruction();
+      sendInstruction("A");
+      recvInstruction();
+      sendInstruction("Volskaya Hanamura 3 Lv1");
+      recvInstruction();
+      sendInstruction("D");
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("A");
+      recvInstruction();
+      sendInstruction("Ilios Hollywood 2 Lv2");
+      recvInstruction();
+      sendInstruction("D");
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("M");
+      recvInstruction();
+      sendInstruction("Junkertown Ilios 3 Lv1");
+      recvInstruction();
+      sendInstruction("D");
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("M");
+      recvInstruction();
+      sendInstruction("Ilios Hollywood 3 Lv1");
+      recvInstruction();
+      sendInstruction("A");
+      recvInstruction();
+      sendInstruction("Hollywood Dorado 3 Lv1");
+      recvInstruction();
+      sendInstruction("D");
+    } else {
+      connectToServer();
+      loginOrReg("l");
+      login(username, "111");
+      answerInfo("p");
+      sendRoomID("1000");
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("D");
+    }
+    
   }
 
     /**
