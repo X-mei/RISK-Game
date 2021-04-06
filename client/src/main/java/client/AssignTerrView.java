@@ -46,13 +46,13 @@ public class AssignTerrView {
         try {
             String path = null;
             if (playerNum.equals("2")) {
-                path = "/client/src/main/resources/2P.JPG";
+                path = "src/main/resources/2P.JPG";
             } else if (playerNum.equals("3")) {
-                path = "client/src/main/resources/3P.JPG";
+                path = "src/main/resources/3P.JPG";
             } else if (playerNum.equals("4")) {
-                path = "client/src/main/resources/4P.JPG";
+                path = "src/main/resources/4P.JPG";
             } else {
-                path = "client/src/main/resources/5P.JPG";
+                path = "src/main/resources/5P.JPG";
             }
             FileInputStream imageStream = new FileInputStream(path);
             Image image = new Image(imageStream);
