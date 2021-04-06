@@ -124,6 +124,10 @@ public class Territory {
     this.ownerName = oname;
   }
 
+  /**
+   * get all the neighboring territory that is owned by the player
+   * @return a set of all territory conforming to requirement
+   */
   public LinkedHashSet<Territory> neighboursByOneOwner() {
     LinkedHashSet<Territory> neighboursOneOwner = new LinkedHashSet<Territory>();
     for(HashMap.Entry<String,Territory> entry: neighbours.entrySet()) {

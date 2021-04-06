@@ -21,7 +21,7 @@ public class RouteChecker extends RuleChecker{
     if (dest == null){
       return "The selected destination do not exist.";
     }
-    HashSet<Territory> visited = new HashSet<Territory>();
+    HashSet<Territory> visited = new HashSet<>();
     Integer cost = 0;
     Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
     checkRoute(src, dest, cost, visited);
@@ -42,11 +42,11 @@ public class RouteChecker extends RuleChecker{
   }
   
   /**
-   * 
-   * @param src
-   * @param dest
-   * @param cost
-   * @param visited
+   * This is the helper function to do a recursive check to see if the route exist and what is the minimum cost
+   * @param src the source territory
+   * @param dest the destination territory to try to get to
+   * @param cost the cost of the current path
+   * @param visited the set of visited territory
    */
   private void checkRoute(Territory src, Territory dest, Integer cost, HashSet<Territory> visited){
     visited.add(src);
@@ -64,7 +64,6 @@ public class RouteChecker extends RuleChecker{
     }
     cost -= src.getSize();
     visited.remove(src);
-    return;
   }
 }
  

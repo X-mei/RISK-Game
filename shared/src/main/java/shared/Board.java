@@ -186,10 +186,14 @@ public class Board {
     return allTerritory.get(name);
   }
 
+  /**
+   * refresh the temp count of unit when doing checking if action is valid
+   * @param Tname the name of the owner of the territory
+   */
   public void refreshTemp(String Tname) {
     for (Territory t : gameBoard.get(Tname)) {
       LinkedHashMap<String, Soldiers> m = t.getSoldiers();
-      HashMap<String, Integer> temp = new HashMap<String, Integer>();
+      HashMap<String, Integer> temp = new HashMap<>();
       for (Map.Entry<String, Soldiers> entry : m.entrySet()) {
         temp.put(entry.getKey(), entry.getValue().getCount());
       }
@@ -197,7 +201,12 @@ public class Board {
     }
   }
 
-
+  /**
+   * get the count of soldier of certain level in a certain territory
+   * @param Tname name of the territory
+   * @param Sname name of the particular level
+   * @return
+   */
   public Integer getTerritoryUnitsCount(String Tname, String Sname) {
     if (tempCount.get(Tname) == null) {
       return null;
@@ -205,6 +214,12 @@ public class Board {
     return tempCount.get(Tname).get(Sname);
   }
 
+  /**
+   * update the temp count of unit when doing checking if action is valid
+   * @param Tname name of the territory
+   * @param Sname name of the particular level
+   * @param cnt addition or subtraction to count
+   */
   public void updateTempCount(String Tname, String Sname, Integer cnt) {
     HashMap<String, Integer> temp = tempCount.get(Tname);
     // if (temp == null){
@@ -260,7 +275,7 @@ public class Board {
 
   /**
    * extract all soldiers from source territories
-   * @param actionSet
+   * @param actionSet all actions
    */
   public synchronized void processOneTurnAttackPre(LinkedHashSet<BasicAction> actionSet) {
     for (BasicAction a : actionSet) {
@@ -274,8 +289,8 @@ public class Board {
    * the key of it is each territory the player want to attack,
    * the value is also a hashmap, and the key of value-hashmap is the soldier name
    * the value of the value-hashmap is the number of that level soldier
-   * @param actionSet
-   * @return
+   * @param actionSet all actions
+   * @return the hashmap of a palyer's action
    */
   public synchronized HashMap<String, HashMap<String, BasicAction>> mergeOneTurnAttackV2(
       LinkedHashSet<BasicAction> actionSet) {
@@ -333,7 +348,7 @@ public class Board {
 
 /**
  * get a soldier's name by the bonus 
- * @param Bonus
+ * @param Bonus the bonus of a particular level
  * @return the nmae of the soldier with equal bonus
  */
 private String getSoldierNameByBonus(int Bonus){
@@ -507,7 +522,7 @@ private String getSoldierNameByBonus(int Bonus){
 
   /**
    * find a player object by the string:name of the player 
-   * @param playerName
+   * @param playerName the name of the player
    * @return the found player object
    * if no found, return null
    */
@@ -554,7 +569,7 @@ private String getSoldierNameByBonus(int Bonus){
   /**
    * Upgrade tech level, only once per round
    * Also check if the tech upgrade is valid
-   * @param techUpAct
+   * @param techUpAct tech action object to process
    */
   public synchronized void processUpdateTech(TechAction techUpAct) {
     if (techUpAct == null){
@@ -579,7 +594,7 @@ private String getSoldierNameByBonus(int Bonus){
 
   /**
    * before the attack, extract specific numbers of soldiers from source territory
-   * @param basicAct
+   * @param basicAct basic action object to process
    */
   public synchronized void processSingleBasicAttackPre(BasicAction basicAct) {
     String src = basicAct.getSource();
@@ -664,7 +679,7 @@ private String getSoldierNameByBonus(int Bonus){
 
   /**
    * display the information for one single player
-   * @param playerName
+   * @param playerName name of the player
    * @return information for that single player
    */
   private String displaySinlgePlayerBoard(String playerName) {
@@ -711,7 +726,7 @@ private String getSoldierNameByBonus(int Bonus){
   /**
    * create a dot line,
    * the line of it is equal to the player's name
-   * @param length
+   * @param length specify the length of dotted line
    * @return the dot line string
    */
   private String createDottedLine(int length) {
@@ -770,7 +785,7 @@ private String getSoldierNameByBonus(int Bonus){
    * add resource for one player
    * the amount of a player's adding resource depends one how many territories he has
    * resource amount += (owned territories number) * a specific number
-   * @param name
+   * @param name name of player
    */
   public void spawnResourceForPlayer(String name){
     Player p = getPlayerByName(name);

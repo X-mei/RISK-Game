@@ -2,7 +2,7 @@ package shared;
 
 import java.util.Random;
 /**
- * 
+ * The base type for all normal soldiers
  */
 public abstract class Soldiers implements Units{
   protected final String name;
@@ -13,12 +13,12 @@ public abstract class Soldiers implements Units{
   protected final Random randomGenerator;
   
   /**
-   * 
-   * @param name
-   * @param count
-   * @param bonus
-   * @param cost
-   * @param techReq
+   * Constructor of base class Soldiers
+   * @param name name of soldiers
+   * @param count the amount of unit
+   * @param bonus the bonus applied to this level of soldier when battling
+   * @param cost the cost to upgrade one unit from lv1 to this level
+   * @param techReq the tech level requirement to update to this level
    */
   public Soldiers(String name, int count, int bonus, int cost, int techReq){
     this.name = name;
