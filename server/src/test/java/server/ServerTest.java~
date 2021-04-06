@@ -1,0 +1,13 @@
+package server;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+public class ServerTest {
+  @Test
+  public void test_server() {
+
+  }
+
+}
