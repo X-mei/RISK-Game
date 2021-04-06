@@ -59,21 +59,21 @@ public class AssignTerrView {
             ImageView imageView = new ImageView(image);
             imageView.setX(40);
             imageView.setY(25);
-            imageView.setFitHeight(540);
-            imageView.setFitWidth(960);
+            imageView.setFitHeight(382.5);
+            imageView.setFitWidth(680);
             assignTerrPane.getChildren().add(imageView);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // prompt: wait
-        prompt1.setLayoutX(1010);
+        prompt1.setLayoutX(750);
         prompt1.setLayoutY(75);
         prompt1.setText("Wait for other players to join...");
         assignTerrPane.getChildren().add(prompt1);
 
         // error
-        error.setLayoutX(1010);
+        error.setLayoutX(750);
         error.setLayoutY(500);
         error.setText("Wrong, please enter again");
         error.setVisible(false);
@@ -81,18 +81,18 @@ public class AssignTerrView {
     }
 
     public void addPromptOfTerritory(String[] prompts){
-        promptTerri1.setLayoutX(1010);
+        promptTerri1.setLayoutX(750);
         promptTerri1.setLayoutY(200);
         promptTerri1.setText(prompts[0]);
         assignTerrPane.getChildren().add(promptTerri1);
 
-        promptTerri2.setLayoutX(1010);
+        promptTerri2.setLayoutX(750);
         promptTerri2.setLayoutY(300);
         promptTerri2.setText(prompts[1]);
         assignTerrPane.getChildren().add(promptTerri2);
 
         if(prompts.length == 3){
-            promptTerri3.setLayoutX(1010);
+            promptTerri3.setLayoutX(750);
             promptTerri3.setLayoutY(400);
             promptTerri3.setText(prompts[2]);
             assignTerrPane.getChildren().add(promptTerri3);
@@ -102,28 +102,28 @@ public class AssignTerrView {
     public void addPrompt2(String prompt) {
         // add prompt2
         prompt1.setVisible(false);
-        prompt2.setLayoutX(1010);
+        prompt2.setLayoutX(750);
         prompt2.setLayoutY(75);
         prompt2.setText(prompt);
         assignTerrPane.getChildren().add(prompt2);
     }
 
     public void addPrompt3(String prompt) {
-        prompt3.setLayoutX(1010);
+        prompt3.setLayoutX(750);
         prompt3.setLayoutY(150);
         prompt3.setText(prompt);
         assignTerrPane.getChildren().add(prompt3);
 
 
-        input1.setLayoutX(1010);
+        input1.setLayoutX(750);
         input1.setLayoutY(250);
         assignTerrPane.getChildren().add(input1);
 
-        input2.setLayoutX(1010);
+        input2.setLayoutX(750);
         input2.setLayoutY(350);
         assignTerrPane.getChildren().add(input2);
 
-        input3.setLayoutX(1010);
+        input3.setLayoutX(750);
         input3.setLayoutY(450);
         assignTerrPane.getChildren().add(input3);
 
@@ -131,7 +131,7 @@ public class AssignTerrView {
             input3.setVisible(false);
         }
 
-        submit.setLayoutX(1010);
+        submit.setLayoutX(750);
         submit.setLayoutY(550);
         submit.setText("submit");
         assignTerrPane.getChildren().add(submit);
@@ -140,7 +140,6 @@ public class AssignTerrView {
     public void waitPlayer() {
         prompt1.setVisible(true);
         prompt1.setText("Wait for other players to assign units...");
-
         prompt2.setVisible(false);
         prompt3.setVisible(false);
         promptTerri1.setVisible(false);
