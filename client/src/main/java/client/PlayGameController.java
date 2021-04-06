@@ -8,10 +8,13 @@ public class PlayGameController {
     Client client;
     String promptMsg;
     String promptInstruction;
+    String actionType;
+    int i = 1;
 
     PlayGameController(PlayGameView playGameView, Client client) {
         this.playGameView = playGameView;
         this.client = client;
+        actionType = "";
         promptMsg = "";
         promptInstruction = "";
         upgradeAction();
@@ -28,9 +31,17 @@ public class PlayGameController {
         playGameView.upgrade.setOnAction(e -> {
             client.sendInstruction(playGameView.upgrade.getText().substring(0, 1));
             String prompt = client.recvInstruction();
+            actionType = "U";
             playGameView.promptUpdate.setVisible(true);
             playGameView.input.setVisible(true);
             playGameView.confirm.setVisible(true);
+            playGameView.choicesOfSource.setVisible(true);
+            playGameView.choicesOfLevel1.setVisible(true);
+            playGameView.choicesOfLevel2.setVisible(true);
+            playGameView.countPrompt.setVisible(true);
+            playGameView.lvPrompt1.setVisible(true);
+            playGameView.lvPrompt2.setVisible(true);
+            playGameView.terrPrompt.setVisible(true);
             playGameView.error.setVisible(false);
             playGameView.upgrade.setVisible(false);
             playGameView.move.setVisible(false);
@@ -43,9 +54,17 @@ public class PlayGameController {
     public void moveAction() {
         playGameView.move.setOnAction(e -> {
             client.sendInstruction(playGameView.move.getText().substring(0, 1));
+            actionType = "M";
             String prompt = client.recvInstruction();
+            playGameView.choicesOfLevel2.setVisible(true);
+            playGameView.choicesOfDest.setVisible(true);
+            playGameView.choicesOfSource.setVisible(true);
             playGameView.promptAM.setVisible(true);
             playGameView.input.setVisible(true);
+            playGameView.srcPrompt.setVisible(true);
+            playGameView.destPrompt.setVisible(true);
+            playGameView.countPrompt.setVisible(true);
+            playGameView.lvPrompt2.setVisible(true);
             playGameView.confirm.setVisible(true);
             playGameView.error.setVisible(false);
             playGameView.upgrade.setVisible(false);
@@ -58,11 +77,20 @@ public class PlayGameController {
 
     public void attackAction() {
         playGameView.attack.setOnAction(e -> {
+
             client.sendInstruction(playGameView.attack.getText().substring(0, 1));
             String prompt = client.recvInstruction();
+            actionType = "A";
+            playGameView.choicesOfLevel2.setVisible(true);
+            playGameView.choicesOfDest.setVisible(true);
+            playGameView.choicesOfSource.setVisible(true);
             playGameView.promptAM.setVisible(true);
             playGameView.input.setVisible(true);
             playGameView.confirm.setVisible(true);
+            playGameView.srcPrompt.setVisible(true);
+            playGameView.destPrompt.setVisible(true);
+            playGameView.countPrompt.setVisible(true);
+            playGameView.lvPrompt2.setVisible(true);
             playGameView.error.setVisible(false);
             playGameView.upgrade.setVisible(false);
             playGameView.move.setVisible(false);
@@ -74,9 +102,15 @@ public class PlayGameController {
 
     public void techAction() {
         playGameView.tech.setOnAction(e -> {
+            if(i > 5){
+                playGameView.errorTech.setVisible(true);
+                return;
+            }
+            i++;
             client.sendInstruction(playGameView.tech.getText().substring(0, 1));
             String prompt = client.recvInstruction();
-            playGameView.error.setVisible(false);
+            playGameView.tech.setVisible(false);
+            playGameView.errorTech.setVisible(false);
         });
     }
 
@@ -124,11 +158,49 @@ public class PlayGameController {
 
     public void confirmAction() {
         playGameView.confirm.setOnAction(e -> {
-            String str = playGameView.input.getText();
+            String str = "";
+            if(actionType.equals("A") || actionType.equals("M")){
+                if(playGameView.choicesOfSource.getValue() == null ||
+                        playGameView.choicesOfDest.getValue() == null ||
+                        playGameView.choicesOfLevel2.getValue() == null){
+                    playGameView.error.setVisible(true);
+                    return;
+                }
+                String Source = playGameView.choicesOfSource.getValue().toString();
+                System.out.println(Source);
+                String Dest  = playGameView.choicesOfDest.getValue().toString();
+                System.out.println(Dest);
+                String Level = playGameView.choicesOfLevel2.getValue().toString();
+                System.out.println(Level);
+                str = Source + " " + Dest + " "+ playGameView.input.getText() + " " + Level;
+                System.out.println(str);
+            }
+            else if(actionType.equals("U")){
+                if(playGameView.choicesOfSource.getValue() == null ||
+                        playGameView.choicesOfLevel1.getValue() == null ||
+                        playGameView.choicesOfLevel2.getValue() == null){
+                    playGameView.error.setVisible(true);
+                    return;
+                }
+                String Terri = playGameView.choicesOfSource.getValue().toString();
+                String Level1  = playGameView.choicesOfLevel1.getValue().toString();
+                String Level2 = playGameView.choicesOfLevel2.getValue().toString();
+                str = Terri + " " + Level1 + " " + playGameView.input.getText() + " " + Level2;
+            }
             if(client.checkActionStr(str)){
                 client.sendInstruction(str);
                 String prompt2 = client.recvInstruction();
+                playGameView.choicesOfLevel1.setVisible(false);
+                playGameView.choicesOfLevel2.setVisible(false);
+                playGameView.choicesOfDest.setVisible(false);
+                playGameView.choicesOfSource.setVisible(false);
                 playGameView.prompt2.setText(prompt2);
+                playGameView.srcPrompt.setVisible(false);
+                playGameView.destPrompt.setVisible(false);
+                playGameView.countPrompt.setVisible(false);
+                playGameView.lvPrompt1.setVisible(false);
+                playGameView.lvPrompt2.setVisible(false);
+                playGameView.terrPrompt.setVisible(false);
                 playGameView.input.setVisible(false);
                 playGameView.confirm.setVisible(false);
                 playGameView.promptAM.setVisible(false);
