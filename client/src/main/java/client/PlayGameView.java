@@ -171,7 +171,7 @@ public class PlayGameView {
         playGamePane.getChildren().add(exitGame);
 
         error.setLayoutX(40);
-        error.setLayoutY(515);
+        error.setLayoutY(615);
         error.setText("Error! Please enter again.");
         error.setVisible(false);
         playGamePane.getChildren().add(error);

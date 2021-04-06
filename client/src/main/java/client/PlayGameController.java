@@ -10,6 +10,7 @@ public class PlayGameController {
     String promptInstruction;
     String actionType;
     int i = 1;
+    boolean press = false;
 
     PlayGameController(PlayGameView playGameView, Client client) {
         this.playGameView = playGameView;
@@ -102,6 +103,7 @@ public class PlayGameController {
 
     public void techAction() {
         playGameView.tech.setOnAction(e -> {
+            press = true;
             if(i > 5){
                 playGameView.errorTech.setVisible(true);
                 return;
@@ -116,6 +118,8 @@ public class PlayGameController {
 
     public void doneAction() {
         playGameView.done.setOnAction(e -> {
+            press = false;
+            playGameView.tech.setVisible(true);
             client.sendInstruction(playGameView.done.getText().substring(0, 1));
             String prompt = client.recvInstruction();
             if (prompt.equals("Wait for other players to perform the action...")) {
@@ -206,10 +210,16 @@ public class PlayGameController {
                 playGameView.promptAM.setVisible(false);
                 playGameView.error.setVisible(false);
                 playGameView.promptUpdate.setVisible(false);
+                if(press == true){
+                    playGameView.tech.setVisible(false);
+                }
+                else{
+                    playGameView.tech.setVisible(true);
+                }
                 playGameView.upgrade.setVisible(true);
                 playGameView.move.setVisible(true);
                 playGameView.attack.setVisible(true);
-                playGameView.tech.setVisible(true);
+
                 playGameView.done.setVisible(true);
             }
             else{
