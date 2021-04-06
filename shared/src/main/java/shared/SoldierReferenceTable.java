@@ -2,6 +2,9 @@ package shared;
 
 import java.util.HashMap;
 
+/**
+ * this class is a table used for get a new soldier by its name
+ */
 public class SoldierReferenceTable {
     private HashMap<String, Soldiers> referenceTable;
 
@@ -17,11 +20,20 @@ public class SoldierReferenceTable {
         this.referenceTable = tempTable;
     }
 
+    /**
+     * return the reference table
+     * @return
+     */
     public HashMap<String, Soldiers> getSoldierReferenceTable(){
         return referenceTable;
     }
 
 
+    /**
+     * get the soldier's cost by name
+     * @param name is the soldier's name
+     * @return the cost
+     */
     public int getCostByName(String name){
         Soldiers s = referenceTable.get(name);
         int cost = s.getCost();

@@ -50,7 +50,7 @@ public class Player {
     
   /**
    * This function generate a action type.
-   * @param the action and the input to parse.
+   * @param action and the input to parse.
    * @return the Action after the conversion.
    * @throws IOException if the input readline fails, IllegalArgumentException if the input is invalid.
    */
@@ -71,6 +71,13 @@ public class Player {
     }
   }
 
+  /**
+   * create an upgrade action
+   * @param input the upgrade input string
+   * @return the upgrade action object
+   * @throws IOException
+   * @throws IllegalArgumentException
+   */
   public UpgradeAction formUpgradeAction(String input) throws IOException, IllegalArgumentException{
     if (input == null) {
       throw new IOException();
@@ -78,39 +85,74 @@ public class Player {
     return factory.createUpgrade(name, input);
   }
 
+  /**
+   * create an upgrade tech level action
+   * @return the tech upgrade object
+   */
   public TechAction formTechAction() {
     return factory.createTechUpgrade(name);
   }
-  
+
+  /**
+   * distribute one player's territories
+   * @param territory  set for one player
+   */
   public void addTerritory(LinkedHashSet<Territory> territory) {
     ownedTerritory = territory;
   }
 
+  /**
+   * get one player's owned all territories
+   * @return one player's all territories
+   */
   public LinkedHashSet<Territory> getTerritoryList() {
     return ownedTerritory;
   }
-  
+
+  /**
+   * set up move or attack action creater
+   */
   public void setUpActionCreationMap() {
     actionCreationFns.put("M", (n, s)->factory.createMove(n, s));
     actionCreationFns.put("A", (n, s)->factory.createAttack(n, s));
   }
-  
+
+  /**
+   * get player's name
+   * @return the player's name
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * get player's code
+   * @return
+   */
   public Integer getCode() {
     return code;
   }
 
+  /**
+   * get this player's status
+   * @return
+   */
   public String getStatus() {
     return status;
   }
-  
+
+  /**
+   * get player's current tech resource
+   * @return the amount of its tech resource
+   */
   public int getTechResource(){
     return techResource;
   }
 
+  /**
+   * increase player's tech resource with specific number
+   * @param credits the increasing amount of the tech resource
+   */
   public void updateTechResource(int credits){
     techResource += credits;
   }
@@ -123,10 +165,18 @@ public class Player {
     tempTechResource = techResource;
   }
 
+  /**
+   * get player's current food resource
+   * @return the amount of its food resource
+   */
   public int getFoodResource(){
     return foodResource;
   }
 
+  /**
+   * increase player's food resource with specific number
+   * @param credits the increasing amount of the food resource
+   */
   public void updateFoodResource(int credits){
     foodResource += credits;
   }
@@ -142,15 +192,26 @@ public class Player {
   public void updateTempFoodResource(int credits) {
     tempFoodResource += credits;
   }
-  
+
+  /**
+   * get player's current tech level
+   * @return
+   */
   public int getTechLevel(){
     return techLevel;
   }
 
+  /**
+   * update player's tech level with 1
+   */
   public void updateTechLevel(){
     techLevel += 1;
   }
 
+  /**
+   * directly set player's tech level to a specific number
+   * @param level is the level you want to set
+   */
   public void setTechLevel(int level){
     techLevel = level;
   }

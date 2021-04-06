@@ -60,8 +60,8 @@ public abstract class Soldiers implements Units{
   }
   
   /**
-   * 
-   * @return
+   * generate a random number used in attack
+   * @return the random number
    */
   public Integer randomNum(){
     return randomGenerator.nextInt((20 - 1) + 1) + 1;

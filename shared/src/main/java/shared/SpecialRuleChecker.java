@@ -29,12 +29,6 @@ public abstract class SpecialRuleChecker {
     else {
       return null;
     }
-    /*
-    if(next != null){
-      return next.checkAction(thisAct, theBoard);
-    }
-    */
-    //return null;
   }
 }
 
