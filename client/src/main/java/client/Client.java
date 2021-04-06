@@ -15,7 +15,6 @@ public class Client {
   private DataInputStream dataIn; // receive msg
   private DataOutputStream dataOut; // send msg
   private String playerName;
-  private int playerSeq;
   private boolean reconnected;
   private int startStatus;
   private int playerNumber;
@@ -28,14 +27,6 @@ public class Client {
     this.out = out;
     this.reconnected = false;
     this.startStatus = 1;
-  }
-
-  public boolean getReconnected() {
-    return reconnected;
-  }
-
-  public int getStartStatus() {
-    return startStatus;
   }
 
   /**
@@ -54,6 +45,10 @@ public class Client {
     }
   }
 
+  /**
+   * This function sends the choice of login or register to server
+   * @param choice
+   */
   public void loginOrReg(String choice) {
     try {
       String line = dataIn.readUTF();
@@ -64,6 +59,12 @@ public class Client {
     }
   }
 
+  /**
+   * This function sends login info to server
+   * @param username
+   * @param password
+   * @return true or false to indicate the success of login
+   */
   public boolean login(String username, String password) {
     try {
       dataOut.writeUTF(username);
@@ -79,6 +80,10 @@ public class Client {
     return false;
   }
 
+  /**
+   * This function gives the choice to server
+   * @param choice
+   */
   public void answerInfo(String choice) {
     try {
       String line = dataIn.readUTF(); 
@@ -97,6 +102,11 @@ public class Client {
     }
   }
 
+  /**
+   * This function sends roomID to server
+   * @param choice
+   * @return true or false to indicate the roomID's validity
+   */
   public boolean sendRoomID(String choice) {
     try {
       dataOut.writeUTF(choice);
@@ -129,9 +139,9 @@ public class Client {
     }
   }
 
-
   /**
-   * This function receives playerName and playerSeq
+   * This function receives playerName and total player Number
+   * @return playerNum
    */
   public String recvNameAndNum() {
     String playerNum = null;
@@ -147,6 +157,10 @@ public class Client {
     return playerNum;
   }
 
+  /**
+   * This function receives prompt of user info
+   * @return prompt
+   */
   public String recvPrompt() {
     String prompt = null;
     try {
@@ -158,6 +172,10 @@ public class Client {
     return prompt;
   }
 
+  /**
+   * This function receives startStatus
+   * @return startStatus
+   */
   public int recvStartStatus() {
     try {
       String line = dataIn.readUTF(); 
@@ -168,6 +186,10 @@ public class Client {
     return startStatus;
   }
 
+  /**
+   * This function receives assign prompts from server
+   * @return String
+   */
   public String recvAssignPrompt() {
     String promptMsg = null;
     try {
@@ -179,6 +201,10 @@ public class Client {
     return promptMsg;
   }
 
+  /**
+   * This function receives assign Territories prompts from server
+   * @return String[] array
+   */
   public String[] recvPrompts() {
     this.terriNum = 2;
     if (playerNumber == 2 || playerNumber == 3) {
@@ -216,6 +242,10 @@ public class Client {
     return false;
   }
 
+  /**
+   * This function receives board's prompt message from server
+   * @return String of board's prompt
+   */
   public String recvBoardPrompt() {
     String boardMsg = null;
     try {
@@ -227,6 +257,10 @@ public class Client {
     return boardMsg;
   }
 
+  /**
+   * This function receives instruction from server
+   * @return String of instruction
+   */
   public String recvInstruction() {
     String instructionMsg = null;
     try {
@@ -238,6 +272,10 @@ public class Client {
     return instructionMsg;
   }
 
+  /**
+   * This function sends action instruction to server
+   * @param action
+   */
   public void sendInstruction(String action) {
     try {
       dataOut.writeUTF(action);
@@ -245,91 +283,6 @@ public class Client {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  /**
-   * This function recv the board prompt and send action
-   */
-  public boolean recvBoardPromptAndSend() throws IOException {
-    String boardMsg = dataIn.readUTF();
-    if (boardMsg.equals("You lost all your territories!")) {
-      out.println(boardMsg);
-      return false;
-    }
-    if (boardMsg.equals("The game ends.")) {
-      out.println(boardMsg);
-      return false;
-    }
-    out.println(boardMsg);
-    while(true) {
-      String line = dataIn.readUTF(); 
-      out.println(line);
-      if (line.equals("Wait for other players to perform the action...")) {
-        break;
-      }
-      String readIn = inputReader.readLine();
-      dataOut.writeUTF(readIn);
-    }
-    return true;
-  }
-
-  /**
-   * This checks if the client wants to exit or continue
-   * @throws IOException
-   */
-  public boolean exitOrContinue() throws IOException {
-    String prompt = dataIn.readUTF();
-    if (!prompt.equals("Do you want to exit or continue watching the game? Input c to continue or else to exit.")) {
-      out.println(prompt);
-      return false;
-    }
-    out.println(prompt);
-    String readIn = null;
-    while(true) {
-      readIn = inputReader.readLine();
-      if (readIn.equals("c")) {
-        dataOut.writeUTF(readIn);
-        return true;
-      } else {
-        dataOut.writeUTF(readIn);
-        return false;
-      }
-    }
-  }
-
-  /**
-   * This function recv the message
-   */
-  public void recvMsg() throws IOException {
-    try {
-      while(true) {
-        String msg = dataIn.readUTF();
-        out.println(msg);
-        if (msg.equals("The game ends.")) {
-          msg = dataIn.readUTF();
-          out.println(msg);
-          break;
-        }
-      }
-    } catch (IOException e) {
-      closeConnection();
-    } 
-  }
-
-  /**
-   * This function returns the playerSeq
-   * @return playerSeq
-   */
-  public int getPlayerSeq() {
-    return playerSeq;
-  }
-
-  /**
-   * This function returns the playerName
-   * @return playerName
-   */
-  public String getPlayerName() {
-    return playerName;
   }
 
   /**

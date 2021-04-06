@@ -40,6 +40,10 @@ public class Server {
     }
   }
 
+  /**
+   * spawn a thread for every incoming client
+   * @throws IOException
+   */
   public void assignRoom() throws IOException {
     // accept the client player
     Socket clientSocket = serverSocket.accept();
