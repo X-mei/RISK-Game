@@ -702,9 +702,9 @@ private String getSoldierNameByBonus(int Bonus){
       for(String s : t.getSoldiers().keySet()){
         Soldiers tempS = t.getSoldiers().get(s);
         int SoldierNum = tempS.getCount();
-        // if(SoldierNum == 0){
-        //   continue;
-        // }
+        if(SoldierNum == 0){
+          continue;
+        }
         soldierNameString += comma + SoldierNum + " " + tempS.getName();
         comma = ", ";
       }
