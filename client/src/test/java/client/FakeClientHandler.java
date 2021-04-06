@@ -76,10 +76,10 @@ public class FakeClientHandler extends Thread {
 
   @Override
   public void run(){
-    String playerInfo = playerName;
-    int playerNum = board.getPlayerNum();
-    try{
-      // send playerInfo
+    try {
+      String playerInfo = playerName;
+      int playerNum = board.getPlayerNum();
+        // send playerInfo
       output.writeUTF(playerInfo);
       output.writeUTF(Integer.toString(playerNum));
       output.writeUTF("Hi, You are player " + playerName + ", and this gameID is " + gameID);
@@ -91,45 +91,13 @@ public class FakeClientHandler extends Thread {
       }
       statusFlag = 2;
       // while loop, check if game ends
-      while(!board.checkSinglePlayerLose(playerName) && board.checkGameEnd().equals("")){
-        sendBoardPromptAndRecv();
-        updateBoard();
-      }
-      if (board.checkSinglePlayerLose(playerName) && board.checkGameEnd().equals("")) {
-        output.writeUTF("You lost all your territories!");
-        output.writeUTF("Do you want to exit or continue watching the game? Input c to continue or else to exit.");
-        String isContinue = input.readUTF();
-        if (isContinue.equals("c")) {
-          // only send board msg
-          sendBoardMsg();
-          sendGameEndMsg();
-        } 
-        else {
-          connectFlag = false;
-        }
-      } else {
-        connectFlag = false;
-        sendGameEndMsg();
-      }
-      connectFlag = false;
-    } catch(IOException e){
-      // disconnect
-      if (disconnectedUsers.containsKey(gameID)) {
-        HashMap<String, String> users = disconnectedUsers.get(gameID);
-        users.put(username, playerName);
-      } else {
-        HashMap<String, String> users = new HashMap<String, String>();
-        users.put(username, playerName);
-        disconnectedUsers.put(gameID, users);
-      }
-      this.disconnectFlag = true;
-      disconnectedGames.put(gameID, statusFlag);
-      System.out.println(username + ": " + playerName + " in gameID: " + gameID + " disconnected. StatusFlag = " + statusFlag);
-      //e.printStackTrace();
-    } finally {
-      //close connection when game over
-      closeConnection();
+      // sendBoardPromptAndRecv();
+      // updateBoard();
+    } catch(IOException e) {
+      e.printStackTrace();
     }
+    
+      
   }
 
   /**

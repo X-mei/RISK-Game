@@ -31,6 +31,10 @@ public class FakeServer extends Thread {
     this.gameBoards = new HashMap<Integer, Board>();
     this.disconnectedUsers = new HashMap<Integer, HashMap<String, String>>();
     this.disconnectedGames = new HashMap<Integer, Integer>();
+    // create rooms in advance for 2-5 people
+    for (int i = 2; i <= 5; i++) {
+      gameRooms.put(i, new FakeGameServer(portNum, i, gameBoards, disconnectedUsers, disconnectedGames));
+    }
   }
 
   public void run() {

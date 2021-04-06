@@ -44,7 +44,7 @@ public class FakeServerHandler extends Thread{
 
   public void run () {
     login();
-    // askInfo();
+    askInfo();
   }
 
   public void login() {

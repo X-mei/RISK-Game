@@ -10,7 +10,7 @@ public class Client {
   private Socket clientSocket;
   private String serverIPAddr;
   private int portNum;
-  private final PrintStream out; // system.println
+  private final PrintStream out; // system.printnl
   private final BufferedReader inputReader; // read input from terminal
   private DataInputStream dataIn; // receive msg
   private DataOutputStream dataOut; // send msg
