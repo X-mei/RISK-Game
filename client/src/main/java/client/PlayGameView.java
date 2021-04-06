@@ -38,6 +38,7 @@ public class PlayGameView {
     ChoiceBox choicesOfSource;
 
     Label error;
+    Label errorTech;
 
     public PlayGameView(String userInfo) {
         this.playGamePane = new AnchorPane();
@@ -62,6 +63,7 @@ public class PlayGameView {
         this.continueWatch = new Button();
         this.exitGame = new Button();
         this.error = new Label();
+        this.errorTech = new Label();
         this.choicesOfLevel1 = new ChoiceBox();
         this.choicesOfLevel2 = new ChoiceBox();
         this.choicesOfDest = new ChoiceBox();
@@ -174,6 +176,12 @@ public class PlayGameView {
         error.setVisible(false);
         playGamePane.getChildren().add(error);
 
+        errorTech.setLayoutX(40);
+        errorTech.setLayoutY(690);
+        errorTech.setText("Error! You have reached the highest tech level.");
+        errorTech.setVisible(false);
+        playGamePane.getChildren().add(errorTech);
+
     }
 
     public void addPrompt(String prompt) {
@@ -267,17 +275,17 @@ public class PlayGameView {
         choicesOfDest.setVisible(false);
         choicesOfSource.setVisible(false);
 
-        upgrade.setLayoutX(40);
-        upgrade.setLayoutY(490);
-        upgrade.setText("Upgrade Soldiers");
-        upgrade.setPrefWidth(200);
-        playGamePane.getChildren().add(upgrade);
-
         tech.setLayoutX(40);
-        tech.setLayoutY(530);
+        tech.setLayoutY(490);
         tech.setText("Technical Upgrade");
         tech.setPrefWidth(200);
         playGamePane.getChildren().add(tech);
+
+        upgrade.setLayoutX(40);
+        upgrade.setLayoutY(530);
+        upgrade.setText("Upgrade Soldiers");
+        upgrade.setPrefWidth(200);
+        playGamePane.getChildren().add(upgrade);
 
         attack.setLayoutX(40);
         attack.setLayoutY(570);
@@ -329,7 +337,7 @@ public class PlayGameView {
         lvPrompt1.setVisible(false);
         lvPrompt2.setVisible(false);
         terrPrompt.setVisible(false);
-
+        errorTech.setVisible(false);
         prompt2.setVisible(false);
         upgrade.setVisible(false);
         move.setVisible(false);

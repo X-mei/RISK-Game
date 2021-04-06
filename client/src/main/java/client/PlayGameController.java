@@ -9,6 +9,7 @@ public class PlayGameController {
     String promptMsg;
     String promptInstruction;
     String actionType;
+    int i = 1;
 
     PlayGameController(PlayGameView playGameView, Client client) {
         this.playGameView = playGameView;
@@ -101,9 +102,15 @@ public class PlayGameController {
 
     public void techAction() {
         playGameView.tech.setOnAction(e -> {
+            if(i > 5){
+                playGameView.errorTech.setVisible(true);
+                return;
+            }
+            i++;
             client.sendInstruction(playGameView.tech.getText().substring(0, 1));
             String prompt = client.recvInstruction();
-            playGameView.error.setVisible(false);
+            playGameView.tech.setVisible(false);
+            playGameView.errorTech.setVisible(false);
         });
     }
 
