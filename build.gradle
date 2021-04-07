@@ -35,6 +35,7 @@ subprojects{
         testCompile "org.testfx:testfx-core:4.0.16-alpha"
         testCompile "org.testfx:testfx-junit5:4.0.16-alpha"
         testCompile group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
+        testRuntime 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
     }
     clover{
       enabled = true
@@ -55,6 +56,8 @@ subprojects{
     test {
         // Use junit platform for unit tests
         useJUnitPlatform()
+        systemProperty "testfx.headless", "true"
+        systemProperty "testfx.robot", "glass"
     }
     configurations {
         testPkg {
