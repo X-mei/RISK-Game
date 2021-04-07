@@ -52,9 +52,21 @@ public class ClientHandlerTest {
   }
 
   @Test
+  public void test_getDisconnectFlag() {
+    ClientHandler t = getTestClientHandler();
+    assertEquals(false, t.getDisconnectFlag());
+  }
+
+  @Test
   public void test_closeConnection() {
     ClientHandler t = getTestClientHandler();
     t.closeConnection();
+  }
+
+  @Test
+  public void test_setStatus() {
+    ClientHandler t = getTestClientHandler();
+    t.setStatusFlag(1);
   }
  
   // @Test

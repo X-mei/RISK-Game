@@ -286,18 +286,6 @@ public class Client {
   }
 
   /**
-   * This function closes the connection.
-   */
-  void closeConnection(){
-    try{
-      this.dataIn.close();
-      this.dataOut.close();
-    } catch(IOException e){
-      e.printStackTrace();
-    }
-  }
-
-  /**
    * This function checks if the input string is
    * valid to form an action.
    * @return boolean
