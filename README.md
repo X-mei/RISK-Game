@@ -3,7 +3,7 @@
 ## Coverage
 [Detailed coverage](https://ys322.pages.oit.duke.edu/ece651-spr21-risc-group6/dashboard.html)
 
-Please go to the directory ece651-spr21-risc-group6/
-To build the project, run ./gradlew installDist
-To run the server, run gradle run-server
-To run the client, run gradle run-client
+Please go to the directory ece651-spr21-risc-group6/  
+To build the project, run ./gradlew installDist  
+To run the server, run gradle run-server  
+To run the client, run gradle run-client  
