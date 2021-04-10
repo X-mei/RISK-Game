@@ -1,5 +1,6 @@
 package shared;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -10,8 +11,10 @@ public class Territory {
   private final String territoryName;
   private String ownerName;
   private Integer size;
+  private ArrayList<String> spyExist;
   private LinkedHashMap<String, Territory> neighbours;
   private LinkedHashMap<String, Soldiers> allUnits;
+  private boolean isCloaked;
 
   /**
    * Constructs a Territory with the specified territory name and owner name
@@ -24,6 +27,8 @@ public class Territory {
     this.size = 10;
     this.neighbours = new LinkedHashMap<String, Territory>();
     this.allUnits = new LinkedHashMap<String, Soldiers>();
+    spyExist = new ArrayList<>();
+    isCloaked = false;
   }
 
   /**
@@ -143,5 +148,49 @@ public class Territory {
    */
   public void clearAllUnits(){
     allUnits.clear();
+  }
+
+  /**
+   * check whose spy is at this territory
+   * @return
+   */
+  public boolean checkifPlayerSpy(String playerName){
+    return spyExist.contains(playerName);
+  }
+
+  /**
+   * add a spy in the territory
+   * @param name is the owner of the spy
+   */
+  public void addSpy(String name){
+    if(spyExist.contains(name)){
+      return;
+    }
+    spyExist.add(name);
+  }
+
+  /**
+   * delete a spy in the territory
+   * @param name is the spy owner
+   */
+  public void deleteSpy(String name){
+    spyExist.remove(name);
+  }
+
+  /**
+   * check if the territory is clocked
+   * @return true if it is cloaked
+   * else, not cloaked
+   */
+  public boolean checkIsCloaked(){
+    return isCloaked;
+  }
+
+  /**
+   * set the territory cloak state
+   * @param b is to set whether this territory should be cloaked
+   */
+  public void setCloakStatus(boolean b){
+    isCloaked = true;
   }
 }

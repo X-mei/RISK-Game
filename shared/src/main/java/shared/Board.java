@@ -326,8 +326,20 @@ public class Board {
     for (String s : actionMap.keySet()) {
       processOneTerritoryAttackNextV2(s, actionMap.get(s));
     }
-
   }
+
+  public synchronized void processOneTurnSpyMove(LinkedHashSet<BasicAction> actionSet){
+    for (BasicAction a : actionSet) {
+      processOneSpyMoveAction(a);
+    }
+  }
+
+  public synchronized void processOneTurnCloak(LinkedHashSet<CloakAction> actionSet){
+    for (CloakAction a : actionSet) {
+      processOneCloakAction(a);
+    }
+  }
+
 
   /**
    * a comparator used for attack actions, make the sort() the sort elements ascending
@@ -493,6 +505,25 @@ private String getSoldierNameByBonus(int Bonus){
   }
 }
 
+/**
+   * process one spy move action
+   * @param spyAct is the spy action
+   */
+  public synchronized void processOneSpyMoveAction(BasicAction spyAct){
+    String src = spyAct.getSource();
+    Territory srcT = getTerritory(src);
+    String dest = spyAct.getDestination();
+    Territory destT = getTerritory(dest);
+    String spyActOwner = spyAct.getActionOwner();
+    Player spyActPlayer = getPlayerByName(spyActOwner);
+    int foodConsume = spyAct.getFoodConsume();
+    spyActPlayer.updateFoodResource(-foodConsume);  //update player's food by minus the spy move cost
+    srcT.deleteSpy(spyActOwner);  //delete spy on src
+    destT.addSpy(spyActOwner);  //add spy on dest
+    spyActPlayer.updateSpyLocation(dest); //update spy location
+  }
+
+
   /**
    * process single move action
    * @param basicAct is the moove action
@@ -501,6 +532,10 @@ private String getSoldierNameByBonus(int Bonus){
     String src = basicAct.getSource(); //get src territory name
     String dest = basicAct.getDestination(); //get dest territory name
     String soldierName = basicAct.getLevelName(); //get moved soldier name
+    if(soldierName.equals("Spy")){
+      processOneSpyMoveAction(basicAct);
+      return;
+    }
     Soldiers srcSoldier = getSoldiersByName(soldierName, src); //get moved soldier object in src
     Soldiers destSoldier = getSoldiersByName(soldierName, dest); //get moved soldier object in dest
     if(destSoldier == null){
@@ -537,15 +572,39 @@ private String getSoldierNameByBonus(int Bonus){
     return pFind;
   }
 
+
+  /**
+   * if the upgrade action is to create a spy, do this function
+   * a spy is updated from a Soldier
+   * @param upAct
+   */
+  public synchronized void processSpyUpdate(UpgradeAction upAct) {
+    String actionOwner = upAct.getActionOwner();
+    Player actionPlayer = getPlayerByName(actionOwner);
+    String src = upAct.getSource();
+    Territory tSrc = allTerritory.get(src);
+    String soldierSLevel = upAct.getsLevel();
+    Soldiers sLevelSoldier = getSoldiersByName(soldierSLevel, src);
+    int updateSoldierNum = upAct.getCount();
+    sLevelSoldier.updateCount(sLevelSoldier.getCount() - updateSoldierNum);
+    actionPlayer.updateSpyLocation(src);  //add the location of the new spy
+    tSrc.addSpy(actionOwner); //add spy in the born territory
+    actionPlayer.updateTechResource(-20);
+  }
+
   /**
    * upgrade single soldier action
    * @param upAct sis the upgrade action object
    */
   public synchronized void processSingleUpdateUnit(UpgradeAction upAct) {
+    String soldierFLevel = upAct.getfLevel();
+    if(soldierFLevel.equals("Spy")){  //if to create a spy
+      processSpyUpdate(upAct);
+      return;
+    }
     String src = upAct.getSource();
     Territory tSrc = allTerritory.get(src);
     String soldierSLevel = upAct.getsLevel();
-    String soldierFLevel = upAct.getfLevel();
     int updateSoldierNum = upAct.getCount();
     Soldiers sLevelSoldier = getSoldiersByName(soldierSLevel, src);
     Soldiers fLevelSoldier = getSoldiersByName(soldierFLevel, src);
@@ -558,14 +617,22 @@ private String getSoldierNameByBonus(int Bonus){
     sLevelSoldier.updateCount(sLevelSoldier.getCount() - updateSoldierNum);
     fLevelSoldier.updateCount(fLevelSoldier.getCount() + updateSoldierNum);
     //consume tech resource
+    String actionOwner = upAct.getActionOwner();
+    Player actionPlayer = getPlayerByName(actionOwner);
+    // if(soldierFLevel.equals("Spy")){    //if the action is to create a spy
+    //   actionPlayer.updateSpyLocation(src);  //add the location of the new spy
+    //   tSrc.addSpy(actionOwner); //add spy in the born territory
+    //   actionPlayer.updateTechResource(-20);
+    // }
+    // else{ //normal upgrade 
     int sLevelSoldierCost = sLevelSoldier.getCost();
     int fLevelSoldierCost = fLevelSoldier.getCost();
     int totalTechCost = updateSoldierNum * (fLevelSoldierCost - sLevelSoldierCost);
-    String actionOwner = upAct.getActionOwner();
-    Player actionPlayer = getPlayerByName(actionOwner);
     actionPlayer.updateTechResource(-totalTechCost);
+    // }    
   }
 
+  
   /**
    * Upgrade tech level, only once per round
    * Also check if the tech upgrade is valid
@@ -591,6 +658,19 @@ private String getSoldierNameByBonus(int Bonus){
     actionPlayer.updateTechLevel();
     System.out.println("in tech update");
   }
+
+
+  
+  public synchronized void processOneCloakAction(CloakAction cloakAcion){
+    String src = cloakAcion.getSource();
+    Territory srcT = getTerritory(src);
+    srcT.setCloakStatus(true); //update target terrotory cloak state
+    String cloakActOwner = cloakAcion.getActionOwner();
+    Player cloakActPlayer = getPlayerByName(cloakActOwner);
+    cloakActPlayer.updateTechResource(-100);  //update tech source
+  }
+
+
 
   /**
    * before the attack, extract specific numbers of soldiers from source territory

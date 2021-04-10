@@ -26,6 +26,7 @@ public class Player {
   protected String status;
   protected ActionFactory factory;
   protected HashMap<String, BiFunction<String, String, BasicAction>> actionCreationFns;
+  protected String spyLocation;
 
 
   /**
@@ -46,6 +47,7 @@ public class Player {
     this.actionCreationFns = new HashMap<String, BiFunction<String, String, BasicAction>>();
     this.factory = factory;
     setUpActionCreationMap();
+    spyLocation = "";
   }
     
   /**
@@ -214,6 +216,22 @@ public class Player {
    */
   public void setTechLevel(int level){
     techLevel = level;
+  }
+
+  /**
+   * get the player's spy location
+   * @return the territory name where his spy at
+   */
+  public String getSpyLocation(){
+    return spyLocation;
+  }
+
+  /**
+   * update the spy location
+   * @param location is the new spy territory location name
+   */
+  public void updateSpyLocation(String location){
+    spyLocation = location;
   }
 }                     
 
