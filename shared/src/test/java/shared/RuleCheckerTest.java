@@ -8,7 +8,7 @@ public class RuleCheckerTest {
   @Test
   public void test_RuleChecker() {
     Board b = new Board(2, new MapFactory(), new UnitsFactory());
-    RuleChecker c = new OwnerChecker(new RouteChecker(null));
+    RuleChecker c = new ExistanceChecker(new OwnerChecker(new RouteChecker(null)));
     BasicAction b1 = new Move("King", "Dorado Hollywood 10 Lv1");
     BasicAction b2 = new Move("King", "Hanamura Hanamura 5 Lv1");
     BasicAction b3 = new Move("King", "Dorado Ilios 9 Lv1");

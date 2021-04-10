@@ -22,7 +22,7 @@ public class BoardTest {
   public void test_processSingleBasicMoveV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0});
+      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
     }
     //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
     BasicAction a1 = new Move("King", "Hanamura Hollywood 4 Lv1");
@@ -205,7 +205,7 @@ public class BoardTest {
   public void test_mergeAndProcessOneTurnAttackV2(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0});
+      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
     }
     Player King = b.getPlayerByName("King");
     King.updateTechResource(100000);
@@ -355,12 +355,12 @@ public class BoardTest {
     LinkedHashSet<BasicAction> testattack1 = new LinkedHashSet<>();
     LinkedHashSet<BasicAction> testattack2 = new LinkedHashSet<>();
     Board b = getTestBoard();
-    b.singleTerritoryUnitSetup("Dorado", new int[]{3,0,0,0,0,0,0});
-    b.singleTerritoryUnitSetup("Hanamura", new int[]{5,0,0,0,0,0,0});
-    b.singleTerritoryUnitSetup("Hollywood", new int[]{0,0,0,0,0,0,0});
-    b.singleTerritoryUnitSetup("Volskaya", new int[]{5,0,0,0,0,0,0});
-    b.singleTerritoryUnitSetup("Ilios", new int[]{10,0,0,0,0,0,0});
-    b.singleTerritoryUnitSetup("Junkertown", new int[]{5,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Dorado", new int[]{3,0,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Hanamura", new int[]{5,0,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Hollywood", new int[]{0,0,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Volskaya", new int[]{5,0,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Ilios", new int[]{10,0,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Junkertown", new int[]{5,0,0,0,0,0,0,0});
     BasicAction moveact1 = new Move("King", "Dorado Hollywood 3 Lv1");
     BasicAction moveact2 = new Move("King", "Hanamura Hollywood 4 Lv1");
     BasicAction moveact3 = new Move("King", "Hollywood Dorado 7 Lv1");
@@ -403,13 +403,13 @@ public class BoardTest {
     LinkedHashSet<UpgradeAction> testup2 = new LinkedHashSet<>();
     LinkedHashSet<UpgradeAction> testup3 = new LinkedHashSet<>();
     Board b = getTestBoard();
-    b.singleTerritoryUnitSetup("Dorado", new int[]{3,0,0,0,0,0,0});
-    b.singleTerritoryUnitSetup("Hanamura", new int[]{0,10,0,0,0,0,0});
-    b.singleTerritoryUnitSetup("Hollywood", new int[]{0,0,5,0,0,0,0});
-    b.singleTerritoryUnitSetup("Volskaya", new int[]{5,0,0,0,6,0,0});
-    b.singleTerritoryUnitSetup("Ilios", new int[]{10,0,0,0,0,0,3});
+    b.singleTerritoryUnitSetup("Dorado", new int[]{3,0,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Hanamura", new int[]{0,10,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Hollywood", new int[]{0,0,5,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Volskaya", new int[]{5,0,0,0,6,0,0,0});
+    b.singleTerritoryUnitSetup("Ilios", new int[]{10,0,0,0,0,0,3,0});
     
-    b.singleTerritoryUnitSetup("Junkertown", new int[]{5,0,0,0,0,0,0});
+    b.singleTerritoryUnitSetup("Junkertown", new int[]{5,0,0,0,0,0,0,0});
     UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv2 3 Lv3");
     UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv2 4 Lv5");
     UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv9 4 Lv7");

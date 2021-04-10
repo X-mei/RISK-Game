@@ -28,7 +28,7 @@ public class UpgradeChecker extends SpecialRuleChecker{
     Integer totalCost = thisAct.getCount() * (endL.getCost() - startL.getCost());
     Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
     if (endL.getTechReq()>p.getTechLevel()){
-      return "You tech level is not high enough.";
+      return "Your tech level is not high enough.";
     }
     if (totalCost > p.getTechResource()) {
       return "You do not have enough resources to upgrade.";
