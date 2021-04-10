@@ -9,9 +9,6 @@ public class OwnerChecker extends RuleChecker {
 
   @Override
   public String checkMyRule(BasicAction thisAct, Board theBoard) {
-    if (theBoard.getTerritory(thisAct.getSource()) == null) {
-      return "The selected source do not exist.";
-    }
     if (thisAct.getActionOwner() == theBoard.getTerritory(thisAct.getSource()).getOwner()) {
       return null;
     }

@@ -14,13 +14,7 @@ public class RouteChecker extends RuleChecker{
   public String checkMyRule(BasicAction thisAct, Board theBoard){
     minCost = Integer.MAX_VALUE;
     Territory src = theBoard.getTerritory(thisAct.getSource());
-    if (src == null){
-      return "The selected source do not exist.";
-    }
     Territory dest = theBoard.getTerritory(thisAct.getDestination());
-    if (dest == null){
-      return "The selected destination do not exist.";
-    }
     HashSet<Territory> visited = new HashSet<>();
     Integer cost = 0;
     Player p = theBoard.getPlayerByName(thisAct.getActionOwner());

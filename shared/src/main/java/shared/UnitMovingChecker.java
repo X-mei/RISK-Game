@@ -10,12 +10,9 @@ public class UnitMovingChecker extends RuleChecker{
   @Override
   public String checkMyRule (BasicAction thisAct, Board theBoard){
     Integer cnt = theBoard.getTerritoryUnitsCount(thisAct.getSource(), thisAct.getLevelName());
-    if (cnt == null){
-      return "The selected source do not exist.";
-    }
     if (thisAct.getCount() <= cnt) {
       theBoard.updateTempCount(thisAct.getSource(), thisAct.getLevelName(), thisAct.getCount());
-      if (thisAct.getActionName() == "M") {
+      if (thisAct.getActionName().equals("M")) {
         theBoard.updateTempCount(thisAct.getDestination(), thisAct.getLevelName(), -thisAct.getCount());
       }
       return null;

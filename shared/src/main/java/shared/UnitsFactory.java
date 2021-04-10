@@ -30,6 +30,10 @@ public class UnitsFactory {
   public Soldiers createLevel7Soldiers(int count) {
     return new Level7Soldiers(count);
   }
+
+  public Soldiers createSpySoldiers(int count) { return new SpySoldiers(count); }
+
+  public Soldiers createFlyingSoldiers(int count) { return new FlyingSoldiers(count); }
 }
 
 
