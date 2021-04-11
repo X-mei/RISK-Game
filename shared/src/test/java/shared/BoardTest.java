@@ -10,6 +10,8 @@ import java.util.LinkedHashSet;
 
 import org.junit.jupiter.api.Test;
 
+import jdk.jfr.Timestamp;
+
 public class BoardTest {
   private Board getTestBoard() {
     MapFactory f = new MapFactory();
@@ -438,6 +440,10 @@ public class BoardTest {
     assertEquals(false, b.checkIfUpgradeBoolean(testup3));
   }
   
+  @Test
+  public void test_tempTest(){
+    
+  }
   /*
   @Test
   public void test_getTerritory() {
