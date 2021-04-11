@@ -56,9 +56,30 @@ public class BoardTest {
         //assertEquals(p.getName(), b.displaySinlgePlayerBoardV3(p.getName()));
         UpgradeAction spyCreate = new UpgradeAction(p.getName(), "Hanamura Lv1 1 Spy");
         b.processSingleUpdateUnit(spyCreate);
-        BasicAction a2 = new Move("King", "Hanamura Volskaya 1 Spy");
+        BasicAction a2 = new Move("King", "Hanamura Ilios 1 Spy");
         b.processSingleBasicMove(a2);
+        UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
+        UpgradeAction a4 = new UpgradeAction("King", "Dorado Lv1 1 Lv3");
+        UpgradeAction a5 = new UpgradeAction("King", "Hanamura Lv1 1 Lv4");
+        UpgradeAction a6 = new UpgradeAction("King", "Hanamura Lv1 1 Lv3");
+        UpgradeAction a7 = new UpgradeAction("Red", "Junkertown Lv1 1 Lv7");
+        UpgradeAction a8 = new UpgradeAction("Red", "Junkertown Lv1 1 Lv3");
+        UpgradeAction a9 = new UpgradeAction("Red", "Junkertown Lv1 1 Lv2");
+        UpgradeAction a10 = new UpgradeAction("Red", "Junkertown Lv1 1 Lv7");
+        UpgradeAction a11 = new UpgradeAction("Red", "Volskaya Lv1 1 Lv2");
+        UpgradeAction a12 = new UpgradeAction("Red", "Volskaya Lv1 1 Lv5");
+        b.processSingleUpdateUnit(a3);
+        b.processSingleUpdateUnit(a4);
+        b.processSingleUpdateUnit(a5);
+        b.processSingleUpdateUnit(a6);
+        b.processSingleUpdateUnit(a7);
+        b.processSingleUpdateUnit(a8);
+        b.processSingleUpdateUnit(a9);
+        b.processSingleUpdateUnit(a10);
+        b.processSingleUpdateUnit(a11);
+        b.processSingleUpdateUnit(a12);
         //assertEquals(p.getName(), b.displaySinlgePlayerBoardV3(p.getName()));
+        //assertEquals(p.getName(), b.infoToFormMap(p.getName()));
       }
     }
   }

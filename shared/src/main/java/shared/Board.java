@@ -834,18 +834,59 @@ private String getSoldierNameByBonus(int Bonus){
     return ans;
   }
 
+  public String infoToFormMap(String playerName) {
+    Player p = getPlayerByName(playerName);
+    // int pFoodResource = p.getFoodResource();
+    // int pTechResource = p.getTechResource();
+    // int pTechLevel = p.getTechLevel();
+    LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
+    String s1 = playerName + "\n";
+    // String s2 = "Tech Level: " + pTechLevel + ", Food: " + pFoodResource + ", Tech: " + pTechResource + "\n";
+    // Eg: ans = "King player:
+    //            ------------
+    //           "
+
+    //String ans = s1 + createDottedLine(s1.length()) + s2 + "\n";
+    String territoryInfo = ""; 
+    HashSet<Territory> neighborSet = new HashSet<>(); 
+    for(Territory t : terriSet){
+      for(Territory temp : t.getNeighbours()){
+        if(!temp.checkIsCloaked() && !p.getTerritoryList().contains(temp)){
+          neighborSet.add(temp);
+        }
+      }
+      territoryInfo += displaySingleTerriInfoWithNameFirst(t) + "\n";
+    }
+    
+    s1 += territoryInfo + "\nenemy can see:\n";
+    String spyLocation = p.getSpyLocation();
+    Territory spyAt = allTerritory.get(spyLocation);
+    neighborSet.add(spyAt);
+    for(Territory t : neighborSet){
+      s1 += t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t) + "\n";
+    }
+    
+    //add spy information
+    //ans += spyInfoDisplay(p) + "\n";
+    //add adjacent enemy territories info
+    //ans += adjacentEnemyTerrInfo(p);
+    return "\n" + s1;
+  }
+
+
   public String displaySinlgePlayerBoardV3(String playerName) {
     Player p = getPlayerByName(playerName);
     int pFoodResource = p.getFoodResource();
     int pTechResource = p.getTechResource();
     int pTechLevel = p.getTechLevel();
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
-    String s1 = playerName + " player:\n";
-    String s2 = "Tech Level: " + pTechLevel + ", Food: " + pFoodResource + ", Tech: " + pTechResource + "\n";
+    String s1 = "You are " + playerName + " player\n";
+    String s2 = "Tech Level: " + pTechLevel + "\nFood: " + pFoodResource + "\nTech: " + pTechResource + "\n";
     // Eg: ans = "King player:
     //            ------------
     //           "
-    String ans = s1 + createDottedLine(s1.length()) + s2 + "\n";
+    //String ans = s1 + createDottedLine(s1.length()) + s2 + "\n";
+    String ans = s1 + s2 + "\n";
     String territoryInfo = "";  
     for(Territory t : terriSet){
       territoryInfo += displaySingleTerriInfo(t) + "\n";
@@ -882,6 +923,33 @@ private String getSoldierNameByBonus(int Bonus){
       String out = temp + tempNeighbor + ")";
       return out;
   }
+
+  public String displaySingleTerriInfoWithNameFirst(Territory t){
+    String soldierNameString = "";
+      //Eg: temp = "10 Lv1 in Numbani (next to:"
+      String comma = "";
+      for(String s : t.getSoldiers().keySet()){
+        Soldiers tempS = t.getSoldiers().get(s);
+        int SoldierNum = tempS.getCount();
+        if(SoldierNum == 0){
+          continue;
+        }
+        soldierNameString += comma + SoldierNum + " " + tempS.getName();
+        comma = ",";
+      }
+      String temp = t.getTerritoryName() + ":" + soldierNameString;
+      // String space = " ";
+      // String tempNeighbor = "";
+      // for (Territory tNeighbor : t.getNeighbours()) {
+      //   tempNeighbor += space + tNeighbor.getTerritoryName();
+      //   space = ", ";
+      // }
+      //Eg tempNeihbor = " Elantris, Midkemia" 
+      //String out = temp + tempNeighbor + ")";
+      return temp;
+  }
+
+
 
   /**
    * display location of one player's spy 
