@@ -10,12 +10,12 @@ public class UpgradeCheckerTest {
   public void test_UpgradeAction() {
     Board b = new Board(2, new MapFactory(), new UnitsFactory());
     SpecialRuleChecker c = new UpgradeChecker(null);
-    b.singleTerritoryUnitSetup("Dorado", new int[]{5, 0, 0, 0, 0, 0, 0, 0}); 
-    b.singleTerritoryUnitSetup("Hanamura", new int[]{3, 10, 0, 0, 0, 0, 0, 0});
-    b.singleTerritoryUnitSetup("Hollywood", new int[] {0, 0, 5, 0, 0, 0, 0, 0});
-    b.singleTerritoryUnitSetup("Volskaya", new int[]{1, 0, 0, 5, 0, 0, 0, 0});
-    b.singleTerritoryUnitSetup("Ilios", new int[]{0, 0 ,  0, 0, 10, 0, 0, 0}); 
-    b.singleTerritoryUnitSetup("Junkertown", new int[]{5, 0, 0, 0, 0, 0, 5, 0});
+    b.singleTerritoryUnitSetup("Dorado", new int[]{5, 0, 0, 0, 0, 0, 0, 0, 0}); 
+    b.singleTerritoryUnitSetup("Hanamura", new int[]{3, 10, 0, 0, 0, 0, 0, 0, 0});
+    b.singleTerritoryUnitSetup("Hollywood", new int[] {0, 0, 5, 0, 0, 0, 0, 0, 0});
+    b.singleTerritoryUnitSetup("Volskaya", new int[]{1, 0, 0, 5, 0, 0, 0, 0, 0});
+    b.singleTerritoryUnitSetup("Ilios", new int[]{0, 0 ,  0, 0, 10, 0, 0, 0, 0}); 
+    b.singleTerritoryUnitSetup("Junkertown", new int[]{5, 0, 0, 0, 0, 0, 5, 0, 0});
     UpgradeAction a1 = new UpgradeAction("King", "Hanamura Lv1 3 Lv3");
     UpgradeAction a2 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
     UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv9 4 Lv7");

@@ -1,5 +1,8 @@
 package shared;
 
+/**
+ * This is the subclass that checks whether player have enough resource to conduct action.
+ */
 public class ResourceChecker extends RuleChecker{
     ResourceChecker(RuleChecker next){
         super(next);

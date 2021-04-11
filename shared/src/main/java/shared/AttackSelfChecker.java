@@ -1,5 +1,8 @@
 package shared;
 
+/**
+ * This is the subclass that checks whether the dest territory belongs to action owner.
+ */
 public class AttackSelfChecker extends RuleChecker{
     public AttackSelfChecker(RuleChecker next){
         super(next);

@@ -34,6 +34,7 @@ public class UnitsFactory {
   public Soldiers createSpySoldiers(int count) { return new SpySoldiers(count); }
 
   public Soldiers createTeleportSoldiers(int count) { return new TeleportSoldiers(count); }
+
 }
 
 

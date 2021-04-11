@@ -140,6 +140,7 @@ public class Board {
     UnitName.add("Lv6");
     UnitName.add("Lv7");
     UnitName.add("Spy");
+    UnitName.add("Tel");
   }
   
   
@@ -174,6 +175,7 @@ public class Board {
     unitsCreateFunction.put("Lv6", (count) -> UnitsF.createLevel6Soldiers(count));
     unitsCreateFunction.put("Lv7", (count) -> UnitsF.createLevel7Soldiers(count));
     unitsCreateFunction.put("Spy", (count) -> UnitsF.createSpySoldiers(count));
+    unitsCreateFunction.put("Tel", (count) -> UnitsF.createTeleportSoldiers(count));
   }
 
   /**
@@ -510,6 +512,9 @@ private String getSoldierNameByBonus(int Bonus){
   else if(name.equals("Lv7")){
     return new Level7Soldiers(1);
   }
+  else if(name.equals("Tel")){
+    return new TeleportSoldiers(1);
+  }
   else {
     return new SpySoldiers(1);
   }
@@ -710,11 +715,21 @@ private String getSoldierNameByBonus(int Bonus){
           return false;
         }
       } else if (type == "Attack") {
-        output = attackRuleChecker.checkAction(action, this);
-        if (output == null) {
-          continue;
-        } else {
-          return false;
+        if (action.getLevelName().equals("Tel")){
+          output = teleportAttackRuleChecker.checkAction(action, this);
+          if (output == null) {
+            continue;
+          } else {
+            return false;
+          }
+        }
+        else {
+          output = attackRuleChecker.checkAction(action, this);
+          if (output == null) {
+            continue;
+          } else {
+            return false;
+          }
         }
       }
       else {

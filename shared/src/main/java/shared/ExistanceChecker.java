@@ -1,5 +1,8 @@
 package shared;
 
+/**
+ * This is the subclass that checks whether the src and dest specified in the action exist.
+ */
 public class ExistanceChecker extends RuleChecker{
     public ExistanceChecker(RuleChecker next){
         super(next);
