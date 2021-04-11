@@ -13,12 +13,8 @@ public class NeighborChecker extends RuleChecker {
   protected String checkMyRule(BasicAction thisAct, Board theBoard) {
     String src = thisAct.getSource();
     String dest = thisAct.getDestination();
-    Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
-    if (thisAct.getCount() > p.getTempFoodResource()) {
-      return "No enough food to move those soldiers.";
-    }
     if(theBoard.getTerritory(src).isNeighbor(theBoard.getTerritory(dest))){
-      p.updateTempFoodResource(-thisAct.getCount());
+      thisAct.setCost(thisAct.getCount());
       return null;
     }
     else{

@@ -33,7 +33,7 @@ public class UnitsFactory {
 
   public Soldiers createSpySoldiers(int count) { return new SpySoldiers(count); }
 
-  public Soldiers createFlyingSoldiers(int count) { return new FlyingSoldiers(count); }
+  public Soldiers createTeleportSoldiers(int count) { return new TeleportSoldiers(count); }
 }
 
 
