@@ -834,6 +834,86 @@ private String getSoldierNameByBonus(int Bonus){
     return ans;
   }
 
+  private String displaySinlgePlayerBoardV3(String playerName) {
+    Player p = getPlayerByName(playerName);
+    int pFoodResource = p.getFoodResource();
+    int pTechResource = p.getTechResource();
+    int pTechLevel = p.getTechLevel();
+    LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
+    String s1 = playerName + " player:\n";
+    String s2 = "Tech Level: " + pTechLevel + ", Food: " + pFoodResource + ", Tech: " + pTechResource + "\n";
+    // Eg: ans = "King player:
+    //            ------------
+    //           "
+    String ans = s1 + createDottedLine(s1.length()) + s2 + "\n";
+    String territoryInfo = "";  
+    for(Territory t : terriSet){
+      String soldierNameString = "";
+      //Eg: temp = "10 Lv1 in Numbani (next to:"
+      String comma = "";
+      for(String s : t.getSoldiers().keySet()){
+        Soldiers tempS = t.getSoldiers().get(s);
+        int SoldierNum = tempS.getCount();
+        if(SoldierNum == 0){
+          continue;
+        }
+        soldierNameString += comma + SoldierNum + " " + tempS.getName();
+        comma = ", ";
+      }
+      String temp = soldierNameString +  " Soldiers in " + t.getTerritoryName() + " (next to:";
+      String space = " ";
+      String tempNeighbor = "";
+      for (Territory tNeighbor : t.getNeighbours()) {
+        tempNeighbor += space + tNeighbor.getTerritoryName();
+        space = ", ";
+      }
+      //Eg tempNeihbor = " Elantris, Midkemia"
+      territoryInfo += temp + tempNeighbor + ")\n";
+    }
+    ans += territoryInfo + "\n";
+
+    //add spy information
+    ans += spyInfoDisplay(p);
+
+
+    
+
+    return ans;
+  }
+
+  /**
+   * display location of one player's spy 
+   * @param p is the player
+   * @return the string information
+   */
+  public String spyInfoDisplay(Player p){
+    String spyLocation = p.getSpyLocation();
+    if(spyLocation.length() != 0){
+      return "Your spy are at " + spyLocation + "\n";
+    }
+    else{
+      return "You have no Spy\n";
+    }
+  }
+
+  public String adjacentTerrInfo(Player p){
+    String playerName= p.getName();
+    String title = "";
+    HashSet<Territory> adjacentEnemyTerr = new HashSet<>();
+    for(Territory t : p.getTerritoryList()){
+      for(Territory terr : t.getNeighbours()){
+        if(!terr.getOwner().equals(playerName)){
+          adjacentEnemyTerr.add(terr);
+        }
+      }
+    }
+    for(Territory t : adjacentEnemyTerr){
+      String temp = t.getTerritoryName() + ", ";
+      title += temp;
+    }
+    return title;
+  }
+
   /**
   * check if a specific player lose
   * @return true if lose 
