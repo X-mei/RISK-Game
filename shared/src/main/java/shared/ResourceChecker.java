@@ -15,3 +15,10 @@ public class ResourceChecker extends RuleChecker{
         return null;
     }
 }
+
+
+
+
+
+
+
