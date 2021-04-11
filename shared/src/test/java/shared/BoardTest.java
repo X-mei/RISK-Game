@@ -41,6 +41,28 @@ public class BoardTest {
     assertEquals(900, b.getPlayerByName("King").getFoodResource());
   }
 
+  @Test 
+  public void test_processSpyAndCloack(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
+    }
+    CloakAction c1 = new CloakAction("Red", "Ilios");
+    CloakAction c2 = new CloakAction("Red", "Volskaya");
+    b.processOneCloakAction(c1);
+    //b.processOneCloakAction(c2);
+    for(Player p : b.getPlayers()){
+      if(p.getName().equals("King")){       
+        //assertEquals(p.getName(), b.displaySinlgePlayerBoardV3(p.getName()));
+        UpgradeAction spyCreate = new UpgradeAction(p.getName(), "Hanamura Lv1 1 Spy");
+        b.processSingleUpdateUnit(spyCreate);
+        BasicAction a2 = new Move("King", "Hanamura Volskaya 1 Spy");
+        b.processSingleBasicMove(a2);
+        assertEquals(p.getName(), b.displaySinlgePlayerBoardV3(p.getName()));
+      }
+    }
+  }
+
   @Test
   public void test_processOneTurnMoveV2(){
     Board b = getTestBoard();

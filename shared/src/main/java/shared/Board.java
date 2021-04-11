@@ -834,7 +834,7 @@ private String getSoldierNameByBonus(int Bonus){
     return ans;
   }
 
-  private String displaySinlgePlayerBoardV3(String playerName) {
+  public String displaySinlgePlayerBoardV3(String playerName) {
     Player p = getPlayerByName(playerName);
     int pFoodResource = p.getFoodResource();
     int pTechResource = p.getTechResource();
@@ -848,7 +848,18 @@ private String getSoldierNameByBonus(int Bonus){
     String ans = s1 + createDottedLine(s1.length()) + s2 + "\n";
     String territoryInfo = "";  
     for(Territory t : terriSet){
-      String soldierNameString = "";
+      territoryInfo += displaySingleTerriInfo(t) + "\n";
+    }
+    ans += territoryInfo + "\n";
+    //add spy information
+    ans += spyInfoDisplay(p) + "\n";
+    //add adjacent enemy territories info
+    ans += adjacentEnemyTerrInfo(p);
+    return ans;
+  }
+
+  public String displaySingleTerriInfo(Territory t){
+    String soldierNameString = "";
       //Eg: temp = "10 Lv1 in Numbani (next to:"
       String comma = "";
       for(String s : t.getSoldiers().keySet()){
@@ -867,18 +878,9 @@ private String getSoldierNameByBonus(int Bonus){
         tempNeighbor += space + tNeighbor.getTerritoryName();
         space = ", ";
       }
-      //Eg tempNeihbor = " Elantris, Midkemia"
-      territoryInfo += temp + tempNeighbor + ")\n";
-    }
-    ans += territoryInfo + "\n";
-
-    //add spy information
-    ans += spyInfoDisplay(p);
-
-
-    
-
-    return ans;
+      //Eg tempNeihbor = " Elantris, Midkemia" 
+      String out = temp + tempNeighbor + ")";
+      return out;
   }
 
   /**
@@ -887,31 +889,48 @@ private String getSoldierNameByBonus(int Bonus){
    * @return the string information
    */
   public String spyInfoDisplay(Player p){
-    String spyLocation = p.getSpyLocation();
+    String spyLocation = p.getSpyLocation();    
+    String out = "";
     if(spyLocation.length() != 0){
-      return "Your spy are at " + spyLocation + "\n";
+      Territory t = getTerritory(spyLocation);
+      out += "Your spy locates at " + spyLocation;
+      if(!p.getTerritoryList().contains(t)){      
+      String s = ":\n" + displaySingleTerriInfo(t) + "(owned by " + t.getOwner() + ")\n";
+      return out + s;
+      }
+      else{
+        return out;
+      }
     }
     else{
-      return "You have no Spy\n";
+      out +=  "You have no Spy, try to create it\n";
+      return out;
     }
   }
 
-  public String adjacentTerrInfo(Player p){
+  /**
+   * display adjacnet enemy's territory info
+   * @param p is the player
+   * @return enemy territory information
+   */
+  public String adjacentEnemyTerrInfo(Player p){
     String playerName= p.getName();
-    String title = "";
     HashSet<Territory> adjacentEnemyTerr = new HashSet<>();
     for(Territory t : p.getTerritoryList()){
       for(Territory terr : t.getNeighbours()){
-        if(!terr.getOwner().equals(playerName)){
+        if(!terr.getOwner().equals(playerName) && !terr.checkIsCloaked()){
           adjacentEnemyTerr.add(terr);
         }
       }
     }
-    for(Territory t : adjacentEnemyTerr){
-      String temp = t.getTerritoryName() + ", ";
-      title += temp;
+    String space = "Adjacent Enemy Territories:\n";
+    if(adjacentEnemyTerr.size() == 0){
+      return space + "No territory Visible\n";
     }
-    return title;
+    for(Territory t : adjacentEnemyTerr){
+      space += displaySingleTerriInfo(t) + "(owned by " + t.getOwner() + ")\n";
+    }
+    return space;
   }
 
   /**
