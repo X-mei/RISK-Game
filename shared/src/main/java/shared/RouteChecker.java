@@ -17,18 +17,11 @@ public class RouteChecker extends RuleChecker{
     Territory dest = theBoard.getTerritory(thisAct.getDestination());
     HashSet<Territory> visited = new HashSet<>();
     Integer cost = 0;
-    Player p = theBoard.getPlayerByName(thisAct.getActionOwner());
     checkRoute(src, dest, cost, visited);
     Integer totalCost = thisAct.getCount() * minCost;
     if(minCost != Integer.MAX_VALUE){
-      if (totalCost > p.getTempFoodResource()) {
-        return "No enough food to move those soldiers.";
-      }
-      else {
-        p.updateTempFoodResource(-totalCost);
-        thisAct.setCost(totalCost);
-        return null;
-      }
+      thisAct.setCost(totalCost);
+      return null;
     }
     else{
       return "No existing route between source and destination!";

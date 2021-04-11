@@ -14,6 +14,7 @@ public class Board {
   protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;
   private final RuleChecker moveRuleChecker;
   private final RuleChecker spyRuleChecker;
+  private final RuleChecker teleportAttackRuleChecker;
   private final RuleChecker attackRuleChecker;
   private final SpecialRuleChecker upgradeRuleChecker;
   private HashMap<String, HashMap<String, Integer>> tempCount;
@@ -52,9 +53,10 @@ public class Board {
     }
     this.UnitName = new LinkedHashSet<>();
     unitNameSetup();
-    this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(null)))));
-    this.spyRuleChecker = new ExistanceChecker(new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null))));
-    this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(null))));
+    this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null))))));
+    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(new UnitMovingChecker(null)));
+    this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
+    this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
     this.tempCount = new HashMap<String, HashMap<String, Integer>>();
     //create a tech upgrade reference table
