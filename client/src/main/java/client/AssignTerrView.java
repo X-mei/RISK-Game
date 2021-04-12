@@ -51,8 +51,10 @@ public class AssignTerrView {
                 path = "src/main/resources/3P.JPG";
             } else if (playerNum.equals("4")) {
                 path = "src/main/resources/4P.JPG";
-            } else {
+            } else if (playerNum.equals("5")) {
                 path = "src/main/resources/5P.JPG";
+            } else {
+                path = "src/main/resources/2P.JPG";
             }
             FileInputStream imageStream = new FileInputStream(path);
             Image image = new Image(imageStream);

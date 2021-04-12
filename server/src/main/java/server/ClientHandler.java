@@ -202,7 +202,7 @@ public class ClientHandler extends Thread {
       }
       int j = 0;
       for(Territory t: player.getTerritoryList()) {
-        int [] unitsToAdd = new int[7];
+        int [] unitsToAdd = new int[9];
         unitsToAdd[0] = unitsAssign[j];
         board.singleTerritoryUnitSetup(t.getTerritoryName(), unitsToAdd);
         j++;
@@ -226,7 +226,7 @@ public class ClientHandler extends Thread {
       attackHashSet.clear();
       upgradeSoldierHashSet.clear();
       techUpgrade = null;
-      String boardMsg = board.displayAllPlayerAllBoard();
+      String boardMsg = board.displaySinlgePlayerBoardV3(playerName);
       output.writeUTF(boardMsg);
       Boolean valid = true;
       Boolean actionValid = true;

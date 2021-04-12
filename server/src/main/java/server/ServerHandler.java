@@ -201,33 +201,62 @@ public class ServerHandler extends Thread {
         e.printStackTrace();
       }
 
-      System.out.println("Get a room for playerNum: " + playerNum);
-      GameServer gameServer = gameRooms.get(playerNum);
-      if (gameServer.isReadyToStart()) {
-        System.out.println("Create a new room for playerNum: " + playerNum);
-        gameServer = new GameServer(portNum, playerNum, gameBoards, disconnectedUsers, disconnectedGames);
-        gameRooms.put(playerNum, gameServer);
-      }
-      gameServer.addClient(clientSocket);
-      gameServer.addUsername(username);
-      // store current gameID and player username
-      if (currentGames.containsKey(gameID)) {
-        currentGames.get(gameID).add(username);
-      } else {
+      /**
+       * 1 human player vs AI player
+       */
+      if (playerNum == 1) {
+        System.out.println("Get a room for this player and AI player. ");
+        System.out.println("Create a new room for player and AI player.");
+        GameServer gameServer = new GameServer(portNum, 2, gameBoards, disconnectedUsers, disconnectedGames);
+        gameServer.addClient(clientSocket);
+        gameServer.addUsername(username);
+        // TODO: add AI player
         HashSet<String> users = new HashSet<>();
         users.add(username);
         currentGames.put(gameID, users);
-      }
-      // ready to start the game
-      if (gameServer.isReadyToStart()) {
-        // store corresponding gameID
-        gameIDs.put(gameServer, gameID);
-        gameServer.setGameID(gameID);
-        System.out.println("This room is ready to start, playerNum: " + playerNum + " gameID: " + gameID);
-        gameID++;
-        // detach a new thread for a room
-        Thread newGame = new Thread(gameServer);
-        newGame.start();
+        // ready to start the game
+        if (gameServer.isReadyToStart()) {
+          // store corresponding gameID
+          gameIDs.put(gameServer, gameID);
+          gameServer.setGameID(gameID);
+          System.out.println("This room is ready to start, playerNum: " + playerNum + " gameID: " + gameID);
+          gameID++;
+          // detach a new thread for a room
+          Thread newGame = new Thread(gameServer);
+          newGame.start();
+        }
+      } else {
+        /**
+         * normal games
+         */
+        System.out.println("Get a room for playerNum: " + playerNum);
+        GameServer gameServer = gameRooms.get(playerNum);
+        if (gameServer.isReadyToStart()) {
+          System.out.println("Create a new room for playerNum: " + playerNum);
+          gameServer = new GameServer(portNum, playerNum, gameBoards, disconnectedUsers, disconnectedGames);
+          gameRooms.put(playerNum, gameServer);
+        }
+        gameServer.addClient(clientSocket);
+        gameServer.addUsername(username);
+        // store current gameID and player username
+        if (currentGames.containsKey(gameID)) {
+          currentGames.get(gameID).add(username);
+        } else {
+          HashSet<String> users = new HashSet<>();
+          users.add(username);
+          currentGames.put(gameID, users);
+        }
+        // ready to start the game
+        if (gameServer.isReadyToStart()) {
+          // store corresponding gameID
+          gameIDs.put(gameServer, gameID);
+          gameServer.setGameID(gameID);
+          System.out.println("This room is ready to start, playerNum: " + playerNum + " gameID: " + gameID);
+          gameID++;
+          // detach a new thread for a room
+          Thread newGame = new Thread(gameServer);
+          newGame.start();
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
