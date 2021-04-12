@@ -42,7 +42,9 @@ public class SendRoomIDController {
                         PlayGameView playGameView = new PlayGameView(prompt);
                         playGameView.init(playerNum);
                         String boardMsg = client.recvBoardPrompt();
+                        String info = client.recvBoardPrompt();
                         String instructionMsg = client.recvInstruction();
+
                         playGameView.addPrompt(boardMsg);
                         playGameView.addPrompt2(instructionMsg);
                         App.root.getChildren().remove(sendRoomIDView.roomIDPane);

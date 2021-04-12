@@ -228,12 +228,18 @@ public class ClientHandler extends Thread {
       techUpgrade = null;
       String boardMsg = board.displaySinlgePlayerBoardV3(playerName);
       output.writeUTF(boardMsg);
+      
+      // send string to parse
+      String info = board.infoToFormMap(playerName);
+      output.writeUTF(info);
+
       Boolean valid = true;
       Boolean actionValid = true;
       Boolean techUpgradeMarker = true;
       String received = null;
       String techUpdate = "";
       while(true) {
+
         String prompt = "";
         if (!valid) {
           prompt += "Invalid input format! Please input this action again.\n";
@@ -246,7 +252,9 @@ public class ClientHandler extends Thread {
         valid = true;
         actionValid = true;
         techUpdate = "";
+        // send prompt info
         output.writeUTF(prompt);
+
         received = input.readUTF();
         if(received.length() != 1){
           valid = false;

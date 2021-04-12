@@ -858,6 +858,7 @@ private String getSoldierNameByBonus(int Bonus){
     // int pTechLevel = p.getTechLevel();
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     String s1 = playerName + "\n";
+
     // String s2 = "Tech Level: " + pTechLevel + ", Food: " + pFoodResource + ", Tech: " + pTechResource + "\n";
     // Eg: ans = "King player:
     //            ------------
@@ -876,9 +877,12 @@ private String getSoldierNameByBonus(int Bonus){
     }
     
     s1 += territoryInfo + "\nenemy can see:\n";
+
     String spyLocation = p.getSpyLocation();
-    Territory spyAt = allTerritory.get(spyLocation);
-    neighborSet.add(spyAt);
+    if (!spyLocation.equals("")) {
+      Territory spyAt = allTerritory.get(spyLocation);
+      neighborSet.add(spyAt);
+    }
     for(Territory t : neighborSet){
       s1 += t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t) + "\n";
     }

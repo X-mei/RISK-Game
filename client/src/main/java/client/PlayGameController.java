@@ -129,23 +129,25 @@ public class PlayGameController {
 
                 App.setTimeout(() -> {
                     promptMsg = client.recvBoardPrompt();
-                    promptInstruction = client.recvBoardPrompt();
+                    String info = client.recvBoardPrompt();
+                    
                     if (promptMsg.equals("You lost all your territories!")) {
                         Platform.runLater(() -> {
                             playGameView.prompt1.setText(promptMsg);
                             playGameView.prompt2.setVisible(true);
-                            playGameView.prompt2.setText(promptInstruction);
+                            playGameView.prompt2.setText(info);
                             playGameView.exitOrContinue();
                         });
                     } else if (promptMsg.equals("The game ends.")) {
                         Platform.runLater(() -> {
                             playGameView.prompt1.setText(promptMsg);
                             playGameView.prompt2.setVisible(true);
-                            playGameView.prompt2.setText(promptInstruction);
+                            playGameView.prompt2.setText(info);
                             playGameView.exitOrContinue();
                             playGameView.continueWatch.setVisible(false);
                         });
                     } else {
+                        promptInstruction = client.recvBoardPrompt();
                         Platform.runLater(() -> {
                             playGameView.activateAll();
                             playGameView.prompt1.setText(promptMsg);
