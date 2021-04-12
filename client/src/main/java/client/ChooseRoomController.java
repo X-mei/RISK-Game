@@ -50,7 +50,6 @@ public class ChooseRoomController {
                 prompt = client.recvPrompt();
                 int status = client.recvStartStatus();
                 promptAssign = client.recvAssignPrompt();
-                //TODO: add prompts
                 String[] prompts = client.recvPrompts();
                 Platform.runLater(() -> {
                     assignTerrView.addPrompt2(prompt);

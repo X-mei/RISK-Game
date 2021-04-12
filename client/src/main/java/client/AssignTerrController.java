@@ -44,6 +44,7 @@ public class AssignTerrController {
                 assignTerrView.waitPlayer();
                 App.setTimeout(() -> {
                     boardMsg = client.recvBoardPrompt();
+                    String info = client.recvBoardPrompt();
                     instructionMsg = client.recvInstruction();
 
                     Platform.runLater(() -> {
