@@ -1,5 +1,8 @@
 package client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -11,6 +14,8 @@ public class PlayGameController {
     String actionType;
     int i = 1;
     boolean press = false;
+    HashMap<String, ArrayList<String>> territories;
+    HashMap<String, String> units;
 
     PlayGameController(PlayGameView playGameView, Client client) {
         this.playGameView = playGameView;
@@ -18,6 +23,8 @@ public class PlayGameController {
         actionType = "";
         promptMsg = "";
         promptInstruction = "";
+        this.territories = new HashMap<String, ArrayList<String>>();
+        this.units = new HashMap<String, String>();
         upgradeAction();
         moveAction();
         attackAction();
@@ -130,7 +137,7 @@ public class PlayGameController {
                 App.setTimeout(() -> {
                     promptMsg = client.recvBoardPrompt();
                     String info = client.recvBoardPrompt();
-                    
+
                     if (promptMsg.equals("You lost all your territories!")) {
                         Platform.runLater(() -> {
                             playGameView.prompt1.setText(promptMsg);
@@ -147,6 +154,10 @@ public class PlayGameController {
                             playGameView.continueWatch.setVisible(false);
                         });
                     } else {
+                        // clear the hashmap
+                        territories.clear();
+                        units.clear();
+                        parseTerritory(info);
                         promptInstruction = client.recvBoardPrompt();
                         Platform.runLater(() -> {
                             playGameView.activateAll();
@@ -269,5 +280,42 @@ public class PlayGameController {
             Stage stage = (Stage) playGameView.exitGame.getScene().getWindow();
             stage.close();
         });
+    }
+
+    /**
+     * parse the string into hashmap
+     */
+    public void parseTerritory(String info) {
+      String[] strArr = info.split("\n");
+
+      // add own territory
+      String pName = strArr[0];
+      ArrayList<String> terrs= new ArrayList<String>();
+      int i = 1;
+      while(!strArr[i].equals("")) {
+        String[] terrInfo = strArr[i].split(":");
+        terrs.add(terrInfo[0]);
+        i++;
+        units.put(terrInfo[0], terrInfo[1]);
+      }
+      territories.put(pName, terrs);
+      i = i + 2;
+      // add enemy's territory
+      while(i < strArr.length) {
+        String[] terrInfo = strArr[i].split(":");
+        if (territories.containsKey(terrInfo[0])) {
+          ArrayList<String> enemyTerrs = territories.get(terrInfo[0]);
+          enemyTerrs.add(terrInfo[1]);
+          territories.put(terrInfo[0], enemyTerrs);
+        } else {
+          ArrayList<String> enemyTerrs = new ArrayList<String>();
+          enemyTerrs.add(terrInfo[1]);
+          territories.put(terrInfo[0], enemyTerrs);
+        }
+        units.put(terrInfo[1], terrInfo[2]);
+        i++;
+      }
+      System.out.println(territories.entrySet());
+      System.out.println(units.entrySet());
     }
 }
