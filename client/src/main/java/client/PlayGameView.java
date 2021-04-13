@@ -1,15 +1,22 @@
 package client;
 
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Paint;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class PlayGameView {
+    HashMap<String, Button> terrs;
     String playerNum;
     AnchorPane playGamePane;
     Label prompt0;
@@ -28,6 +35,12 @@ public class PlayGameView {
     Button attack;
     Button tech;
     Button done;
+    Button terr2P_1;
+    Button terr2P_2;
+    Button terr2P_3;
+    Button terr2P_4;
+    Button terr2P_5;
+    Button terr2P_6;
     TextField input;
     Button confirm;
     Button continueWatch;
@@ -41,6 +54,7 @@ public class PlayGameView {
     Label errorTech;
 
     public PlayGameView(String userInfo) {
+        this.terrs = new HashMap<>();
         this.playGamePane = new AnchorPane();
         this.prompt0 = new Label(userInfo);
         this.prompt1 = new Label();
@@ -63,6 +77,12 @@ public class PlayGameView {
         this.continueWatch = new Button();
         this.exitGame = new Button();
         this.error = new Label();
+        this.terr2P_1 = new Button();
+        this.terr2P_2 = new Button();
+        this.terr2P_3 = new Button();
+        this.terr2P_4 = new Button();
+        this.terr2P_5 = new Button();
+        this.terr2P_6 = new Button();
         this.errorTech = new Label();
         this.choicesOfLevel1 = new ChoiceBox();
         this.choicesOfLevel2 = new ChoiceBox();
@@ -94,6 +114,60 @@ public class PlayGameView {
             playGamePane.getChildren().add(imageView);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        terr2P_1.setLayoutX(135);
+        terr2P_1.setLayoutY(85);
+        terr2P_1.setText("Hanamura");
+        terr2P_1.setVisible(false);
+        playGamePane.getChildren().add(terr2P_1);
+        terrs.put("Hanamura", terr2P_1);
+        BackgroundFill backgroundFill = new BackgroundFill(Paint.valueOf("#8FBC8F"), new CornerRadii(20), Insets.EMPTY);
+        Background background = new Background(backgroundFill);
+        terr2P_1.setBackground(background);
+
+        terr2P_2.setLayoutX(140);
+        terr2P_2.setLayoutY(310);
+        terr2P_2.setText("Dorado");
+        terr2P_2.setVisible(false);
+        playGamePane.getChildren().add(terr2P_2);
+        terrs.put("Dorado", terr2P_2);
+
+        terr2P_3.setLayoutX(325);
+        terr2P_3.setLayoutY(355);
+        terr2P_3.setText("Hollywood");
+        terr2P_3.setVisible(false);
+        playGamePane.getChildren().add(terr2P_3);
+        terrs.put("Hollywood", terr2P_3);
+
+        terr2P_4.setLayoutX(483);
+        terr2P_4.setLayoutY(337);
+        terr2P_4.setText("Ilios");
+        terr2P_4.setVisible(false);
+        playGamePane.getChildren().add(terr2P_4);
+        terrs.put("Ilios", terr2P_4);
+
+        terr2P_5.setLayoutX(605);
+        terr2P_5.setLayoutY(200);
+        terr2P_5.setText("Junkertown");
+        terr2P_5.setVisible(false);
+        playGamePane.getChildren().add(terr2P_5);
+        terrs.put("Junkertown", terr2P_5);
+
+        terr2P_6.setLayoutX(438);
+        terr2P_6.setLayoutY(65);
+        terr2P_6.setText("Volskaya");
+        terr2P_6.setVisible(false);
+        playGamePane.getChildren().add(terr2P_6);
+        terrs.put("Volskaya", terr2P_6);
+
+        if(playerNum.equals("2")){
+            terr2P_1.setVisible(true);
+            terr2P_2.setVisible(true);
+            terr2P_3.setVisible(true);
+            terr2P_4.setVisible(true);
+            terr2P_5.setVisible(true);
+            terr2P_6.setVisible(true);
         }
         promptAM.setLayoutX(40);
         promptAM.setLayoutY(495);
@@ -286,6 +360,8 @@ public class PlayGameView {
         upgrade.setText("Upgrade Soldiers");
         upgrade.setPrefWidth(200);
         playGamePane.getChildren().add(upgrade);
+        String str = "to upgrade";
+        Tooltip.install(upgrade, new Tooltip(str));
 
         attack.setLayoutX(40);
         attack.setLayoutY(570);

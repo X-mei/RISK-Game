@@ -44,6 +44,7 @@ public class App extends Application {
 
         // set scene
         Scene scene = new Scene(root, 1500, 800);
+        scene.getStylesheets().add(getClass().getResource("/Game.css").toExternalForm());
         primaryStage.setTitle("Welcome to RISC");
         primaryStage.setScene(scene);
         primaryStage.show();
