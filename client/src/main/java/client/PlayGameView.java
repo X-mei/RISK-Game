@@ -323,15 +323,16 @@ public class PlayGameView {
       }
 
     }
-    
-    Tooltip.install(terr2P_1, new Tooltip(units.get("Hanamura")));
-    Tooltip.install(terr2P_2, new Tooltip(units.get("Dorado")));
-    Tooltip.install(terr2P_3, new Tooltip(units.get("Hollywood")));
-    Tooltip.install(terr2P_4, new Tooltip(units.get("Ilios")));
-    Tooltip.install(terr2P_5, new Tooltip(units.get("Junkertown")));
-    Tooltip.install(terr2P_6, new Tooltip(units.get("Volskaya")));
+    for(String terrName: terrs.keySet()){
+      Tooltip.install(terrs.get(terrName), new Tooltip("Size = 10\n"));
+    }
+
+    for(String terrName: units.keySet()){
+        Tooltip.install(terrs.get(terrName), new Tooltip("Size = 10\n" + units.get(terrName)));
+    }   
 
   }
+
 
     public void addPrompt(String prompt) {
         prompt0.setLayoutX(750);
