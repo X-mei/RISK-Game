@@ -36,6 +36,7 @@ public class App extends Application {
         Client client = new Client("127.0.0.1", 12345,
                 new BufferedReader(new InputStreamReader(System.in)), System.out);
         client.connectToServer();
+        client.sendPlayerIdentity(false);
 
         // login
         loginView.init();
@@ -44,6 +45,8 @@ public class App extends Application {
 
         // set scene
         Scene scene = new Scene(root, 1500, 800);
+        // add stylesheet
+        scene.getStylesheets().add(getClass().getResource("/Game.css").toExternalForm());
         primaryStage.setTitle("Welcome to RISC");
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -197,4 +197,12 @@ public class Territory {
   public void setCloakStatus(boolean b){
     isCloaked = true;
   }
+
+  public int calculateUnitsPower(){
+    int result = 0;
+    for (Soldiers u: allUnits.values()){
+      result += u.getBonus()*u.getCount();
+    }
+    return result;
+  }
 }

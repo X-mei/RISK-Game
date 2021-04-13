@@ -57,12 +57,15 @@ public class LoginView {
         register.setLayoutX(100);
         register.setLayoutY(200);
         register.setText("register");
+        register.setId("register");
         loginPane.getChildren().add(register);
+        
 
         // button login
         login.setLayoutX(200);
         login.setLayoutY(200);
         login.setText("login");
+        login.setId("login");
         loginPane.getChildren().add(login);
 
         // error

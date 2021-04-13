@@ -1,15 +1,28 @@
-package client;
 
-import javafx.collections.FXCollections;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+package client;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Paint;
 
 public class PlayGameView {
+    HashMap<String, Button> terrs;
     String playerNum;
     AnchorPane playGamePane;
     Label prompt0;
@@ -28,6 +41,12 @@ public class PlayGameView {
     Button attack;
     Button tech;
     Button done;
+    Button terr2P_1;
+    Button terr2P_2;
+    Button terr2P_3;
+    Button terr2P_4;
+    Button terr2P_5;
+    Button terr2P_6;
     TextField input;
     Button confirm;
     Button continueWatch;
@@ -36,11 +55,14 @@ public class PlayGameView {
     ChoiceBox choicesOfLevel2;
     ChoiceBox choicesOfDest;
     ChoiceBox choicesOfSource;
+    HashMap<String, ArrayList<String>> territories;
+    HashMap<String, String> units;
 
     Label error;
     Label errorTech;
 
     public PlayGameView(String userInfo) {
+        this.terrs = new HashMap<>();
         this.playGamePane = new AnchorPane();
         this.prompt0 = new Label(userInfo);
         this.prompt1 = new Label();
@@ -63,14 +85,22 @@ public class PlayGameView {
         this.continueWatch = new Button();
         this.exitGame = new Button();
         this.error = new Label();
+        this.terr2P_1 = new Button();
+        this.terr2P_2 = new Button();
+        this.terr2P_3 = new Button();
+        this.terr2P_4 = new Button();
+        this.terr2P_5 = new Button();
+        this.terr2P_6 = new Button();
         this.errorTech = new Label();
         this.choicesOfLevel1 = new ChoiceBox();
         this.choicesOfLevel2 = new ChoiceBox();
         this.choicesOfDest = new ChoiceBox();
         this.choicesOfSource = new ChoiceBox();
+        this.territories = new HashMap<String, ArrayList<String>>();
+        this.units = new HashMap<String, String>();
     }
 
-    public void init(String playerNum) {
+  public void init(String playerNum) {
         // show img
         try {
             String path = null;
@@ -95,6 +125,65 @@ public class PlayGameView {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        terr2P_1.setLayoutX(135);
+        terr2P_1.setLayoutY(85);
+        terr2P_1.setText("Hanamura");
+        terr2P_1.setVisible(false);
+        terr2P_1.setId("2p1");
+        playGamePane.getChildren().add(terr2P_1);
+        terrs.put("Hanamura", terr2P_1);
+    
+
+        terr2P_2.setLayoutX(140);
+        terr2P_2.setLayoutY(310);
+        terr2P_2.setText("Dorado");
+        terr2P_2.setVisible(false);
+        terr2P_2.setId("2p2");
+        playGamePane.getChildren().add(terr2P_2);
+        terrs.put("Dorado", terr2P_2);
+
+        terr2P_3.setLayoutX(325);
+        terr2P_3.setLayoutY(355);
+        terr2P_3.setText("Hollywood");
+        terr2P_3.setVisible(false);
+        terr2P_3.setId("2p3");
+        playGamePane.getChildren().add(terr2P_3);
+        terrs.put("Hollywood", terr2P_3);
+
+        terr2P_4.setLayoutX(483);
+        terr2P_4.setLayoutY(337);
+        terr2P_4.setText("Ilios");
+        terr2P_4.setVisible(false);
+        terr2P_4.setId("2p4");
+        playGamePane.getChildren().add(terr2P_4);
+        terrs.put("Ilios", terr2P_4);
+
+        terr2P_5.setLayoutX(605);
+        terr2P_5.setLayoutY(200);
+        terr2P_5.setText("Junkertown");
+        terr2P_5.setVisible(false);
+        terr2P_5.setId("2p5");
+        playGamePane.getChildren().add(terr2P_5);
+        terrs.put("Junkertown", terr2P_5);
+
+        terr2P_6.setLayoutX(438);
+        terr2P_6.setLayoutY(65);
+        terr2P_6.setText("Volskaya");
+        terr2P_6.setVisible(false);
+        terr2P_6.setId("2p6");
+        playGamePane.getChildren().add(terr2P_6);
+        terrs.put("Volskaya", terr2P_6);
+
+        if(playerNum.equals("2")){
+            terr2P_1.setVisible(true);
+            terr2P_2.setVisible(true);
+            terr2P_3.setVisible(true);
+            terr2P_4.setVisible(true);
+            terr2P_5.setVisible(true);
+            terr2P_6.setVisible(true);
+        }
+        
         promptAM.setLayoutX(40);
         promptAM.setLayoutY(495);
         promptAM.setText("Please enter the action: src dest count Level.");
@@ -183,6 +272,67 @@ public class PlayGameView {
         playGamePane.getChildren().add(errorTech);
 
     }
+
+  public void recvTerrInfo(HashMap<String, ArrayList<String>> territories, HashMap<String, String> units){
+    this.territories = territories;
+    this.units = units;
+    for(String terrName :terrs.keySet()){
+      BackgroundFill backgroundfill = new BackgroundFill(Paint.valueOf("#CDCDB4"), null, null);
+      Background background = new Background(backgroundfill);
+      terrs.get(terrName).setBackground(background);
+    }
+    for(String playerName: territories.keySet()){
+      if(playerName.equals("King")){
+        for(String terrName : territories.get(playerName)){
+          BackgroundFill backgroundfill = new BackgroundFill(Paint.valueOf("#FFEC8B"), null, null);
+          Background background = new Background(backgroundfill);
+          terrs.get(terrName).setBackground(background);
+        }
+      }
+
+       if(playerName.equals("Red")){
+        for(String terrName : territories.get(playerName)){
+          BackgroundFill backgroundfill = new BackgroundFill(Paint.valueOf("#CD5555"), null, null);
+          Background background = new Background(backgroundfill);
+          terrs.get(terrName).setBackground(background);
+        }
+      }
+
+       if(playerName.equals("Pink")){
+        for(String terrName : territories.get(playerName)){
+          BackgroundFill backgroundfill = new BackgroundFill(Paint.valueOf("#FFE4E1"), null, null);
+          Background background = new Background(backgroundfill);
+          terrs.get(terrName).setBackground(background);
+        }
+      }
+         
+       if(playerName.equals("Blue")){
+        for(String terrName : territories.get(playerName)){
+          BackgroundFill backgroundfill = new BackgroundFill(Paint.valueOf("#AFEEEE"), null, null);
+          Background background = new Background(backgroundfill);
+          terrs.get(terrName).setBackground(background);
+        }
+      }
+                
+       if(playerName.equals("Green")){
+        for(String terrName : territories.get(playerName)){
+          BackgroundFill backgroundfill = new BackgroundFill(Paint.valueOf("#C1FFC1"), null, null);
+          Background background = new Background(backgroundfill);
+          terrs.get(terrName).setBackground(background);
+        }
+      }
+
+    }
+    for(String terrName: terrs.keySet()){
+      Tooltip.install(terrs.get(terrName), new Tooltip("Size = 10\n"));
+    }
+
+    for(String terrName: units.keySet()){
+        Tooltip.install(terrs.get(terrName), new Tooltip("Size = 10\n" + units.get(terrName)));
+    }   
+
+  }
+
 
     public void addPrompt(String prompt) {
         prompt0.setLayoutX(750);
@@ -286,6 +436,8 @@ public class PlayGameView {
         upgrade.setText("Upgrade Soldiers");
         upgrade.setPrefWidth(200);
         playGamePane.getChildren().add(upgrade);
+        String str = "to upgrade";
+        Tooltip.install(upgrade, new Tooltip(str));
 
         attack.setLayoutX(40);
         attack.setLayoutY(570);
