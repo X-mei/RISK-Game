@@ -1,5 +1,8 @@
 package client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -8,12 +11,15 @@ public class SendRoomIDController {
     AssignTerrView assignTerrView;
     Client client;
     String choice;
+    HashMap<String, ArrayList<String>> territories;
+    HashMap<String, String> units;
 
     public SendRoomIDController(SendRoomIDView sendRoomIDView, Client client) {
         this.sendRoomIDView = sendRoomIDView;
         this.assignTerrView = new AssignTerrView();
-
         this.client = client;
+        this.territories = new HashMap<String, ArrayList<String>>();
+        this.units = new HashMap<String, String>();
         confirmAction();
     }
 
@@ -29,7 +35,6 @@ public class SendRoomIDController {
                     int status = client.recvStartStatus();
                     if (status == 1) {
                         String promptAssign = client.recvAssignPrompt();
-                        //TODO: add prompts
                         String[] prompts = client.recvPrompts();
                         assignTerrView.init(playerNum);
                         assignTerrView.addPrompt2(prompt);
@@ -45,6 +50,8 @@ public class SendRoomIDController {
                         String info = client.recvBoardPrompt();
                         String instructionMsg = client.recvInstruction();
 
+                        parseTerritory(info);
+
                         playGameView.addPrompt(boardMsg);
                         playGameView.addPrompt2(instructionMsg);
                         App.root.getChildren().remove(sendRoomIDView.roomIDPane);
@@ -57,5 +64,42 @@ public class SendRoomIDController {
                 }
             }
         });
+    }
+
+    /**
+     * parse the string into hashmap
+     */
+    public void parseTerritory(String info) {
+      String[] strArr = info.split("\n");
+
+      // add own territory
+      String pName = strArr[0];
+      ArrayList<String> terrs= new ArrayList<String>();
+      int i = 1;
+      while(!strArr[i].equals("")) {
+        String[] terrInfo = strArr[i].split(":");
+        terrs.add(terrInfo[0]);
+        i++;
+        units.put(terrInfo[0], terrInfo[1]);
+      }
+      territories.put(pName, terrs);
+      i = i + 2;
+      // add enemy's territory
+      while(i < strArr.length) {
+        String[] terrInfo = strArr[i].split(":");
+        if (territories.containsKey(terrInfo[0])) {
+          ArrayList<String> enemyTerrs = territories.get(terrInfo[0]);
+          enemyTerrs.add(terrInfo[1]);
+          territories.put(terrInfo[0], enemyTerrs);
+        } else {
+          ArrayList<String> enemyTerrs = new ArrayList<String>();
+          enemyTerrs.add(terrInfo[1]);
+          territories.put(terrInfo[0], enemyTerrs);
+        }
+        units.put(terrInfo[1], terrInfo[2]);
+        i++;
+      }
+      System.out.println(territories.entrySet());
+      System.out.println(units.entrySet());
     }
 }

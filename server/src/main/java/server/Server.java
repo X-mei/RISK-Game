@@ -36,7 +36,7 @@ public class Server {
     this.disconnectedGames = new HashMap<Integer, Integer>();
     // create rooms in advance for 2-5 people
     for (int i = 2; i <= 5; i++) {
-      gameRooms.put(i, new GameServer(portNum, i, gameBoards, disconnectedUsers, disconnectedGames));
+      gameRooms.put(i, new GameServer(portNum, i, gameBoards, disconnectedUsers, disconnectedGames, 0));
     }
   }
 
@@ -47,9 +47,17 @@ public class Server {
   public void assignRoom() throws IOException {
     // accept the client player
     Socket clientSocket = serverSocket.accept();
-    System.out.println("One player is connected.");
     DataInputStream input = new DataInputStream(clientSocket.getInputStream());
     DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
+    String info = input.readUTF();
+    boolean aiPlayer;
+    if (info.equals("0")) {
+      aiPlayer = true;
+      System.out.println("One ai player is connected.");
+    } else {
+      aiPlayer = false;
+      System.out.println("One human player is connected.");
+    }
     ServerHandler server = new ServerHandler(input, output, clientSocket, portNum, 
                                               gameRooms, userLogInfo, currentGames, 
                                               gameIDs, gameBoards, disconnectedUsers,

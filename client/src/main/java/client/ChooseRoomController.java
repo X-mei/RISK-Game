@@ -41,23 +41,31 @@ public class ChooseRoomController {
 
             System.out.println(choice.substring(0, 1));
             client.sendGameRoom(choice.substring(0, 1));
-            assignTerrView.init(choice.substring(0, 1));
-            App.root.getChildren().remove(chooseRoomView.chooseRoomPane);
-            App.root.getChildren().add(assignTerrView.assignTerrPane);
+            if (!choice.substring(0, 1).equals("0")) {
+              assignTerrView.init(choice.substring(0, 1));
+              App.root.getChildren().remove(chooseRoomView.chooseRoomPane);
+              App.root.getChildren().add(assignTerrView.assignTerrPane);
 
-            App.setTimeout(() -> {
-                String playerNum = client.recvNameAndNum();
-                prompt = client.recvPrompt();
-                int status = client.recvStartStatus();
-                promptAssign = client.recvAssignPrompt();
-                String[] prompts = client.recvPrompts();
-                Platform.runLater(() -> {
-                    assignTerrView.addPrompt2(prompt);
-                    assignTerrView.addPrompt3(promptAssign);
-                    assignTerrView.addPromptOfTerritory(prompts);
-                    AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client, choice.substring(0,1));
-                });
-            }, 200);
+              App.setTimeout(() -> {
+                  String playerNum = client.recvNameAndNum();
+                  prompt = client.recvPrompt();
+                  int status = client.recvStartStatus();
+                  promptAssign = client.recvAssignPrompt();
+                  String[] prompts = client.recvPrompts();
+                  Platform.runLater(() -> {
+                      assignTerrView.addPrompt2(prompt);
+                      assignTerrView.addPrompt3(promptAssign);
+                      assignTerrView.addPromptOfTerritory(prompts);
+                      AssignTerrController assignTerrController = new AssignTerrController(assignTerrView, client, choice.substring(0,1));
+                  });
+              }, 200);
+            } else {
+              WatchingAIGameView watchingAIGameView = new WatchingAIGameView();
+              watchingAIGameView.init();
+              App.root.getChildren().remove(chooseRoomView.chooseRoomPane);
+              App.root.getChildren().add(watchingAIGameView.watchAIGamePane);
+            }
+            
 
 
         });

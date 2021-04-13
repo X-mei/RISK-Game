@@ -14,6 +14,7 @@ public class ChooseRoomView {
     RadioButton r3;
     RadioButton r4;
     RadioButton r5;
+    RadioButton r6;
     ToggleGroup tg;
     Button confirm;
 
@@ -25,6 +26,7 @@ public class ChooseRoomView {
         this.r3 = new RadioButton("4 human players");
         this.r4 = new RadioButton("5 human players");
         this.r5 = new RadioButton("1 human player vs AI player");
+        this.r6 = new RadioButton("0 human player, AI player vs AI player");
         this.tg = new ToggleGroup();
         this.confirm = new Button();
     }
@@ -52,15 +54,19 @@ public class ChooseRoomView {
         r5.setToggleGroup(tg);
         r5.setLayoutX(20);
         r5.setLayoutY(350);
+        r6.setToggleGroup(tg);
+        r6.setLayoutX(20);
+        r6.setLayoutY(400);
         chooseRoomPane.getChildren().add(r1);
         chooseRoomPane.getChildren().add(r2);
         chooseRoomPane.getChildren().add(r3);
         chooseRoomPane.getChildren().add(r4);
         chooseRoomPane.getChildren().add(r5);
+        chooseRoomPane.getChildren().add(r6);
 
         // confirm button
         confirm.setLayoutX(200);
-        confirm.setLayoutY(450);
+        confirm.setLayoutY(500);
         confirm.setText("confirm");
         chooseRoomPane.getChildren().add(confirm);
 

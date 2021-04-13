@@ -891,7 +891,7 @@ private String getSoldierNameByBonus(int Bonus){
     //ans += spyInfoDisplay(p) + "\n";
     //add adjacent enemy territories info
     //ans += adjacentEnemyTerrInfo(p);
-    return "\n" + s1;
+    return s1;
   }
 
 

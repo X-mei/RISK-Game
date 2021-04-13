@@ -46,6 +46,22 @@ public class Client {
   }
 
   /**
+   * This function sends whether the client is AI player or not
+   * @param choice
+   */
+  public void sendPlayerIdentity(boolean aiPlayer) {
+    try {
+      if (aiPlayer) {
+        dataOut.writeUTF("0");
+      } else {
+        dataOut.writeUTF("1");
+      }
+    } catch(IOException e) {
+      out.println("send failed");
+    }
+  }
+
+  /**
    * This function sends the choice of login or register to server
    * @param choice
    */

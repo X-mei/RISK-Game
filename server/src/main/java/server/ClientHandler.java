@@ -81,9 +81,10 @@ public class ClientHandler extends Thread {
     int playerNum = board.getPlayerNum();
     try{
       // send playerInfo
+      System.out.println("ready to send to " + playerName);
       output.writeUTF(playerInfo);
       output.writeUTF(Integer.toString(playerNum));
-      output.writeUTF("Hi, You are player " + playerName + ", and this gameID is " + gameID);
+      output.writeUTF("Hi, You are player " + playerName + ", and this gameID is " + gameID + ", all " + playerNum + " players");
       output.writeUTF(Integer.toString(statusFlag));
       
       // ask client to assign territory
