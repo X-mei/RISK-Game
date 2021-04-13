@@ -35,7 +35,7 @@ public class AssignTerrController {
                     assignTerrView.input2.getText() + "," +
                     assignTerrView.input3.getText());
             String[] inputs;
-            if (playerNum.equals("2") || playerNum.equals("3")) {
+            if (playerNum.equals("2") || playerNum.equals("3") || playerNum.equals("1") || playerNum.equals("0")) {
                 inputs = new String[3];
                 inputs[0] = assignTerrView.input1.getText();
                 inputs[1] = assignTerrView.input2.getText();

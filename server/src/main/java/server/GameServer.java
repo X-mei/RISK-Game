@@ -36,10 +36,13 @@ public class GameServer implements Runnable {
   private HashMap<Integer, Board> gameBoards;
   private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
   private HashMap<Integer, Integer> disconnectedGames;
+  private int aiNum;
+  private AIPlayer aiPlayer1;
+  private AIPlayer aiPlayer2;
 
   public GameServer(int portNum, int playerNum, HashMap<Integer, Board> gameBoards,
                       HashMap<Integer, HashMap<String, String>> disconnectedUsers,
-                      HashMap<Integer, Integer> disconnectedGames) {
+                      HashMap<Integer, Integer> disconnectedGames, int aiNum) {
     this.mapFac = new MapFactory();
     this.UnitsFac = new UnitsFactory();
     this.board = null;
@@ -58,6 +61,7 @@ public class GameServer implements Runnable {
     this.gameBoards = gameBoards;
     this.disconnectedUsers = disconnectedUsers;
     this.disconnectedGames = disconnectedGames;
+    this.aiNum = aiNum;
   }
 
   public void setGameID(int gameID) {
@@ -69,6 +73,22 @@ public class GameServer implements Runnable {
    */
   public void addClient(Socket clientSock) {
     clientSocks.add(clientSock);
+  }
+
+  /**
+   * This function adds aiplayer
+   * @param aiplayer
+   */
+  public void addAIPlayer1(AIPlayer aiPlayer) {
+    this.aiPlayer1 = aiPlayer;
+  }
+
+  /**
+   * This function adds aiplayer
+   * @param aiplayer
+   */
+  public void addAIPlayer2(AIPlayer aiPlayer) {
+    this.aiPlayer2 = aiPlayer;
   }
 
   public void addUsername(String username) {
@@ -98,6 +118,12 @@ public class GameServer implements Runnable {
       Board board = new Board(playerNum, mapFac, UnitsFac);  
       this.board = board;
       gameBoards.put(gameID, board);
+      if (aiNum == 1) {
+        aiPlayer1.addBoard(board);
+      } else if (aiNum == 2) {
+        aiPlayer1.addBoard(board);
+        aiPlayer2.addBoard(board);
+      }
       for (Socket client: clientSocks) {
         DataInputStream input = new DataInputStream(client.getInputStream());
         DataOutputStream output = new DataOutputStream(client.getOutputStream());

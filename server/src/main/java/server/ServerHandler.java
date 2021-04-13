@@ -24,6 +24,7 @@ public class ServerHandler extends Thread {
   private HashMap<GameServer, Integer> gameIDs;
   private String username;
   private static int gameID = 1000;
+  private static String aiUsername = "AIUSER";
   private HashMap<Integer, Board> gameBoards;
   private HashMap<Integer, HashMap<String, String>> disconnectedUsers;
   private HashMap<Integer, Integer> disconnectedGames;
@@ -48,8 +49,8 @@ public class ServerHandler extends Thread {
   }
 
   public void run () {
-    login();
-    askInfo();
+      login();
+      askInfo();
   }
 
   /**
@@ -133,11 +134,35 @@ public class ServerHandler extends Thread {
       String received = input.readUTF();
       if (received.equals("p")) {
         enterRoom();
+      } else if (received.equals("a1")) {
+        assignRoomForAI(1);
+      } else if (received.equals("a2")) {
+        assignRoomForAI(0);
       } else {
         assignRoom();
       }
     } catch (IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  /**
+   * This function assigns room for ai
+   */
+  public void assignRoomForAI(int aiNum) {
+    System.out.println("assign Room for ai");
+    GameServer gameServer = gameRooms.get(aiNum);
+    gameServer.addClient(clientSocket);
+    // ready to start the game
+    if (gameServer.isReadyToStart()) {
+      // store corresponding gameID
+      gameIDs.put(gameServer, gameID);
+      gameServer.setGameID(gameID);
+      System.out.println("This room is ready to start, gameID: " + gameID);
+      gameID++;
+      // detach a new thread for a room
+      Thread newGame = new Thread(gameServer);
+      newGame.start();
     }
   }
 
@@ -205,35 +230,51 @@ public class ServerHandler extends Thread {
        * 1 human player vs AI player
        */
       if (playerNum == 1) {
-        System.out.println("Get a room for this player and AI player. ");
         System.out.println("Create a new room for player and AI player.");
-        GameServer gameServer = new GameServer(portNum, 2, gameBoards, disconnectedUsers, disconnectedGames);
+        GameServer gameServer = new GameServer(portNum, 2, gameBoards, disconnectedUsers, disconnectedGames, 1);
         gameServer.addClient(clientSocket);
         gameServer.addUsername(username);
-        // TODO: add AI player
-        HashSet<String> users = new HashSet<>();
-        users.add(username);
-        currentGames.put(gameID, users);
-        // ready to start the game
-        if (gameServer.isReadyToStart()) {
-          // store corresponding gameID
-          gameIDs.put(gameServer, gameID);
-          gameServer.setGameID(gameID);
-          System.out.println("This room is ready to start, playerNum: " + playerNum + " gameID: " + gameID);
-          gameID++;
-          // detach a new thread for a room
-          Thread newGame = new Thread(gameServer);
-          newGame.start();
-        }
-      } else {
-        /**
-         * normal games
-         */
+        gameRooms.put(1, gameServer);
+        // add AI player and connect to server
+        AIPlayer aiPlayer = new AIPlayer("127.0.0.1", 12345, System.out, 1, aiUsername);
+        gameServer.addAIPlayer1(aiPlayer);
+        aiUsername += "1";
+        gameServer.addUsername("aiplayer");
+        Thread ai = new Thread(aiPlayer);
+        ai.start();
+
+      } 
+      /**
+       * 2 AI players
+       */
+      else if (playerNum == 0) {
+        System.out.println("Create a new room for 2 AI players.");
+        GameServer gameServer = new GameServer(portNum, 2, gameBoards, disconnectedUsers, disconnectedGames, 2);
+        gameRooms.put(0, gameServer);
+        // add 2 AI players and connect to server
+        AIPlayer aiPlayer1 = new AIPlayer("127.0.0.1", 12345, System.out, 2, aiUsername);
+        gameServer.addAIPlayer1(aiPlayer1);
+        aiUsername += "1";
+        gameServer.addUsername("aiplayer1");
+        Thread ai1 = new Thread(aiPlayer1);
+        ai1.start();
+        AIPlayer aiPlayer2 = new AIPlayer("127.0.0.1", 12345, System.out, 2, aiUsername);
+        gameServer.addAIPlayer1(aiPlayer2);
+        aiUsername += "1";
+        gameServer.addUsername("aiplayer2");
+        Thread ai2 = new Thread(aiPlayer2);
+        ai2.start();
+
+      } 
+      /**
+       * normal games
+       */
+      else {
         System.out.println("Get a room for playerNum: " + playerNum);
         GameServer gameServer = gameRooms.get(playerNum);
         if (gameServer.isReadyToStart()) {
           System.out.println("Create a new room for playerNum: " + playerNum);
-          gameServer = new GameServer(portNum, playerNum, gameBoards, disconnectedUsers, disconnectedGames);
+          gameServer = new GameServer(portNum, playerNum, gameBoards, disconnectedUsers, disconnectedGames, 0);
           gameRooms.put(playerNum, gameServer);
         }
         gameServer.addClient(clientSocket);
