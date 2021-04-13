@@ -4,11 +4,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
+import shared.BasicAction;
 import shared.Board;
+import shared.Player;
+import shared.Territory;
 
 /**
  * This class is for AI player to play with human player
@@ -222,9 +228,66 @@ public class AIPlayer implements Runnable {
   // return a hashmap, <actionName, actionString> eg: "A", "Dorado Hanamura 3 Lv1"
   // the last one will be "D"
   // One problem, key may not repeat!
-  public LinkedHashMap<String, String> decideActionChoice() {
-    LinkedHashMap<String, String> actions = new LinkedHashMap<String, String>();
-    return actions;
+
+  /**
+   * This class generate the actions to perform in the string of format
+   * @param actions the list of actions to to put into
+   */
+  public void decideActionChoice(ArrayList<String> actions) {
+    generateAttackDecisions(actions);
+    actions.add("T");
+    actions.add("D");
+  }
+
+  /**
+   * This class generate the attack action, it will call other method to generate move
+   * and upgrade action to make attack possible.
+   * @param actions is the list of actions to perform
+   */
+  public void generateAttackDecisions(ArrayList<String> actions){
+    Player p = board.getPlayerByName(playerName);
+    // The set stores all the name of potential target to attack
+    HashSet<String> set = new HashSet<>();
+    int lowest_score = Integer.MAX_VALUE;
+    String potentialTarget;
+    // For all the territory owned by the AI player
+    for (Territory t: p.getTerritoryList()){
+      // For all the neighbor of this territory
+      for (Territory neighbor: t.getNeighbours()){
+        // If the neighbor is owned by player herself then pass
+        if (neighbor.getOwner().equals(t.getOwner())){
+          continue;
+        }
+        // If already calculated the power score then pass
+        if (set.contains(t.getTerritoryName())){
+          continue;
+        }
+        else {
+          // Calculate the score
+          int score = neighbor.calculateUnitsPower();
+          // Update the lowest score and potential target
+          if (score < lowest_score){
+            potentialTarget = neighbor.getTerritoryName();
+            lowest_score = score;
+          }
+          set.add(t.getTerritoryName());
+        }
+      }
+    }
+    if (lowest_score == Integer.MAX_VALUE){
+      return;
+    }
+    else {
+
+    }
+  }
+
+  public void generateMoveDecisions(ArrayList<String> actions){
+
+  }
+
+  public void generateUpgradeDecisions(ArrayList<String> actions){
+
   }
 
   /**
@@ -267,20 +330,23 @@ public class AIPlayer implements Runnable {
         }
         out.println(board.displaySinlgePlayerBoardV3(playerName));
         // send a series of actions
-        LinkedHashMap<String, String> actions = decideActionChoice();
-        for (String actionName : actions.keySet()) {
+        ArrayList<String> actions = new ArrayList<>();
+        decideActionChoice(actions);
+        for (String action : actions) {
           // recv "what would you like to do"
           String instructionMsg = recvInstruction();
           // send action choice
-          dataOut.writeUTF(actionName);
-          if (!actionName.equals("D")) {
-            if (actionName.equals("T")) {
+          String temp = ""+action.charAt(0);
+          dataOut.writeUTF(temp);
+          if (!temp.equals("D")) {
+            if (temp.equals("T")) {
               continue;
             } else {
               // recv "input str format"
               String prompt = dataIn.readUTF();
+
               // send action string
-              dataOut.writeUTF(actions.get(actionName));
+              dataOut.writeUTF(temp.substring(2));
             }
           } else {
             // recv "wait for other players to perform action"
