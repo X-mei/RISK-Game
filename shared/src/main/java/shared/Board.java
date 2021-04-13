@@ -54,7 +54,7 @@ public class Board {
     this.UnitName = new LinkedHashSet<>();
     unitNameSetup();
     this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null))))));
-    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(new UnitMovingChecker(null)));
+    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(null));//new SpyUnitMovingChecker(null)));
     this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
@@ -73,7 +73,7 @@ public class Board {
     soldierBonusLevelTable.put("Lv5", 8);
     soldierBonusLevelTable.put("Lv6", 11);
     soldierBonusLevelTable.put("Lv7", 15);
-    soldierBonusLevelTable.put("Spy", -1);
+    soldierBonusLevelTable.put("Tel", 5);
 
     this.boardRandomGenerator = new Random();
     this.soldierRefTable = new SoldierReferenceTable();
@@ -139,7 +139,6 @@ public class Board {
     UnitName.add("Lv5");
     UnitName.add("Lv6");
     UnitName.add("Lv7");
-    UnitName.add("Spy");
     UnitName.add("Tel");
   }
   
@@ -174,7 +173,6 @@ public class Board {
     unitsCreateFunction.put("Lv5", (count) -> UnitsF.createLevel5Soldiers(count));
     unitsCreateFunction.put("Lv6", (count) -> UnitsF.createLevel6Soldiers(count));
     unitsCreateFunction.put("Lv7", (count) -> UnitsF.createLevel7Soldiers(count));
-    unitsCreateFunction.put("Spy", (count) -> UnitsF.createSpySoldiers(count));
     unitsCreateFunction.put("Tel", (count) -> UnitsF.createTeleportSoldiers(count));
   }
 
@@ -236,6 +234,20 @@ public class Board {
     // }
     temp.put(Sname, temp.get(Sname) - cnt);
   }
+
+  
+  /**
+   * Get the count of spy on a given territory by the name of the owner of spy
+   * @param OName the name of the owner
+   * @param TName the name of the territory
+   * @return the count of spy by the given name on a given territory
+   */
+  //public int getSpyCountByName(String OName, String TName){
+  //  Territory t = allTerritory.get(TName);
+  //  return t.checkSpyCount(OName);
+  //}
+  
+  
 
   /**
    * Set all kinds of units on one territory 
@@ -512,11 +524,8 @@ private String getSoldierNameByBonus(int Bonus){
   else if(name.equals("Lv7")){
     return new Level7Soldiers(1);
   }
-  else if(name.equals("Tel")){
+  else{
     return new TeleportSoldiers(1);
-  }
-  else {
-    return new SpySoldiers(1);
   }
 }
 

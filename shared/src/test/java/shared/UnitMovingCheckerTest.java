@@ -9,12 +9,12 @@ public class UnitMovingCheckerTest {
   public void test_CheckUnitMoving() {
     Board b = new Board(2, new MapFactory(), new UnitsFactory());
     RuleChecker c = new UnitMovingChecker(null);  
-    b.singleTerritoryUnitSetup("Dorado", new int[]{5, 0, 0, 0, 0, 0, 0, 0, 0});
-    b.singleTerritoryUnitSetup("Hanamura", new int[]{3, 10, 0, 0, 0, 0, 0, 0, 0});
-    b.singleTerritoryUnitSetup("Hollywood", new int[]{0, 0, 5, 0, 0, 0, 0, 0, 0});
-    b.singleTerritoryUnitSetup("Volskaya", new int[]{1, 0, 0, 5, 0, 0, 0, 0, 0});
-    b.singleTerritoryUnitSetup("Ilios", new int[]{0, 0, 0, 0, 10, 0, 0, 0, 0});
-    b.singleTerritoryUnitSetup("Junkertown", new int[]{5, 0, 0, 0, 0, 0, 5, 0, 0});
+    b.singleTerritoryUnitSetup("Dorado", new int[]{5, 0, 0, 0, 0, 0, 0, 0});
+    b.singleTerritoryUnitSetup("Hanamura", new int[]{3, 10, 0, 0, 0, 0, 0, 0});
+    b.singleTerritoryUnitSetup("Hollywood", new int[]{0, 0, 5, 0, 0, 0, 0, 0});
+    b.singleTerritoryUnitSetup("Volskaya", new int[]{1, 0, 0, 5, 0, 0, 0, 0});
+    b.singleTerritoryUnitSetup("Ilios", new int[]{0, 0, 0, 0, 10, 0, 0, 0});
+    b.singleTerritoryUnitSetup("Junkertown", new int[]{5, 0, 0, 0, 0, 0, 5, 0});
     BasicAction b1 = new Move("King", "Dorado B 10 Lv1");
     BasicAction b2 = new Move("King", "Hanamura Hollywood 5 Lv2");
     BasicAction b3 = new Attack("King", "Hollywood B 9 Lv3");
