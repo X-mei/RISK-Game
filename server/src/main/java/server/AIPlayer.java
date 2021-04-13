@@ -72,7 +72,7 @@ public class AIPlayer implements Runnable {
 
   /**
    * This function sends whether the client is AI player or not
-   * @param choice
+   * @param
    */
   public void sendPlayerIdentity() {
     try {
@@ -84,7 +84,7 @@ public class AIPlayer implements Runnable {
 
   /**
    * This function sends the choice of login or register to server
-   * @param choice
+   * @param
    */
   public void loginOrReg() {
     try {
@@ -98,8 +98,8 @@ public class AIPlayer implements Runnable {
 
   /**
    * This function sends login info to server
-   * @param username
-   * @param password
+   * @param
+   * @param
    * @return true or false to indicate the success of login
    */
   public boolean login() {
@@ -120,7 +120,7 @@ public class AIPlayer implements Runnable {
 
   /**
    * This function gives the choice to server
-   * @param choice
+   * @param
    */
   public void answerInfo() {
     try {
@@ -250,6 +250,7 @@ public class AIPlayer implements Runnable {
     HashSet<String> set = new HashSet<>();
     int lowest_score = Integer.MAX_VALUE;
     String potentialTarget;
+    String potentialSrc;
     // For all the territory owned by the AI player
     for (Territory t: p.getTerritoryList()){
       // For all the neighbor of this territory
@@ -268,6 +269,7 @@ public class AIPlayer implements Runnable {
           // Update the lowest score and potential target
           if (score < lowest_score){
             potentialTarget = neighbor.getTerritoryName();
+            potentialSrc = t.getTerritoryName();
             lowest_score = score;
           }
           set.add(t.getTerritoryName());
@@ -282,11 +284,11 @@ public class AIPlayer implements Runnable {
     }
   }
 
-  public void generateMoveDecisions(ArrayList<String> actions){
+  public void generateMoveDecisions(ArrayList<String> actions, int scoreReq){
 
   }
 
-  public void generateUpgradeDecisions(ArrayList<String> actions){
+  public void generateUpgradeDecisions(ArrayList<String> actions, int scoreReq){
 
   }
 
