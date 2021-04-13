@@ -259,7 +259,7 @@ public class ServerHandler extends Thread {
         Thread ai1 = new Thread(aiPlayer1);
         ai1.start();
         AIPlayer aiPlayer2 = new AIPlayer("127.0.0.1", 12345, System.out, 2, aiUsername);
-        gameServer.addAIPlayer1(aiPlayer2);
+        gameServer.addAIPlayer2(aiPlayer2);
         aiUsername += "1";
         gameServer.addUsername("aiplayer2");
         Thread ai2 = new Thread(aiPlayer2);
