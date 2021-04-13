@@ -37,31 +37,76 @@
 }
 #2p1:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),10.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p2:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),10.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p3:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),10.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p4:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),10.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p5:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),10.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p6:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),10.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p1:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p2:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p3:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p4:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p5:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p6:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p7:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p8:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#3p9:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
     -fx-cursor: hand;
 }
