@@ -1,12 +1,37 @@
-.root
-{
-    -fx-background-color: #FF6A6A;
+#Hanamura{
+    -fx-background-color: #CDCDB4;
 }
-.button
-{
-    -fx-background-color: red;
+#Dorado{
+    -fx-background-color: #CDCDB4;
 }
-.button:hover
+#Volskaya{
+    -fx-background-color: #CDCDB4;
+}
+#Junkertown{
+    -fx-background-color: #CDCDB4;
+}
+#Ilios{
+    -fx-background-color: #CDCDB4;
+}
+#Hollywood{
+    -fx-background-color: #CDCDB4;
+}
+#Hanamura:hover{
+    -fx-background-color: #8FBC8F;
+}
+#Dorado:hover{
+    -fx-background-color: #8FBC8F;
+}
+#Volskaya:hover{
+    -fx-background-color: #8FBC8F;
+}
+#Junkertown:hover{
+    -fx-background-color: #8FBC8F;
+}
+#Ilios:hover{
+    -fx-background-color: #8FBC8F;
+}
+#Hollywood:hover
 {
-    -fx-background-color: green;
+    -fx-background-color: #8FBC8F;
 }
