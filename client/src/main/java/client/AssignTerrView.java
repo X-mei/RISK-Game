@@ -1,14 +1,19 @@
 package client;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
-import java.io.FileInputStream;
-import java.io.IOException;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Paint;
 
 public class AssignTerrView {
     AnchorPane assignTerrPane;
@@ -18,6 +23,12 @@ public class AssignTerrView {
     Label promptTerri1;
     Label promptTerri2;
     Label promptTerri3;
+    Button terr2P_1;
+    Button terr2P_2;
+    Button terr2P_3;
+    Button terr2P_4;
+    Button terr2P_5;
+    Button terr2P_6;
     Label error;
     TextField input1;
     TextField input2;
@@ -34,6 +45,12 @@ public class AssignTerrView {
         this.promptTerri2 = new Label();
         this.promptTerri3 = new Label();
         this.error = new Label();
+        this.terr2P_1 = new Button();
+        this.terr2P_2 = new Button();
+        this.terr2P_3 = new Button();
+        this.terr2P_4 = new Button();
+        this.terr2P_5 = new Button();
+        this.terr2P_6 = new Button();
         this.input1 = new TextField();
         this.input2 = new TextField();
         this.input3 = new TextField();
@@ -67,7 +84,61 @@ public class AssignTerrView {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        terr2P_1.setLayoutX(135);
+        terr2P_1.setLayoutY(85);
+        terr2P_1.setText("Hanamura");
+        terr2P_1.setVisible(false);
+        terr2P_1.setId("Hanamura");
+        assignTerrPane.getChildren().add(terr2P_1);
+        BackgroundFill backgroundFill = new BackgroundFill(Paint.valueOf("#8FBC8F"), new CornerRadii(20), Insets.EMPTY);
+        Background background = new Background(backgroundFill);
+        terr2P_1.setBackground(background);
 
+        terr2P_2.setLayoutX(140);
+        terr2P_2.setLayoutY(310);
+        terr2P_2.setText("Dorado");
+        terr2P_2.setVisible(false);
+        terr2P_2.setId("Dorado");
+        assignTerrPane.getChildren().add(terr2P_2);
+
+        terr2P_3.setLayoutX(325);
+        terr2P_3.setLayoutY(355);
+        terr2P_3.setText("Hollywood");
+        terr2P_3.setId("Hollywood");
+        terr2P_3.setVisible(false);
+        assignTerrPane.getChildren().add(terr2P_3);
+        
+        terr2P_4.setLayoutX(483);
+        terr2P_4.setLayoutY(337);
+        terr2P_4.setText("Ilios");
+        terr2P_4.setId("Ilios");
+        terr2P_4.setVisible(false);
+        assignTerrPane.getChildren().add(terr2P_4);
+       
+        terr2P_5.setLayoutX(605);
+        terr2P_5.setLayoutY(200);
+        terr2P_5.setText("Junkertown");
+        terr2P_5.setVisible(false);
+        terr2P_5.setId("Junkertown");
+        assignTerrPane.getChildren().add(terr2P_5);
+
+        terr2P_6.setLayoutX(438);
+        terr2P_6.setLayoutY(65);
+        terr2P_6.setText("Volskaya");
+        terr2P_6.setVisible(false);
+        terr2P_6.setId("Volskaya");
+        assignTerrPane.getChildren().add(terr2P_6);
+
+         if(playerNum.equals("2")){
+            terr2P_1.setVisible(true);
+            terr2P_2.setVisible(true);
+            terr2P_3.setVisible(true);
+            terr2P_4.setVisible(true);
+            terr2P_5.setVisible(true);
+            terr2P_6.setVisible(true);
+        }
+         
         // prompt: wait
         prompt1.setLayoutX(750);
         prompt1.setLayoutY(75);

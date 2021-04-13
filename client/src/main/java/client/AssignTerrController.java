@@ -59,6 +59,7 @@ public class AssignTerrController {
                     Platform.runLater(() -> {
                         playGameView.addPrompt(boardMsg);
                         playGameView.addPrompt2(instructionMsg);
+                        playGameView.recvTerrInfo(territories, units);
                         App.root.getChildren().remove(assignTerrView.assignTerrPane);
                         App.root.getChildren().add(playGameView.playGamePane);
                         PlayGameController playGameController = new PlayGameController(playGameView, client);
