@@ -14,7 +14,6 @@ public class Board {
   protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;
   private final RuleChecker moveRuleChecker;
   private final RuleChecker spyRuleChecker;
-  private final RuleChecker teleportAttackRuleChecker;
   private final RuleChecker attackRuleChecker;
   private final SpecialRuleChecker upgradeRuleChecker;
   private HashMap<String, HashMap<String, Integer>> tempCount;
@@ -53,10 +52,9 @@ public class Board {
     }
     this.UnitName = new LinkedHashSet<>();
     unitNameSetup();
-    this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null))))));
-    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(new UnitMovingChecker(null)));
-    this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
-    this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
+    this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(null)))));
+    this.spyRuleChecker = new ExistanceChecker(new OwnerChecker(new NeighborChecker(new UnitMovingChecker(null))));
+    this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(null))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
     this.tempCount = new HashMap<String, HashMap<String, Integer>>();
     //create a tech upgrade reference table
@@ -140,7 +138,6 @@ public class Board {
     UnitName.add("Lv6");
     UnitName.add("Lv7");
     UnitName.add("Spy");
-    UnitName.add("Tel");
   }
   
   
@@ -175,7 +172,6 @@ public class Board {
     unitsCreateFunction.put("Lv6", (count) -> UnitsF.createLevel6Soldiers(count));
     unitsCreateFunction.put("Lv7", (count) -> UnitsF.createLevel7Soldiers(count));
     unitsCreateFunction.put("Spy", (count) -> UnitsF.createSpySoldiers(count));
-    unitsCreateFunction.put("Tel", (count) -> UnitsF.createTeleportSoldiers(count));
   }
 
   /**
@@ -337,11 +333,11 @@ public class Board {
     }
   }
 
-  public synchronized void processOneTurnSpyMove(LinkedHashSet<BasicAction> actionSet){
-    for (BasicAction a : actionSet) {
-      processOneSpyMoveAction(a);
-    }
-  }
+  // public synchronized void processOneTurnSpyMove(LinkedHashSet<BasicAction> actionSet){
+  //   for (BasicAction a : actionSet) {
+  //     processOneSpyMoveAction(a);
+  //   }
+  // }
 
   public synchronized void processOneTurnCloak(LinkedHashSet<CloakAction> actionSet){
     for (CloakAction a : actionSet) {
@@ -512,9 +508,6 @@ private String getSoldierNameByBonus(int Bonus){
   else if(name.equals("Lv7")){
     return new Level7Soldiers(1);
   }
-  else if(name.equals("Tel")){
-    return new TeleportSoldiers(1);
-  }
   else {
     return new SpySoldiers(1);
   }
@@ -535,7 +528,7 @@ private String getSoldierNameByBonus(int Bonus){
     spyActPlayer.updateFoodResource(-foodConsume);  //update player's food by minus the spy move cost
     srcT.deleteSpy(spyActOwner);  //delete spy on src
     destT.addSpy(spyActOwner);  //add spy on dest
-    spyActPlayer.updateSpyLocation(dest); //update spy location
+    spyActPlayer.updateSpyLocation(src, dest); //update spy location
   }
 
 
@@ -602,9 +595,9 @@ private String getSoldierNameByBonus(int Bonus){
     Soldiers sLevelSoldier = getSoldiersByName(soldierSLevel, src);
     int updateSoldierNum = upAct.getCount();
     sLevelSoldier.updateCount(sLevelSoldier.getCount() - updateSoldierNum);
-    actionPlayer.updateSpyLocation(src);  //add the location of the new spy
+    actionPlayer.addnewSpyLocation(src, updateSoldierNum);  //add the location of the new spy
     tSrc.addSpy(actionOwner); //add spy in the born territory
-    actionPlayer.updateTechResource(-20);
+    actionPlayer.updateTechResource(-20 * updateSoldierNum);
   }
 
   /**
@@ -715,21 +708,11 @@ private String getSoldierNameByBonus(int Bonus){
           return false;
         }
       } else if (type == "Attack") {
-        if (action.getLevelName().equals("Tel")){
-          output = teleportAttackRuleChecker.checkAction(action, this);
-          if (output == null) {
-            continue;
-          } else {
-            return false;
-          }
-        }
-        else {
-          output = attackRuleChecker.checkAction(action, this);
-          if (output == null) {
-            continue;
-          } else {
-            return false;
-          }
+        output = attackRuleChecker.checkAction(action, this);
+        if (output == null) {
+          continue;
+        } else {
+          return false;
         }
       }
       else {
@@ -858,7 +841,6 @@ private String getSoldierNameByBonus(int Bonus){
     // int pTechLevel = p.getTechLevel();
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     String s1 = playerName + "\n";
-
     // String s2 = "Tech Level: " + pTechLevel + ", Food: " + pFoodResource + ", Tech: " + pTechResource + "\n";
     // Eg: ans = "King player:
     //            ------------
@@ -877,11 +859,12 @@ private String getSoldierNameByBonus(int Bonus){
     }
     
     s1 += territoryInfo + "\nenemy can see:\n";
-
-    String spyLocation = p.getSpyLocation();
-    if (!spyLocation.equals("")) {
-      Territory spyAt = allTerritory.get(spyLocation);
-      neighborSet.add(spyAt);
+    HashMap<String, Integer> spyLocation = p.getSpyLocation();
+    for(String s : spyLocation.keySet()){
+      if(spyLocation.get(s) > 0 && !p.getTerritoryList().contains(allTerritory.get(s))){
+        Territory spyAt = allTerritory.get(s);
+        neighborSet.add(spyAt);
+      }
     }
     for(Territory t : neighborSet){
       s1 += t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t) + "\n";
@@ -978,22 +961,32 @@ private String getSoldierNameByBonus(int Bonus){
    * @return the string information
    */
   public String spyInfoDisplay(Player p){
-    String spyLocation = p.getSpyLocation();    
-    String out = "";
-    if(spyLocation.length() != 0){
-      Territory t = getTerritory(spyLocation);
-      out += "Your spy locates at " + spyLocation;
-      if(!p.getTerritoryList().contains(t)){      
-      String s = ":\n" + displaySingleTerriInfo(t) + "(owned by " + t.getOwner() + ")\n";
-      return out + s;
+    boolean hasSpy = false;
+    HashMap<String, Integer> spyLocation = p.getSpyLocation();  
+    String has = "Your spies are at:\n";
+    String temp1 = "";
+    //String temp2 = "";  
+    for(String s : spyLocation.keySet()){
+      if(spyLocation.get(s) > 0){
+        hasSpy = true;
+        if(!p.getTerritoryList().contains(allTerritory.get(s))){      
+          Territory sT = allTerritory.get(s);
+          temp1 +=  s + "(" + spyLocation.get(s) + "): " + displaySingleTerriInfo(sT) + "(owned by " + sT.getOwner() + ")"+ "\n";
+        //temp2 = ", ";
+        }
+        else{
+          temp1 += s + "(" + spyLocation.get(s) + "): Your own\n";
+        }
       }
       else{
-        return out;
+        continue;
       }
     }
+    if(hasSpy == false){
+      return "You have no Spy, try to create one!\n";
+    }
     else{
-      out +=  "You have no Spy, try to create it\n";
-      return out;
+      return has + temp1;
     }
   }
 

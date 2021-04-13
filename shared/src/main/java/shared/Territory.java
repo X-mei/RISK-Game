@@ -11,7 +11,7 @@ public class Territory {
   private final String territoryName;
   private String ownerName;
   private Integer size;
-  private ArrayList<String> spyExist;
+  private HashMap<String, Integer> spyList;
   private LinkedHashMap<String, Territory> neighbours;
   private LinkedHashMap<String, Soldiers> allUnits;
   private boolean isCloaked;
@@ -27,7 +27,7 @@ public class Territory {
     this.size = 10;
     this.neighbours = new LinkedHashMap<String, Territory>();
     this.allUnits = new LinkedHashMap<String, Soldiers>();
-    spyExist = new ArrayList<>();
+    spyList = new HashMap<>();
     isCloaked = false;
   }
 
@@ -151,11 +151,18 @@ public class Territory {
   }
 
   /**
-   * check whose spy is at this territory
+   * check if one's spy is at this territory
    * @return
    */
-  public boolean checkifPlayerSpy(String playerName){
-    return spyExist.contains(playerName);
+  public int checkSpyCount(String playerName){
+    for(String s : spyList.keySet()){
+      if(s.equals(playerName)){
+        if(spyList.get(s) > 0){
+          return spyList.get(s);
+        }
+      }
+    }
+    return 0;
   }
 
   /**
@@ -163,10 +170,7 @@ public class Territory {
    * @param name is the owner of the spy
    */
   public void addSpy(String name){
-    if(spyExist.contains(name)){
-      return;
-    }
-    spyExist.add(name);
+    spyList.put(name, spyList.getOrDefault(name, 0) + 1);
   }
 
   /**
@@ -174,7 +178,7 @@ public class Territory {
    * @param name is the spy owner
    */
   public void deleteSpy(String name){
-    spyExist.remove(name);
+    spyList.put(name, spyList.get(name) - 1);
   }
 
   /**

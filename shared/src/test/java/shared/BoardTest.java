@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import org.junit.jupiter.api.Test;
 
 import jdk.jfr.Timestamp;
+//import jdk.nashorn.internal.AssertsEnabled;
 
 public class BoardTest {
   private Board getTestBoard() {
@@ -49,16 +50,34 @@ public class BoardTest {
     }
     CloakAction c1 = new CloakAction("Red", "Ilios");
     CloakAction c2 = new CloakAction("Red", "Volskaya");
+    CloakAction c3 = new CloakAction("Red", "Junkertown");
     b.processOneCloakAction(c1);
     //b.processOneCloakAction(c2);
     for(Player p : b.getPlayers()){
       if(p.getName().equals("King")){       
         //assertEquals(p.getName(), b.displaySinlgePlayerBoardV3(p.getName()));
         UpgradeAction spyCreate = new UpgradeAction(p.getName(), "Hanamura Lv1 1 Spy");
+        UpgradeAction spyCreate1 = new UpgradeAction(p.getName(), "Hanamura Lv1 1 Spy");
+        UpgradeAction spyCreate2 = new UpgradeAction(p.getName(), "Dorado Lv1 1 Spy");
         b.processSingleUpdateUnit(spyCreate);
+        b.processSingleUpdateUnit(spyCreate1);
+        b.processSingleUpdateUnit(spyCreate2);
+        HashMap<String, Integer> KingSpyMap =p.getSpyLocation();
+
+        BasicAction ms1 = new Move("King", "Hanamura Ilios 1 Spy");
+        BasicAction ms2 = new Move("King", "Hanamura Volskaya 1 Spy");
+        b.processSingleBasicMove(ms1);
+        b.processSingleBasicMove(ms2);
+        String KingSpyMapString = "";
+        for(String s : KingSpyMap.keySet()){
+          KingSpyMapString += s + "(" + KingSpyMap.get(s) + ")";
+        }
+        //assertEquals("hahaha", KingSpyMapString);
+
+        //b.processSingleUpdateUnit(spyCreate);
         BasicAction a2 = new Move("King", "Hanamura Ilios 1 Spy");
         b.processSingleBasicMove(a2);
-        UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
+        UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 1 Lv7");
         UpgradeAction a4 = new UpgradeAction("King", "Dorado Lv1 1 Lv3");
         UpgradeAction a5 = new UpgradeAction("King", "Hanamura Lv1 1 Lv4");
         UpgradeAction a6 = new UpgradeAction("King", "Hanamura Lv1 1 Lv3");

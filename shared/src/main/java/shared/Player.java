@@ -1,6 +1,7 @@
 package shared;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -26,7 +27,7 @@ public class Player {
   protected String status;
   protected ActionFactory factory;
   protected HashMap<String, BiFunction<String, String, BasicAction>> actionCreationFns;
-  protected String spyLocation;
+  protected HashMap<String, Integer> spyLocation;
 
 
   /**
@@ -47,7 +48,7 @@ public class Player {
     this.actionCreationFns = new HashMap<String, BiFunction<String, String, BasicAction>>();
     this.factory = factory;
     setUpActionCreationMap();
-    spyLocation = "";
+    spyLocation = new HashMap<>();
   }
     
   /**
@@ -222,16 +223,29 @@ public class Player {
    * get the player's spy location
    * @return the territory name where his spy at
    */
-  public String getSpyLocation(){
+  public HashMap<String, Integer> getSpyLocation(){   
     return spyLocation;
+  }
+
+
+  /**
+   * for a new created spy, add it to the spyLocation map with its born territory
+   * @param name
+   */
+  public void addnewSpyLocation(String name, int updateNum){
+    spyLocation.put(name, spyLocation.getOrDefault(name, 0) + updateNum);
   }
 
   /**
    * update the spy location
    * @param location is the new spy territory location name
    */
-  public void updateSpyLocation(String location){
-    spyLocation = location;
+  public void updateSpyLocation(String src, String dest){
+    //add dest territory name 
+    spyLocation.put(dest, spyLocation.getOrDefault(dest, 0) + 1);
+    //delete source name
+    int temp = spyLocation.get(src) - 1;
+    spyLocation.put(src, temp);
   }
 }                     
 
