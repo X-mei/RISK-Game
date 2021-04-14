@@ -42,7 +42,7 @@ public class EnterGameController {
         enterGameView.confirm.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (choice.equals("enter a previous game")) {
+                if (choice.equals("Enter a Previous Game")) {
                     client.answerInfo("p");
                     App.root.getChildren().remove(enterGameView.enterGamePane);
                     App.root.getChildren().add(sendRoomIDView.roomIDPane);
