@@ -11,10 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
-import shared.BasicAction;
-import shared.Board;
-import shared.Player;
-import shared.Territory;
+import shared.*;
 
 /**
  * This class is for AI player to play with human player
@@ -31,6 +28,14 @@ public class AIPlayer implements Runnable {
   private int terriNum;
   private String username;
   private Board board;
+  private final RuleChecker moveRuleChecker;
+  private final RuleChecker spyRuleChecker;
+  private final RuleChecker teleportAttackRuleChecker;
+  private final RuleChecker attackRuleChecker;
+  private final SpecialRuleChecker upgradeRuleChecker;
+  private final String [] soldierNames = {"Lv1","Lv2","Lv3","Lv4","Tel","Lv5","Lv6","Lv7"};
+  private final HashMap<String, Integer> soldierBonusLevelTable;
+
 
   public AIPlayer(String ip, int port, PrintStream out, int playerNum, String username) {
     this.serverIPAddr = ip;
@@ -38,6 +43,20 @@ public class AIPlayer implements Runnable {
     this.out = out;
     this.playerNumber = playerNum;
     this.username = username;
+    this.attackRuleChecker = new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null)));
+    this.spyRuleChecker = new NeighborChecker(null);//new SpyUnitMovingChecker(null)));
+    this.teleportAttackRuleChecker = new UnitMovingChecker(new ResourceChecker(null));
+    this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
+    this.upgradeRuleChecker = new UpgradeChecker(null);
+    soldierBonusLevelTable = new HashMap<>();
+    soldierBonusLevelTable.put("Lv1", 0);
+    soldierBonusLevelTable.put("Lv2", 1);
+    soldierBonusLevelTable.put("Lv3", 3);
+    soldierBonusLevelTable.put("Lv4", 5);
+    soldierBonusLevelTable.put("Tel", 5);
+    soldierBonusLevelTable.put("Lv5", 8);
+    soldierBonusLevelTable.put("Lv6", 11);
+    soldierBonusLevelTable.put("Lv7", 15);
   }
 
   /**
@@ -246,11 +265,14 @@ public class AIPlayer implements Runnable {
    */
   public void generateAttackDecisions(ArrayList<String> actions){
     Player p = board.getPlayerByName(playerName);
+    int resourceCost = 50+(p.getTechLevel()-1)*(p.getTechLevel())/2*25;
+    p.updateTempTechResource(-resourceCost);
     // The set stores all the name of potential target to attack
     HashSet<String> set = new HashSet<>();
     int lowest_score = Integer.MAX_VALUE;
-    String potentialTarget;
-    String potentialSrc;
+    int selfScore = 0;
+    String potentialTarget = "";
+    String potentialSrc = "";
     // For all the territory owned by the AI player
     for (Territory t: p.getTerritoryList()){
       // For all the neighbor of this territory
@@ -271,24 +293,58 @@ public class AIPlayer implements Runnable {
             potentialTarget = neighbor.getTerritoryName();
             potentialSrc = t.getTerritoryName();
             lowest_score = score;
+            selfScore = t.calculateUnitsPower();
           }
           set.add(t.getTerritoryName());
         }
       }
     }
+
+    // If no lowest score are found, then no adjacent hostile territory to attack
     if (lowest_score == Integer.MAX_VALUE){
       return;
     }
-    else {
+    int scoreGap = lowest_score-selfScore;
+    // If there is a deficiency in the score, try to upgrade the unit
+    if (scoreGap > 0){
+      scoreGap = generateUpgradeDecisions(actions, scoreGap);
+    }
+    // If the score gap still exist, move unit from other territory
+    if (scoreGap > 0){
+      scoreGap = generateMoveDecisions(actions, scoreGap);
+    }
+    // If the score gap still exist, unable to attack
+    if (scoreGap > 0){
+      return;
+    }
 
+    int curScore = 0;
+    // For each type of soldier in descending bonus
+    for (int i=soldierNames.length-1; i>=0; ++i){
+      int cnt = 0;
+      // Add soldier one by one until the total score is higher than the target
+      for (; cnt<board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]); ++cnt){
+        curScore += soldierBonusLevelTable.get(soldierNames[i]);
+        if (curScore >= lowest_score){
+          break;
+        }
+      }
+      // Generate action string for this type of soldier
+      String actionStr = "A "+potentialSrc+" "+cnt+" "+potentialTarget+" "+soldierNames[i];
+      actions.add(actionStr);
+      // If we already have enough score, break
+      if (curScore >= lowest_score){
+        break;
+      }
     }
   }
 
-  public void generateMoveDecisions(ArrayList<String> actions, int scoreReq){
+
+  public int generateMoveDecisions(ArrayList<String> actions, int scoreReq){
 
   }
 
-  public void generateUpgradeDecisions(ArrayList<String> actions, int scoreReq){
+  public int generateUpgradeDecisions(ArrayList<String> actions, int scoreReq){
 
   }
 

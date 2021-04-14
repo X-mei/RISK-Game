@@ -5,7 +5,7 @@ package shared;
  * specifically, is the dest the direct neighbor of src. 
  */
 public class NeighborChecker extends RuleChecker {
-  NeighborChecker(RuleChecker next){
+  public NeighborChecker(RuleChecker next){
     super(next);
   }
   
