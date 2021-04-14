@@ -355,11 +355,11 @@ public class Board {
   //   }
   // }
 
-  public synchronized void processOneTurnCloak(LinkedHashSet<CloakAction> actionSet){
-    for (CloakAction a : actionSet) {
-      processOneCloakAction(a);
-    }
-  }
+  // public synchronized void processOneTurnCloak(LinkedHashSet<CloakAction> actionSet){
+  //   for (CloakAction a : actionSet) {
+  //     processOneCloakAction(a);
+  //   }
+  // }
 
 
   /**
@@ -684,14 +684,51 @@ private String getSoldierNameByBonus(int Bonus){
   }
 
 
-  
+  /**
+   * research cloak, only once per game
+   * should at least Level 3 to do it
+   * @param techUpAct research cloak action object to process
+   */
+  public synchronized void processResearchCloak(ResearchCloak researchAct) {
+    if (researchAct == null){
+      return;
+    }
+    String techUpOwner = researchAct.getActionOwner();
+    Player actionPlayer = getPlayerByName(techUpOwner);
+    int currTechLevel = actionPlayer.getTechLevel();
+    if (currTechLevel < 3) {
+      System.out.println("You should reach at least tech level 3 to research cloak");
+      return;
+    }
+    if (actionPlayer.getTechResource() < 100) {
+      System.out.println("Not enough tech resource to research cloak");
+      return;
+    }
+    actionPlayer.updateTechResource(-100);
+    actionPlayer.changeCloakState(true);
+    //System.out.println("in tech update");
+  }
+
+
+  /**
+   * process one cloak action for one player
+   * @param cloakAcion
+   */
   public synchronized void processOneCloakAction(CloakAction cloakAcion){
+    String cloakActOwner = cloakAcion.getActionOwner();
+    Player cloakActPlayer = getPlayerByName(cloakActOwner);
+    if(!cloakActPlayer.checkPlayerCanCloak()){
+      System.out.println("You cannot cloak yet, research it first!");
+      return;
+    }
+    if(cloakActPlayer.getTechResource() < 20){
+      System.out.println("Not enough tech resource to cloak a territory");
+      return;
+    }
     String src = cloakAcion.getSource();
     Territory srcT = getTerritory(src);
     srcT.setCloakStatus(true); //update target terrotory cloak state
-    String cloakActOwner = cloakAcion.getActionOwner();
-    Player cloakActPlayer = getPlayerByName(cloakActOwner);
-    cloakActPlayer.updateTechResource(-100);  //update tech source
+    cloakActPlayer.updateTechResource(-20);  //update tech source
   }
 
 

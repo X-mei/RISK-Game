@@ -28,6 +28,7 @@ public class Player {
   protected ActionFactory factory;
   protected HashMap<String, BiFunction<String, String, BasicAction>> actionCreationFns;
   protected HashMap<String, Integer> spyLocation;
+  protected boolean canCloak;
 
 
   /**
@@ -49,6 +50,7 @@ public class Player {
     this.factory = factory;
     setUpActionCreationMap();
     spyLocation = new HashMap<>();
+    canCloak = false;
   }
     
   /**
@@ -246,6 +248,22 @@ public class Player {
     //delete source name
     int temp = spyLocation.get(src) - 1;
     spyLocation.put(src, temp);
+  }
+
+  /**
+   * check id the player can cloak
+   * @return true if he can 
+   */
+  public boolean checkPlayerCanCloak(){
+    return canCloak;
+  }
+
+  /**
+   * set player's cloak ability 
+   * @param out 
+   */
+  public void changeCloakState(boolean out){
+    canCloak = out;
   }
 }                     
 
