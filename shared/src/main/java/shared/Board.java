@@ -14,6 +14,7 @@ public class Board {
   protected HashMap<String, Function<Integer, Soldiers>> unitsCreateFunction;
   private final RuleChecker moveRuleChecker;
   private final RuleChecker spyRuleChecker;
+  private final RuleChecker teleportAttackRuleChecker;
   private final RuleChecker attackRuleChecker;
   private final SpecialRuleChecker upgradeRuleChecker;
   private HashMap<String, HashMap<String, Integer>> tempCount;
