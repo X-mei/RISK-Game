@@ -73,4 +73,5 @@ public class EnterGameView {
         enterGamePane.getChildren().add(confirm);
 
     }
+    
 }
