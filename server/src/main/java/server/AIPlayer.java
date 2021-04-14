@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import shared.*;
 
@@ -311,7 +312,7 @@ public class AIPlayer implements Runnable {
     }
     // If the score gap still exist, move unit from other territory
     if (scoreGap > 0){
-      scoreGap = generateMoveDecisions(actions, scoreGap);
+      scoreGap = generateMoveDecisions(actions, potentialSrc, scoreGap);
     }
     // If the score gap still exist, unable to attack
     if (scoreGap > 0){
@@ -340,12 +341,38 @@ public class AIPlayer implements Runnable {
   }
 
 
-  public int generateMoveDecisions(ArrayList<String> actions, int scoreReq){
-
+  public int generateMoveDecisions(ArrayList<String> actions, String potentialSrc, int scoreReq){
+    Player p = board.getPlayerByName(playerName);
+    Territory srcTerr = board.getAllTerritroy().get(potentialSrc);  //get source territory object
+    LinkedHashSet<Territory> ownedTerr = p.getTerritoryList();
+    ArrayList<Territory> ownedOtherTerr = new ArrayList<>(); //store all other same owner territories
+    for(Territory t : ownedTerr){
+      if(!t.getTerritoryName().equals(srcTerr.getTerritoryName())){
+        ownedOtherTerr.add(t);
+      }
+    }
+    for(Territory t : ownedOtherTerr){  
+      //check all soldiers in one territory, move high level soldier(all) first 
+      for(int count = 7; count >= 0; count --){
+        if(scoreReq > 0){ //if scoreReq still larger than 0, add action
+          String soldierName = soldierNames[count];
+          Soldiers singleSoldierObj = t.getOneUnits(soldierName);
+          BasicAction singleMoveAct = new Move(p.getName(), t.getTerritoryName() + " " + srcTerr.getTerritoryName() + " " + singleSoldierObj.getCount() + " " + singleSoldierObj.getName());
+          String s = moveRuleChecker.checkAction(singleMoveAct, board);
+          if(s != null){  //check if the move s valid
+            continue;
+          }
+          String actionStr = "M "+ t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  singleSoldierObj.getCount() +" "+ singleSoldierObj.getName();
+          actions.add(actionStr); //add a move action
+          scoreReq -= singleSoldierObj.getCount() + singleSoldierObj.getBonus();  //reduce soreReq
+        }
+      }
+    }
+    return scoreReq;
   }
 
   public int generateUpgradeDecisions(ArrayList<String> actions, int scoreReq){
-
+    return -1;
   }
 
   /**
