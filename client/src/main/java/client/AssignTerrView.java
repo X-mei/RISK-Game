@@ -38,6 +38,15 @@ public class AssignTerrView {
     Button terr3P_7;
     Button terr3P_8;
     Button terr3P_9;
+    Button terr4P_1;
+    Button terr4P_2;
+    Button terr4P_3;
+    Button terr4P_4;
+    Button terr4P_5;
+    Button terr4P_6;
+    Button terr4P_7;
+    Button terr4P_8;
+    
   
     Label error;
     TextField input1;
@@ -70,6 +79,14 @@ public class AssignTerrView {
         this.terr3P_7 = new Button();
         this.terr3P_8 = new Button();
         this.terr3P_9 = new Button();
+        this.terr4P_1 = new Button();
+        this.terr4P_2 = new Button();
+        this.terr4P_3 = new Button();
+        this.terr4P_4 = new Button();
+        this.terr4P_5 = new Button();
+        this.terr4P_6 = new Button();
+        this.terr4P_7 = new Button();
+        this.terr4P_8 = new Button();
         this.input1 = new TextField();
         this.input2 = new TextField();
         this.input3 = new TextField();
@@ -242,6 +259,82 @@ public class AssignTerrView {
             terr3P_8.setVisible(true);
             terr3P_9.setVisible(true);
         }
+
+            
+        terr4P_1.setLayoutX(135);
+        terr4P_1.setLayoutY(85);
+        terr4P_1.setText("Dorado");
+        terr4P_1.setVisible(false);
+        terr4P_1.setId("4p1");
+        assignTerrPane.getChildren().add(terr4P_1);
+        
+                
+        terr4P_2.setLayoutX(125);
+        terr4P_2.setLayoutY(300);
+        terr4P_2.setText("Oasis");
+        terr4P_2.setVisible(false);
+        terr4P_2.setId("4p2");
+        assignTerrPane.getChildren().add(terr4P_2);
+
+                
+        terr4P_3.setLayoutX(305);
+        terr4P_3.setLayoutY(350);
+        terr4P_3.setText("Nepal");
+        terr4P_3.setVisible(false);
+        terr4P_3.setId("4p3");
+        assignTerrPane.getChildren().add(terr4P_3);
+                
+        terr4P_4.setLayoutX(425);
+        terr4P_4.setLayoutY(355);
+        terr4P_4.setText("Ilios");
+        terr4P_4.setVisible(false);
+        terr4P_4.setId("4p4");
+        assignTerrPane.getChildren().add(terr4P_4);
+
+                
+        terr4P_5.setLayoutX(500);
+        terr4P_5.setLayoutY(365);
+        terr4P_5.setText("Junkertown");
+        terr4P_5.setVisible(false);
+        terr4P_5.setId("4p5");
+        assignTerrPane.getChildren().add(terr4P_5);
+   
+                
+        terr4P_6.setLayoutX(605);
+        terr4P_6.setLayoutY(200);
+        terr4P_6.setText("Volskaya");
+        terr4P_6.setVisible(false);
+        terr4P_6.setId("4p6");
+        assignTerrPane.getChildren().add(terr4P_6);
+        
+                
+        terr4P_7.setLayoutX(445);
+        terr4P_7.setLayoutY(75);
+        terr4P_7.setText("Hollywood");
+        terr4P_7.setVisible(false);
+        terr4P_7.setId("4p7");
+        assignTerrPane.getChildren().add(terr4P_7);
+                
+        terr4P_8.setLayoutX(325);
+        terr4P_8.setLayoutY(70);
+        terr4P_8.setText("Hanamura");
+        terr4P_8.setVisible(false);
+        terr4P_8.setId("4p8");
+        assignTerrPane.getChildren().add(terr4P_8);
+
+        if(playerNum.equals("4")){
+          terr4P_1.setVisible(true);
+          terr4P_2.setVisible(true);
+          terr4P_3.setVisible(true);
+          terr4P_4.setVisible(true);
+          terr4P_5.setVisible(true);
+          terr4P_6.setVisible(true);
+          terr4P_7.setVisible(true);
+          terr4P_8.setVisible(true);
+        }
+
+        
+        
                                        
         // prompt: wait
         prompt1.setLayoutX(750);

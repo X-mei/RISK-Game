@@ -517,7 +517,6 @@ public class PlayGameView {
     for(String playerName: territories.keySet()){
       if(playerName.equals("King")){
         for(String terrName : territories.get(playerName)){
-          Tooltip.install(playerTerrs.get(playerNum).get(terrName), Tooltip("Owner:"));
           BackgroundFill backgroundfill = new BackgroundFill(Paint.valueOf("#FFEC8B"), null, null);
           Background background = new Background(backgroundfill);
           playerTerrs.get(playerNum).get(terrName).setBackground(background);
