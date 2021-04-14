@@ -150,6 +150,7 @@ public class FakeClient2 extends Thread {
       answerInfo("p");
       sendRoomID("1000");
       recvBoardPrompt();
+      recvBoardPrompt();
       recvInstruction();
       sendInstruction("D");
     }
