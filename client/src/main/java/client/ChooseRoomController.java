@@ -53,6 +53,7 @@ public class ChooseRoomController {
                   promptAssign = client.recvAssignPrompt();
                   String[] prompts = client.recvPrompts();
                   Platform.runLater(() -> {
+                      assignTerrView.imageView1.setVisible(false);
                       assignTerrView.addPrompt2(prompt);
                       assignTerrView.addPrompt3(promptAssign);
                       assignTerrView.addPromptOfTerritory(prompts);

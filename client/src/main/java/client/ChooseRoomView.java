@@ -6,6 +6,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class ChooseRoomView {
     AnchorPane chooseRoomPane;
     Label prompt;
@@ -32,31 +40,50 @@ public class ChooseRoomView {
     }
 
     public void init() {
+
+      try {
+        // add image
+        String path = "src/main/resources/riscTitle.png";
+        FileInputStream imageStream = new FileInputStream(path);
+        Image image = new Image(imageStream);
+        ImageView imageView = new ImageView(image);
+        imageView.setX(300);
+        imageView.setY(25);
+        imageView.setFitHeight(400);
+        imageView.setFitWidth(800);
+        chooseRoomPane.getChildren().add(imageView);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+
         // prompt label
-        prompt.setLayoutX(20);
-        prompt.setLayoutY(75);
-        prompt.setText("Which game room (2-5 people) do you want to enter?");
+        prompt.setLayoutX(500);
+        prompt.setLayoutY(350);
+        prompt.setText("Which game room do you want to enter?");
+        prompt.setFont(new Font("Arial", 15));
+        prompt.setTextFill(Color.web("#a0522d", 1.0));
         chooseRoomPane.getChildren().add(prompt);
 
         // input radio button
         r1.setToggleGroup(tg);
-        r1.setLayoutX(20);
-        r1.setLayoutY(150);
+        r1.setLayoutX(550);
+        r1.setLayoutY(400);
         r2.setToggleGroup(tg);
-        r2.setLayoutX(20);
-        r2.setLayoutY(200);
+        r2.setLayoutX(550);
+        r2.setLayoutY(450);
         r3.setToggleGroup(tg);
-        r3.setLayoutX(20);
-        r3.setLayoutY(250);
+        r3.setLayoutX(550);
+        r3.setLayoutY(500);
         r4.setToggleGroup(tg);
-        r4.setLayoutX(20);
-        r4.setLayoutY(300);
+        r4.setLayoutX(550);
+        r4.setLayoutY(550);
         r5.setToggleGroup(tg);
-        r5.setLayoutX(20);
-        r5.setLayoutY(350);
+        r5.setLayoutX(550);
+        r5.setLayoutY(600);
         r6.setToggleGroup(tg);
-        r6.setLayoutX(20);
-        r6.setLayoutY(400);
+        r6.setLayoutX(550);
+        r6.setLayoutY(650);
         chooseRoomPane.getChildren().add(r1);
         chooseRoomPane.getChildren().add(r2);
         chooseRoomPane.getChildren().add(r3);
@@ -65,9 +92,10 @@ public class ChooseRoomView {
         chooseRoomPane.getChildren().add(r6);
 
         // confirm button
-        confirm.setLayoutX(200);
-        confirm.setLayoutY(500);
+        confirm.setLayoutX(650);
+        confirm.setLayoutY(700);
         confirm.setText("confirm");
+        confirm.setStyle("-fx-background-color: #8FBC8F;");
         chooseRoomPane.getChildren().add(confirm);
 
     }

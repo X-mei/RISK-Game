@@ -34,6 +34,12 @@ public class FakeClient extends Thread {
   }
 
   public void run() {
+    try {
+      dataOut.writeUTF("1");
+    } catch(IOException e) {
+      e.printStackTrace();
+    } 
+    
     connectToServer();
     loginOrReg("r");
     login(username, "111");
@@ -52,17 +58,22 @@ public class FakeClient extends Thread {
       assign1[2] = "1";
       sendAssignTerritory(assign1);
       recvBoardPrompt();
-      recvInstruction();
-      sendInstruction("D");
       recvBoardPrompt();
       recvInstruction();
       sendInstruction("D");
       recvBoardPrompt();
-      recvInstruction();
-      sendInstruction("D");
       recvBoardPrompt();
       recvInstruction();
       sendInstruction("D");
+      recvBoardPrompt();
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("D");
+      recvBoardPrompt();
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("D");
+      recvBoardPrompt();
       recvBoardPrompt();
       recvInstruction();
       sendInstruction("D");
@@ -72,6 +83,7 @@ public class FakeClient extends Thread {
       assign1[2] = "3";
       sendAssignTerritory(assign1);
       recvBoardPrompt();
+      recvBoardPrompt();
       recvInstruction();
       sendInstruction("T");
       recvInstruction();
@@ -80,6 +92,7 @@ public class FakeClient extends Thread {
       sendInstruction("Ilios Lv1 2 Lv2");
       recvInstruction();
       sendInstruction("D");
+      recvBoardPrompt();
       recvBoardPrompt();
       recvInstruction();
       sendInstruction("A");
@@ -94,6 +107,7 @@ public class FakeClient extends Thread {
       recvInstruction();
       sendInstruction("D");
       recvBoardPrompt();
+      recvBoardPrompt();
       recvInstruction();
       sendInstruction("A");
       recvInstruction();
@@ -101,12 +115,14 @@ public class FakeClient extends Thread {
       recvInstruction();
       sendInstruction("D");
       recvBoardPrompt();
+      recvBoardPrompt();
       recvInstruction();
       sendInstruction("M");
       recvInstruction();
       sendInstruction("Junkertown Ilios 3 Lv1");
       recvInstruction();
       sendInstruction("D");
+      recvBoardPrompt();
       recvBoardPrompt();
       recvInstruction();
       sendInstruction("M");
