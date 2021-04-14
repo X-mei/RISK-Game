@@ -6,7 +6,7 @@ import java.util.HashSet;
  */
 public class RouteChecker extends RuleChecker{
   private int minCost;
-  RouteChecker(RuleChecker next){
+  public RouteChecker(RuleChecker next){
     super(next);
   }
   

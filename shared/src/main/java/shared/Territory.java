@@ -201,7 +201,7 @@ public class Territory {
   public int calculateUnitsPower(){
     int result = 0;
     for (Soldiers u: allUnits.values()){
-      result += u.getBonus()*u.getCount();
+      result += (u.getBonus()+1)*u.getCount();
     }
     return result;
   }
