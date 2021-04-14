@@ -61,6 +61,8 @@ public class PlayGameView {
     Label error;
     Label errorTech;
 
+    ImageView imageView2;
+
     public PlayGameView(String userInfo) {
         this.terrs = new HashMap<>();
         this.playGamePane = new AnchorPane();
@@ -271,6 +273,22 @@ public class PlayGameView {
         errorTech.setVisible(false);
         playGamePane.getChildren().add(errorTech);
 
+        try {
+          // add image
+          String path = "src/main/resources/dead.gif";
+          FileInputStream imageStream = new FileInputStream(path);
+          Image image2 = new Image(imageStream);
+          imageView2 = new ImageView(image2);
+          imageView2.setX(200);
+          imageView2.setY(450);
+          imageView2.setFitHeight(200);
+          imageView2.setFitWidth(200);
+          playGamePane.getChildren().add(imageView2);
+          imageView2.setVisible(false);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
     }
 
   public void recvTerrInfo(HashMap<String, ArrayList<String>> territories, HashMap<String, String> units){
@@ -463,6 +481,8 @@ public class PlayGameView {
 
         continueWatch.setVisible(true);
         exitGame.setVisible(true);
+        imageView2.setVisible(true);
+
         choicesOfLevel1.setVisible(false);
         choicesOfLevel2.setVisible(false);
         choicesOfDest.setVisible(false);
