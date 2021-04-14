@@ -322,11 +322,7 @@ public class AIPlayer implements Runnable {
     }
     // If the score gap still exist, move unit from other territory
     if (scoreGap > 0){
-<<<<<<< server/src/main/java/server/AIPlayer.java
       scoreGap = generateUpgradeDecisions(actions, potentialSrc, scoreGap);
-=======
-      scoreGap = generateMoveDecisions(actions, potentialSrc, scoreGap);
->>>>>>> server/src/main/java/server/AIPlayer.java
     }
     // If the score gap still exist, unable to attack
     if (scoreGap > 0){
@@ -403,6 +399,7 @@ public class AIPlayer implements Runnable {
       }
     }
     return scoreReq;
+  }
 
   public int generateMoveDecisions(ArrayList<String> actions, String potentialSrc, int scoreReq){
     Player p = board.getPlayerByName(playerName);
