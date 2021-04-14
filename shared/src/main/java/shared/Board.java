@@ -70,10 +70,11 @@ public class Board {
     soldierBonusLevelTable.put("Lv2", 1);
     soldierBonusLevelTable.put("Lv3", 3);
     soldierBonusLevelTable.put("Lv4", 5);
+    soldierBonusLevelTable.put("Tel", 5);
     soldierBonusLevelTable.put("Lv5", 8);
     soldierBonusLevelTable.put("Lv6", 11);
     soldierBonusLevelTable.put("Lv7", 15);
-    soldierBonusLevelTable.put("Tel", 5);
+
 
     this.boardRandomGenerator = new Random();
     this.soldierRefTable = new SoldierReferenceTable();
@@ -750,17 +751,17 @@ private String getSoldierNameByBonus(int Bonus){
   }
 
 
-  public Boolean checkIfActionBoolean(LinkedHashSet<BasicAction> actions, String type) {
+  public Boolean checkIfActionBoolean(LinkedHashSet<BasicAction> actions) {
     for (BasicAction action : actions) {
       String output;
-      if (type == "Move") {
+      if (action.getActionName().equals("A")) {
         output = moveRuleChecker.checkAction(action, this);
         if (output == null) {
           continue;
         } else {
           return false;
         }
-      } else if (type == "Attack") {
+      } else if (action.getActionName().equals("M")) {
         output = attackRuleChecker.checkAction(action, this);
         if (output == null) {
           continue;
@@ -768,7 +769,7 @@ private String getSoldierNameByBonus(int Bonus){
           return false;
         }
       }
-      else {
+      else if (action.getActionName().equals("S")){
         output = spyRuleChecker.checkAction(action, this);
         if (output == null) {
           continue;

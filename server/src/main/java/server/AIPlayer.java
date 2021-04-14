@@ -35,6 +35,7 @@ public class AIPlayer implements Runnable {
   private final SpecialRuleChecker upgradeRuleChecker;
   private final String [] soldierNames = {"Lv1","Lv2","Lv3","Lv4","Tel","Lv5","Lv6","Lv7"};
   private final HashMap<String, Integer> soldierBonusLevelTable;
+  private final HashMap<String, Integer> techLevelReqReference;
 
 
   public AIPlayer(String ip, int port, PrintStream out, int playerNum, String username) {
@@ -48,7 +49,7 @@ public class AIPlayer implements Runnable {
     this.teleportAttackRuleChecker = new UnitMovingChecker(new ResourceChecker(null));
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
-    soldierBonusLevelTable = new HashMap<>();
+    this.soldierBonusLevelTable = new HashMap<>();
     soldierBonusLevelTable.put("Lv1", 0);
     soldierBonusLevelTable.put("Lv2", 1);
     soldierBonusLevelTable.put("Lv3", 3);
@@ -57,6 +58,15 @@ public class AIPlayer implements Runnable {
     soldierBonusLevelTable.put("Lv5", 8);
     soldierBonusLevelTable.put("Lv6", 11);
     soldierBonusLevelTable.put("Lv7", 15);
+    this.techLevelReqReference = new HashMap<>();
+    techLevelReqReference.put("Lv2", 1);
+    techLevelReqReference.put("Lv3", 2);
+    techLevelReqReference.put("Lv4", 3);
+    techLevelReqReference.put("Tel", 3);
+    techLevelReqReference.put("Lv5", 4);
+    techLevelReqReference.put("Lv6", 5);
+    techLevelReqReference.put("Lv7", 6);
+
   }
 
   /**
@@ -307,11 +317,11 @@ public class AIPlayer implements Runnable {
     int scoreGap = lowest_score-selfScore;
     // If there is a deficiency in the score, try to upgrade the unit
     if (scoreGap > 0){
-      scoreGap = generateUpgradeDecisions(actions, scoreGap);
+      scoreGap = generateMoveDecisions(actions, potentialSrc, scoreGap);
     }
     // If the score gap still exist, move unit from other territory
     if (scoreGap > 0){
-      scoreGap = generateMoveDecisions(actions, scoreGap);
+      scoreGap = generateUpgradeDecisions(actions, potentialSrc, scoreGap);
     }
     // If the score gap still exist, unable to attack
     if (scoreGap > 0){
@@ -320,7 +330,7 @@ public class AIPlayer implements Runnable {
 
     int curScore = 0;
     // For each type of soldier in descending bonus
-    for (int i=soldierNames.length-1; i>=0; ++i){
+    for (int i=soldierNames.length-1; i>=0; --i){
       int cnt = 0;
       // Add soldier one by one until the total score is higher than the target
       for (; cnt<board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]); ++cnt){
@@ -328,6 +338,9 @@ public class AIPlayer implements Runnable {
         if (curScore >= lowest_score){
           break;
         }
+      }
+      if (cnt == 0){
+        continue;
       }
       // Generate action string for this type of soldier
       String actionStr = "A "+potentialSrc+" "+cnt+" "+potentialTarget+" "+soldierNames[i];
@@ -340,12 +353,55 @@ public class AIPlayer implements Runnable {
   }
 
 
-  public int generateMoveDecisions(ArrayList<String> actions, int scoreReq){
+  public int generateMoveDecisions(ArrayList<String> actions, String potentialSrc , int scoreReq){
 
   }
 
-  public int generateUpgradeDecisions(ArrayList<String> actions, int scoreReq){
-
+  /**
+   * Generate upgrade action needed to make attack possible
+   * @param actions list of actions
+   * @param potentialSrc  name of the territory to upgrade
+   * @param scoreReq the score gap to close
+   * @return the score left to close the gap
+   */
+  public int generateUpgradeDecisions(ArrayList<String> actions, String potentialSrc, int scoreReq){
+    Player p = board.getPlayerByName(playerName);
+    int techLevel = p.getTechLevel();
+    // For each soldier in the source territory
+    for (int i=0; i<soldierNames.length-1; ++i){
+      // If no such type of soldier, continue
+      if (board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]).equals(0)){
+        continue;
+      }
+      // If the current type of soldier have a higher requirement than the techLevel, break
+      // Since all other level of soldier have a even higher tech requirement
+      if (techLevelReqReference.get(soldierNames[i]) > techLevel){
+        break;
+      }
+      // For all the available soldier type to upgrade to
+      for (int j=soldierNames.length-1; j>=0; --j){
+        // If that level is not reachable then continue to next level
+        if (techLevelReqReference.get(soldierNames[j]) < techLevel){
+          continue;
+        }
+        int cnt = 0;
+        int curScore = 0;
+        // Upgrade this type of soldier to the given level one at a time
+        for (; cnt<board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]); ++cnt){
+          scoreReq -= (soldierBonusLevelTable.get(soldierNames[j]) - soldierBonusLevelTable.get(soldierNames[i]));
+          if (scoreReq <= 0){
+            break;
+          }
+        }
+        // Update the temp soldier count, so the attack can access them
+        board.updateTempCount(potentialSrc, soldierNames[i], cnt);
+        board.updateTempCount(potentialSrc, soldierNames[j], -cnt);
+        String actionStr = "U "+potentialSrc+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j];
+        actions.add(actionStr);
+        break;
+      }
+    }
+    return scoreReq;
   }
 
   /**
