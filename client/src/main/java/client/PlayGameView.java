@@ -527,15 +527,15 @@ public class PlayGameView {
     for(String terrName: playerTerrs.get(playerNum).keySet()){
       Tooltip.install(playerTerrs.get(playerNum).get(terrName), new Tooltip("Size = 10\n"));
     }
-
-    for(String terrName: units.keySet()){
-      Tooltip.install(playerTerrs.get(playerNum).get(terrName), new Tooltip("Size = 10\n" + units.get(terrName) + "\n"));
-    } 
+    for(String PlayerName: territories.keySet()){
+      for(String terrName: territories.get(PlayerName)){
+         Tooltip.install(playerTerrs.get(playerNum).get(terrName), new Tooltip("Size = 10\n" + "Owner: " + PlayerName + "\n" + units.get(terrName) + "\n"));
+      }
+    }
     
     for(String playerName: territories.keySet()){
       if(playerName.equals("King")){
         for(String terrName : territories.get(playerName)){
-          Tooltip.install(playerTerrs.get(playerNum).get(terrName), Tooltip("Owner:"));
           BackgroundFill backgroundfill = new BackgroundFill(Paint.valueOf("#FFEC8B"), null, null);
           Background background = new Background(backgroundfill);
           playerTerrs.get(playerNum).get(terrName).setBackground(background);
