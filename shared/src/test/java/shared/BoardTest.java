@@ -446,13 +446,11 @@ public class BoardTest {
     testattack.add(attackact2);
     testattack1.add(attackact3);
     testattack2.add(attackact4);
-    String type1 = "Move";
-    String type2 = "Attack";
-    Boolean status1 = b.checkIfActionBoolean(testmove, type1);
-    Boolean status2 = b.checkIfActionBoolean(testattack, type2);
-    Boolean status3 = b.checkIfActionBoolean(testmove1, type1);
-    Boolean status4 = b.checkIfActionBoolean(testattack1, type2);
-    Boolean status5= b.checkIfActionBoolean(testattack2, type2);
+    Boolean status1 = b.checkIfActionBoolean(testmove);
+    Boolean status2 = b.checkIfActionBoolean(testattack);
+    Boolean status3 = b.checkIfActionBoolean(testmove1);
+    Boolean status4 = b.checkIfActionBoolean(testattack1);
+    Boolean status5= b.checkIfActionBoolean(testattack2);
     assertEquals(true, status1);
     assertEquals(false, status2);
     assertEquals(false, status3);

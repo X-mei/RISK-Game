@@ -273,7 +273,7 @@ public class ClientHandler extends Thread {
           actionPlayer.refreshTempFoodResource();
           actionPlayer.refreshTempTechResource();
           // rule checker of move and attack actions
-          if(board.checkIfUpgradeBoolean(upgradeSoldierHashSet) && board.checkIfActionBoolean(moveHashSet, "Move") && board.checkIfActionBoolean(attackHashSet, "Attack")) {
+          if(board.checkIfUpgradeBoolean(upgradeSoldierHashSet) && board.checkIfActionBoolean(moveHashSet) && board.checkIfActionBoolean(attackHashSet)) {
             output.writeUTF("Wait for other players to perform the action...");
             lock.lock();
             isReady.await();
