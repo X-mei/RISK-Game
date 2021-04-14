@@ -367,15 +367,8 @@ public class AIPlayer implements Runnable {
           scoreReq -= singleSoldierObj.getCount() + singleSoldierObj.getBonus();  //reduce soreReq
         }
       }
-      //LinkedHashSet<Soldiers> singleTerrallSoldiers = srcTerr.getUnits();
-
     }
-
-    //LinkedHashSet<Territory> neighborTerr = srcTerr.getNeighbours();  //get all neighbor
-    
-
-
-    return -1;
+    return scoreReq;
   }
 
   public int generateUpgradeDecisions(ArrayList<String> actions, int scoreReq){
