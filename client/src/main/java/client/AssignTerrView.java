@@ -3,6 +3,8 @@ package client;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,7 +15,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class AssignTerrView {
     AnchorPane assignTerrPane;
@@ -35,6 +43,7 @@ public class AssignTerrView {
     TextField input3;
     Button submit;
     String playerNum;
+    final Rectangle rectPath;
 
     public AssignTerrView() {
         this.assignTerrPane = new AnchorPane();
@@ -55,6 +64,7 @@ public class AssignTerrView {
         this.input2 = new TextField();
         this.input3 = new TextField();
         this.submit = new Button();
+        this.rectPath = new Rectangle (50, 600, 40, 40);
     }
 
     public void init(String playerNum) {
@@ -144,6 +154,24 @@ public class AssignTerrView {
         prompt1.setLayoutY(75);
         prompt1.setText("Wait for other players to join...");
         assignTerrPane.getChildren().add(prompt1);
+
+        // animation
+        assignTerrPane.getChildren().add(rectPath);
+        rectPath.setArcHeight(10);
+        rectPath.setArcWidth(10);
+        rectPath.setFill(Color.ORANGE);
+        Path path = new Path();
+        path.getElements().add(new MoveTo(650,600));
+        path.getElements().add(new CubicCurveTo(200, 500, 500, 700, 650, 600));
+        path.getElements().add(new CubicCurveTo(500, 500, 200, 700, 50, 600));
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.millis(4000));
+        pathTransition.setPath(path);
+        pathTransition.setNode(rectPath);
+        pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+        pathTransition.setCycleCount(Timeline.INDEFINITE);
+        pathTransition.setAutoReverse(true);
+        pathTransition.play();
 
         // error
         error.setLayoutX(750);
