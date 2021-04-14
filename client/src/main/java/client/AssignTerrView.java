@@ -3,8 +3,6 @@ package client;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,11 +15,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
+import javafx.scene.text.Font;
 
 public class AssignTerrView {
     AnchorPane assignTerrPane;
@@ -53,7 +47,7 @@ public class AssignTerrView {
     TextField input3;
     Button submit;
     String playerNum;
-    final Rectangle rectPath;
+    ImageView imageView1;
 
     public AssignTerrView() {
         this.assignTerrPane = new AnchorPane();
@@ -83,7 +77,6 @@ public class AssignTerrView {
         this.input2 = new TextField();
         this.input3 = new TextField();
         this.submit = new Button();
-        this.rectPath = new Rectangle (50, 600, 40, 40);
     }
 
     public void init(String playerNum) {
@@ -254,28 +247,28 @@ public class AssignTerrView {
         }
                                        
         // prompt: wait
-        prompt1.setLayoutX(750);
-        prompt1.setLayoutY(75);
+        prompt1.setLayoutX(120);
+        prompt1.setLayoutY(500);
         prompt1.setText("Wait for other players to join...");
+        prompt1.setFont(new Font("Arial", 20));
+        prompt1.setTextFill(Color.web("#a0522d", 1.0));
         assignTerrPane.getChildren().add(prompt1);
 
         // animation
-        assignTerrPane.getChildren().add(rectPath);
-        rectPath.setArcHeight(10);
-        rectPath.setArcWidth(10);
-        rectPath.setFill(Color.ORANGE);
-        Path path = new Path();
-        path.getElements().add(new MoveTo(650,600));
-        path.getElements().add(new CubicCurveTo(200, 500, 500, 700, 650, 600));
-        path.getElements().add(new CubicCurveTo(500, 500, 200, 700, 50, 600));
-        PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(4000));
-        pathTransition.setPath(path);
-        pathTransition.setNode(rectPath);
-        pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pathTransition.setCycleCount(Timeline.INDEFINITE);
-        pathTransition.setAutoReverse(true);
-        pathTransition.play();
+        try {
+          // add image
+          String path = "src/main/resources/loading.gif";
+          FileInputStream imageStream = new FileInputStream(path);
+          Image image1 = new Image(imageStream);
+          imageView1 = new ImageView(image1);
+          imageView1.setX(100);
+          imageView1.setY(600);
+          imageView1.setFitHeight(200);
+          imageView1.setFitWidth(350);
+          assignTerrPane.getChildren().add(imageView1);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
 
         // error
         error.setLayoutX(750);

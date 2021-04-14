@@ -1,24 +1,14 @@
 package client;
 
-import javafx.animation.PathTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.transform.Rotate;
-import javafx.util.Duration;
 
 import java.io.FileInputStream;
-import java.io.IOError;
 import java.io.IOException;
 
 import javafx.scene.image.Image;
@@ -50,16 +40,32 @@ public class LoginView {
         // add image
         String path = "src/main/resources/riscTitle.png";
         FileInputStream imageStream = new FileInputStream(path);
-        Image image = new Image(imageStream);
-        ImageView imageView = new ImageView(image);
-        imageView.setX(300);
-        imageView.setY(25);
-        imageView.setFitHeight(400);
-        imageView.setFitWidth(800);
-        loginPane.getChildren().add(imageView);
+        Image image1 = new Image(imageStream);
+        ImageView imageView1 = new ImageView(image1);
+        imageView1.setX(300);
+        imageView1.setY(25);
+        imageView1.setFitHeight(400);
+        imageView1.setFitWidth(800);
+        loginPane.getChildren().add(imageView1);
       } catch (IOException e) {
         e.printStackTrace();
       }
+
+      try {
+        // add image
+        String path = "src/main/resources/soldiers.gif";
+        FileInputStream imageStream = new FileInputStream(path);
+        Image image2 = new Image(imageStream);
+        ImageView imageView2 = new ImageView(image2);
+        imageView2.setX(300);
+        imageView2.setY(500);
+        imageView2.setFitHeight(200);
+        imageView2.setFitWidth(800);
+        loginPane.getChildren().add(imageView2);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
       
         // username Label
         username.setLayoutX(550);
@@ -118,25 +124,6 @@ public class LoginView {
         error.setVisible(false);
         loginPane.getChildren().add(error);
 
-
-        // animation
-        final Rectangle rectPath = new Rectangle (50, 50, 40, 40);
-        loginPane.getChildren().add(rectPath);
-        rectPath.setArcHeight(10);
-        rectPath.setArcWidth(10);
-        rectPath.setFill(Color.ORANGE);
-        Path path = new Path();
-        path.getElements().add(new MoveTo(20,20));
-        path.getElements().add(new CubicCurveTo(380, 0, 380, 120, 200, 120));
-        path.getElements().add(new CubicCurveTo(0, 120, 0, 240, 380, 240));
-        PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(4000));
-        pathTransition.setPath(path);
-        pathTransition.setNode(rectPath);
-        pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pathTransition.setCycleCount(Timeline.INDEFINITE);
-        pathTransition.setAutoReverse(true);
-        pathTransition.play();
     }
 
 }
