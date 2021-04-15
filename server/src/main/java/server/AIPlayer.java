@@ -507,4 +507,8 @@ public class AIPlayer implements Runnable {
     }
     
   }
+  public void setPlayername(String PName){
+    this.playerName = PName;
+
+  }
 }
