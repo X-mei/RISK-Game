@@ -54,16 +54,6 @@ public class AIPlayerTest {
     //assertEquals(1,2);
   }
 
-  @Test
-  public void test_generateMove() {
-    Board b = getTestBoard();
-    for(String s : b.getAllTerritroy().keySet()){
-      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
-    }
-    AIPlayer ai = new AIPlayer("a.b.c.d", 12345, null, 0, "Player 1");
-    ai.addBoard(b);
-
-  }
 
 }
 
