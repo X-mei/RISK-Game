@@ -20,6 +20,8 @@ public class UnitMovingChecker extends RuleChecker{
     else {
       return "You do not have enough unit to move.";
     }
+    
+    
   }
 
 }

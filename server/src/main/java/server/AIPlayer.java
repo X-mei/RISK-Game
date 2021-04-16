@@ -47,9 +47,10 @@ public class AIPlayer implements Runnable {
     this.out = out;
     this.playerNumber = playerNum;
     this.username = username;
-    this.attackRuleChecker = new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null)));
+    this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null))))));
+    
     this.spyRuleChecker = new NeighborChecker(null);//new SpyUnitMovingChecker(null)));
-    this.teleportAttackRuleChecker = new UnitMovingChecker(new ResourceChecker(null));
+    this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
     this.soldierBonusLevelTable = new HashMap<>();
@@ -330,6 +331,7 @@ public class AIPlayer implements Runnable {
     }
 
     int curScore = 0;
+    //System.out.println(lowest_score);
     // For each type of soldier in descending bonus
     for (int i=soldierNames.length-1; i>=0; --i){
       int cnt = 0;
@@ -337,6 +339,7 @@ public class AIPlayer implements Runnable {
       for (; cnt<board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]); ++cnt){
         curScore += soldierBonusLevelTable.get(soldierNames[i]);
         if (curScore >= lowest_score){
+          cnt++;
           break;
         }
       }
@@ -393,6 +396,9 @@ public class AIPlayer implements Runnable {
         if (endL.getTechReq() > techLevel){
           continue;
         }
+        if (endL.getName().equals(startL.getName())) {
+          break;
+        }
         int cnt = 0;
         // Upgrade this type of soldier to the given level one at a time
         //System.out.println("Hi");
@@ -441,24 +447,28 @@ public class AIPlayer implements Runnable {
     for(Territory t : ownedOtherTerr){  
       //check all soldiers in one territory 
       for(int count = 7; count >= 0; count --){
+        if (scoreReq <= 0) {
+          break;
+        }
         String soldierName = soldierNames[count];
         Soldiers singleSoldierObj = t.getOneUnits(soldierName);
         int cnt = 0;
         //for each kind of soldier, check how many of them can satisfy the score
-        for(; cnt < singleSoldierObj.getCount(); cnt++){
-          if (singleSoldierObj.getBonus() > scoreReq) {
+        for(; cnt < board.getTerritoryUnitsCount(t.getTerritoryName(), soldierName); cnt++){
+          scoreReq -= singleSoldierObj.getBonus();
+          //System.out.println(scoreReq);
+          //System.out.println(cnt);
+          if (scoreReq <= 0) {
+            cnt++;
             break;
           }
-          else {
-            scoreReq -= singleSoldierObj.getBonus();
-          }   
         }
         if(cnt == 0){
             continue;
         }
         String actionStr = "M "+ t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  cnt +" "+ singleSoldierObj.getName();
-        BasicAction act = new Attack(playerName, t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  cnt +" "+ singleSoldierObj.getName());
-        if (attackRuleChecker.checkAction(act, board) == null) {
+        BasicAction act = new Move(playerName, t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  cnt +" "+ singleSoldierObj.getName());
+        if (moveRuleChecker.checkAction(act, board) == null) {
           actions.add(actionStr);//add a move action
         }
       }
