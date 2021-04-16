@@ -15,6 +15,7 @@ public class Territory {
   private LinkedHashMap<String, Territory> neighbours;
   private LinkedHashMap<String, Soldiers> allUnits;
   private boolean isCloaked;
+  //private String previousPlayer;
 
   /**
    * Constructs a Territory with the specified territory name and owner name
@@ -29,6 +30,7 @@ public class Territory {
     this.allUnits = new LinkedHashMap<String, Soldiers>();
     spyList = new HashMap<>();
     isCloaked = false;
+    //previousPlayer = oname;
   }
 
   /**
@@ -205,4 +207,21 @@ public class Territory {
     }
     return result;
   }
+
+  
+  /**
+   * get the previous owner of the territory
+   * @return the name of the player
+   */
+  // public String getPreviousPlayer(){
+  //   return previousPlayer;
+  // }
+
+  // /**
+  //  * set the previous player of a territory
+  //  * @param name
+  //  */
+  // public void setPreviousPlayer(String name){
+  //   previousPlayer = name;
+  // }
 }
