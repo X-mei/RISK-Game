@@ -206,7 +206,14 @@ public class ClientHandler extends Thread {
         int [] unitsToAdd = new int[9];
         unitsToAdd[0] = unitsAssign[j];
         board.singleTerritoryUnitSetup(t.getTerritoryName(), unitsToAdd);
+        player.addPreviousRoundCanSee(t.getTerritoryName(), t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t)); //initialize origin last can see own territory
+        for(Territory tEnemy : t.getNeighbours()){  //initialize origin last can see enemy territory
+          if(!player.getTerritoryList().contains(tEnemy)){
+            player.addPreviousRoundCanSee(t.getTerritoryName(), t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t));
+          }
+        }
         j++;
+        
       }
       output.writeUTF("Wait for other players to assign the units...");
       lock.lock();
@@ -399,6 +406,22 @@ public class ClientHandler extends Thread {
     } catch(IOException e){
       e.printStackTrace();
     }
+  }
+
+  private String displaySingleTerriInfoWithNameFirst(Territory t){
+    String soldierNameString = "";
+      String comma = "";
+      for(String s : t.getSoldiers().keySet()){
+        Soldiers tempS = t.getSoldiers().get(s);
+        int SoldierNum = tempS.getCount();
+        if(SoldierNum == 0){
+          continue;
+        }
+        soldierNameString += comma + SoldierNum + " " + tempS.getName();
+        comma = ",";
+      }
+      String temp = t.getTerritoryName() + ":" + soldierNameString;
+      return temp;
   }
 
 }
