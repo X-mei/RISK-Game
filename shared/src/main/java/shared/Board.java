@@ -688,7 +688,7 @@ private String getSoldierNameByBonus(int Bonus){
   /**
    * research cloak, only once per game
    * should at least Level 3 to do it
-   * @param techUpAct research cloak action object to process
+   * @param researchAct research cloak action object to process
    */
   public synchronized void processResearchCloak(ResearchCloak researchAct) {
     if (researchAct == null){

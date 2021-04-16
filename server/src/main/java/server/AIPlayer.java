@@ -14,6 +14,8 @@ import java.util.LinkedHashSet;
 
 import shared.*;
 
+import javax.swing.text.html.HTMLDocument;
+
 /**
  * This class is for AI player to play with human player
  */
@@ -51,15 +53,16 @@ public class AIPlayer implements Runnable {
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
     this.soldierBonusLevelTable = new HashMap<>();
-    soldierBonusLevelTable.put("Lv1", 0);
-    soldierBonusLevelTable.put("Lv2", 1);
-    soldierBonusLevelTable.put("Lv3", 3);
-    soldierBonusLevelTable.put("Lv4", 5);
-    soldierBonusLevelTable.put("Tel", 5);
-    soldierBonusLevelTable.put("Lv5", 8);
-    soldierBonusLevelTable.put("Lv6", 11);
-    soldierBonusLevelTable.put("Lv7", 15);
+    soldierBonusLevelTable.put("Lv1", 1);
+    soldierBonusLevelTable.put("Lv2", 2);
+    soldierBonusLevelTable.put("Lv3", 4);
+    soldierBonusLevelTable.put("Lv4", 6);
+    soldierBonusLevelTable.put("Tel", 6);
+    soldierBonusLevelTable.put("Lv5", 9);
+    soldierBonusLevelTable.put("Lv6", 12);
+    soldierBonusLevelTable.put("Lv7", 16);
     this.techLevelReqReference = new HashMap<>();
+    techLevelReqReference.put("Lv1", 1);
     techLevelReqReference.put("Lv2", 1);
     techLevelReqReference.put("Lv3", 2);
     techLevelReqReference.put("Lv4", 3);
@@ -67,7 +70,6 @@ public class AIPlayer implements Runnable {
     techLevelReqReference.put("Lv5", 4);
     techLevelReqReference.put("Lv6", 5);
     techLevelReqReference.put("Lv7", 6);
-
   }
 
   /**
@@ -278,6 +280,8 @@ public class AIPlayer implements Runnable {
     Player p = board.getPlayerByName(playerName);
     int resourceCost = 50+(p.getTechLevel()-1)*(p.getTechLevel())/2*25;
     p.updateTempTechResource(-resourceCost);
+    // First levelup unit utilizing a portion of resources
+    generateUpgradeActions(actions);
     // The set stores all the name of potential target to attack
     HashSet<String> set = new HashSet<>();
     int lowest_score = Integer.MAX_VALUE;
@@ -320,10 +324,6 @@ public class AIPlayer implements Runnable {
     if (scoreGap > 0){
       scoreGap = generateMoveDecisions(actions, potentialSrc, scoreGap);
     }
-    // If the score gap still exist, move unit from other territory
-    if (scoreGap > 0){
-      scoreGap = generateUpgradeDecisions(actions, potentialSrc, scoreGap);
-    }
     // If the score gap still exist, unable to attack
     if (scoreGap > 0){
       return;
@@ -353,52 +353,78 @@ public class AIPlayer implements Runnable {
     }
   }
 
-
+  public void generateUpgradeActions(ArrayList<String> actions){
+    Player p = board.getPlayerByName(playerName);
+    int avaTechResource = p.getTechResource()*2/3;
+    
+    for (Territory t: p.getTerritoryList()){
+      generateUpgradeForOneTerritory(actions, t.getTerritoryName(), avaTechResource/3);
+    }
+  }
   /**
    * Generate upgrade action needed to make attack possible
    * @param actions list of actions
-   * @param potentialSrc  name of the territory to upgrade
-   * @param scoreReq the score gap to close
+   * @param toUpgrade  name of the territory to upgrade
+   * @param resource the available resource to use
    * @return the score left to close the gap
    */
-  public int generateUpgradeDecisions(ArrayList<String> actions, String potentialSrc, int scoreReq){
+  public void generateUpgradeForOneTerritory(ArrayList<String> actions, String toUpgrade, int resource){
     Player p = board.getPlayerByName(playerName);
     int techLevel = p.getTechLevel();
     // For each soldier in the source territory
     for (int i=0; i<soldierNames.length-1; ++i){
+      Soldiers startL = board.getTerritory(toUpgrade).getOneUnits(soldierNames[i]);
       // If no such type of soldier, continue
-      if (board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]).equals(0)){
+      if (startL.getCount().equals(0)){
         continue;
+      }
+      if (resource <= 0) {
+        break;
       }
       // If the current type of soldier have a higher requirement than the techLevel, break
       // Since all other level of soldier have a even higher tech requirement
-      if (techLevelReqReference.get(soldierNames[i]) > techLevel){
+      if (startL.getTechReq() > techLevel){
         break;
       }
       // For all the available soldier type to upgrade to
       for (int j=soldierNames.length-1; j>=0; --j){
+        Soldiers endL = board.getTerritory(toUpgrade).getOneUnits(soldierNames[j]);
         // If that level is not reachable then continue to next level
-        if (techLevelReqReference.get(soldierNames[j]) < techLevel){
+        if (endL.getTechReq() > techLevel){
           continue;
         }
         int cnt = 0;
-        int curScore = 0;
         // Upgrade this type of soldier to the given level one at a time
-        for (; cnt<board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]); ++cnt){
-          scoreReq -= (soldierBonusLevelTable.get(soldierNames[j]) - soldierBonusLevelTable.get(soldierNames[i]));
-          if (scoreReq <= 0){
+        //System.out.println("Hi");
+        for (; cnt<startL.getCount(); ++cnt){
+          //System.out.println(resource);
+          if ((endL.getCost() - startL.getCost()) > resource) {
             break;
           }
+          else {
+            resource -= (endL.getCost() - startL.getCost());
+          }
         }
-        // Update the temp soldier count, so the attack can access them
-        board.updateTempCount(potentialSrc, soldierNames[i], cnt);
-        board.updateTempCount(potentialSrc, soldierNames[j], -cnt);
-        String actionStr = "U "+potentialSrc+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j];
-        actions.add(actionStr);
+        // System.out.println(cnt);
+        if (cnt == 0) {
+          break;
+        }
+        // Generate the action string
+        String actionStr = "U "+toUpgrade+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j];
+        // Use checker to do resource check, this will also update all the temp field
+        UpgradeAction act = new UpgradeAction(playerName, toUpgrade+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j]);
+        String res = upgradeRuleChecker.checkAction(act, board);
+        
+        if (res == null) {
+          actions.add(actionStr);
+        }
+        else {
+          System.out.println(res);
+        }
         break;
       }
     }
-    return scoreReq;
+
   }
 
   public int generateMoveDecisions(ArrayList<String> actions, String potentialSrc, int scoreReq){
@@ -406,6 +432,7 @@ public class AIPlayer implements Runnable {
     Territory srcTerr = board.getAllTerritroy().get(potentialSrc);  //get source territory object
     LinkedHashSet<Territory> ownedTerr = p.getTerritoryList();
     ArrayList<Territory> ownedOtherTerr = new ArrayList<>(); //store all other same owner territories
+    
     for(Territory t : ownedTerr){
       if(!t.getTerritoryName().equals(srcTerr.getTerritoryName())){
         ownedOtherTerr.add(t);
@@ -416,20 +443,24 @@ public class AIPlayer implements Runnable {
       for(int count = 7; count >= 0; count --){
         String soldierName = soldierNames[count];
         Soldiers singleSoldierObj = t.getOneUnits(soldierName);
-        int singleSoldierCount = 0;
+        int cnt = 0;
         //for each kind of soldier, check how many of them can satisfy the score
-        for(int i = 1; i <= singleSoldierObj.getCount(); i ++){
-            singleSoldierCount = i;
+        for(; cnt < singleSoldierObj.getCount(); cnt++){
+          if (singleSoldierObj.getBonus() > scoreReq) {
+            break;
+          }
+          else {
             scoreReq -= singleSoldierObj.getBonus();
-            if(scoreReq < 0){
-                break;
-            }            
+          }   
         }
-        if(singleSoldierCount == 0){
+        if(cnt == 0){
             continue;
         }
-        String actionStr = "M "+ t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  singleSoldierCount +" "+ singleSoldierObj.getName();
-        actions.add(actionStr); //add a move action
+        String actionStr = "M "+ t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  cnt +" "+ singleSoldierObj.getName();
+        BasicAction act = new Attack(playerName, t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  cnt +" "+ singleSoldierObj.getName());
+        if (attackRuleChecker.checkAction(act, board) == null) {
+          actions.add(actionStr);//add a move action
+        }
       }
     }
     return scoreReq;
@@ -476,6 +507,9 @@ public class AIPlayer implements Runnable {
         out.println(board.displaySinlgePlayerBoardV3(playerName));
         // send a series of actions
         ArrayList<String> actions = new ArrayList<>();
+        board.refreshTemp(playerName);
+        board.getPlayerByName(playerName).refreshTempFoodResource();
+        board.getPlayerByName(playerName).refreshTempTechResource();
         decideActionChoice(actions);
         for (String action : actions) {
           // recv "what would you like to do"
@@ -505,6 +539,10 @@ public class AIPlayer implements Runnable {
     } catch(IOException e) {
       e.printStackTrace();
     }
-    
+  }
+
+  
+  public void setPlayername(String PName){
+    this.playerName = PName;
   }
 }
