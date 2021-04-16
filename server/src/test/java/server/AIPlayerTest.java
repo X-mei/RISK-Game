@@ -65,8 +65,8 @@ public class AIPlayerTest {
     board.refreshTemp("Red");
     ArrayList<String> actions = new ArrayList<>();
     ai.generateAttackDecisions(actions);
-    System.out.println(actions);
-    assertEquals(1,2);
+    //System.out.println(actions);
+    //assertEquals(1,2);
   }
 }
 
