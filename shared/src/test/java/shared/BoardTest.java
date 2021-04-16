@@ -48,10 +48,18 @@ public class BoardTest {
     for(String s : b.getAllTerritroy().keySet()){
       b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
     }
+    TechAction t1 = new TechAction("Red");
+    b.processUpdateTech(t1);
+    b.processUpdateTech(t1);
+    b.processUpdateTech(t1);
+    b.processUpdateTech(t1);
+    b.processUpdateTech(t1);
+    ResearchCloak r1 = new ResearchCloak("Red");
+    b.processResearchCloak(r1);
     CloakAction c1 = new CloakAction("Red", "Ilios");
     CloakAction c2 = new CloakAction("Red", "Volskaya");
     CloakAction c3 = new CloakAction("Red", "Junkertown");
-    b.processOneCloakAction(c1);
+    b.processOneCloakAction(c2);
     //b.processOneCloakAction(c2);
     for(Player p : b.getPlayers()){
       if(p.getName().equals("King")){       
@@ -66,7 +74,7 @@ public class BoardTest {
 
         BasicAction ms1 = new Move("King", "Hanamura Ilios 1 Spy");
         BasicAction ms2 = new Move("King", "Hanamura Volskaya 1 Spy");
-        b.processSingleBasicMove(ms1);
+        //b.processSingleBasicMove(ms1);
         b.processSingleBasicMove(ms2);
         String KingSpyMapString = "";
         for(String s : KingSpyMap.keySet()){
@@ -76,7 +84,7 @@ public class BoardTest {
 
         //b.processSingleUpdateUnit(spyCreate);
         BasicAction a2 = new Move("King", "Hanamura Ilios 1 Spy");
-        b.processSingleBasicMove(a2);
+        //b.processSingleBasicMove(a2);
         UpgradeAction a3 = new UpgradeAction("King", "Hanamura Lv1 1 Lv7");
         UpgradeAction a4 = new UpgradeAction("King", "Dorado Lv1 1 Lv3");
         UpgradeAction a5 = new UpgradeAction("King", "Hanamura Lv1 1 Lv4");
@@ -101,6 +109,90 @@ public class BoardTest {
         //assertEquals(p.getName(), b.infoToFormMap(p.getName()));
       }
     }
+  }
+
+
+  @Test 
+  public void test_processPreviousFunctionDisplay(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
+    }
+     b.infoToFormMap("King");
+    TechAction t1 = new TechAction("Red");
+    b.processUpdateTech(t1);
+    b.processUpdateTech(t1);
+    b.processUpdateTech(t1);
+    b.processUpdateTech(t1);
+    ResearchCloak r1 = new ResearchCloak("Red");
+    b.processResearchCloak(r1);
+    CloakAction c1 = new CloakAction("Red", "Ilios");
+    CloakAction c2 = new CloakAction("Red", "Volskaya");
+    CloakAction c3 = new CloakAction("Red", "Junkertown");
+    //b.processOneCloakAction(c2);
+    //assertEquals("King", b.infoToFormMap("King"));
+    UpgradeAction u1 = new UpgradeAction("Red", "Volskaya Lv1 1 Lv5");
+    b.processSingleUpdateUnit(u1);
+    b.infoToFormMap("King");
+    Player king = b.getPlayerByName("King");
+    // for(String s : king.getPreviousRoundCanSee().keySet()){
+    //   System.out.println(king.getPreviousRoundCanSee().get(s));
+    // }
+    //System.out.println();
+    //assertEquals("King", b.infoToFormMap("King"));
+    //Round 1
+    BasicAction a1 = new Attack("King", "Hanamura Volskaya 6 Lv7");
+    LinkedHashSet<BasicAction> s1 = new LinkedHashSet<>();
+    s1.add(a1);
+    HashMap<String, HashMap<String, BasicAction>> outMap = b.mergeOneTurnAttackV2(s1);
+    b.processOneTurnAttackNextV2(outMap);
+    //assertEquals("King", b.infoToFormMap("King"));
+    b.infoToFormMap("King");
+    //Round 2
+    BasicAction a2 = new Attack("Red", "Ilios Volskaya 16 Lv7");
+    LinkedHashSet<BasicAction> s2 = new LinkedHashSet<>();
+    s2.add(a2);
+    HashMap<String, HashMap<String, BasicAction>> outMap2 = b.mergeOneTurnAttackV2(s2);
+    b.processOneTurnAttackNextV2(outMap2);
+    //assertEquals("King", b.infoToFormMap("King"));
+    b.infoToFormMap("King");
+    //Round 3
+    BasicAction a3 = new Attack("King", "Hanamura Volskaya 26 Lv7");   
+    LinkedHashSet<BasicAction> s3 = new LinkedHashSet<>();
+    s3.add(a3);
+    HashMap<String, HashMap<String, BasicAction>> outMap3 = b.mergeOneTurnAttackV2(s3);
+    b.processOneTurnAttackNextV2(outMap3);
+    //assertEquals("King", b.infoToFormMap("King"));
+    b.infoToFormMap("King");
+
+    //Round 4
+    BasicAction a4 = new Attack("King", "Volskaya Junkertown 36 Lv7");
+    LinkedHashSet<BasicAction> s4 = new LinkedHashSet<>();
+    s4.add(a4);
+    HashMap<String, HashMap<String, BasicAction>> outMap4 = b.mergeOneTurnAttackV2(s4);
+    b.processOneTurnAttackNextV2(outMap4);
+    //assertEquals("King", b.infoToFormMap("King"));
+    b.infoToFormMap("King");
+     //Round 5
+     BasicAction a5 = new Attack("Red", "Ilios Junkertown 66 Lv7");
+     BasicAction a6 = new Attack("Red", "Ilios Volskaya 46 Lv7");
+     LinkedHashSet<BasicAction> s5 = new LinkedHashSet<>();
+     s5.add(a5);
+     s5.add(a6);
+     HashMap<String, HashMap<String, BasicAction>> outMap5 = b.mergeOneTurnAttackV2(s5);
+     b.processOneTurnAttackNextV2(outMap5);
+     b.infoToFormMap("King");
+     //assertEquals("King", b.infoToFormMap("King"));
+     //Round 6
+     BasicAction a7 = new Attack("Red", "Ilios Hanamura 6 Lv7");
+     BasicAction a8 = new Attack("Red", "Ilios Hollywood 6 Lv7");
+     LinkedHashSet<BasicAction> s6 = new LinkedHashSet<>();
+     s6.add(a7);
+     s6.add(a8);
+     HashMap<String, HashMap<String, BasicAction>> outMap6 = b.mergeOneTurnAttackV2(s6);
+     b.processOneTurnAttackNextV2(outMap6);
+     assertEquals("King", b.infoToFormMap("King"));
+    
   }
 
   @Test
