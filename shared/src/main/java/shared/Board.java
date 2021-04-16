@@ -889,18 +889,11 @@ private String getSoldierNameByBonus(int Bonus){
   }
 
   public String infoToFormMap(String playerName) {
+    HashMap<String, String> thisRoundCanSeeOwn = new HashMap<>();  //Owned territories visible for this round 
+    HashMap<String, String> thisRoundCanSeeEnemy = new HashMap<>();  //Enemy's territories visible for this round 
     Player p = getPlayerByName(playerName);
-    // int pFoodResource = p.getFoodResource();
-    // int pTechResource = p.getTechResource();
-    // int pTechLevel = p.getTechLevel();
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     String s1 = playerName + "\n";
-    // String s2 = "Tech Level: " + pTechLevel + ", Food: " + pFoodResource + ", Tech: " + pTechResource + "\n";
-    // Eg: ans = "King player:
-    //            ------------
-    //           "
-
-    //String ans = s1 + createDottedLine(s1.length()) + s2 + "\n";
     String territoryInfo = ""; 
     HashSet<Territory> neighborSet = new HashSet<>(); 
     for(Territory t : terriSet){
@@ -910,6 +903,7 @@ private String getSoldierNameByBonus(int Bonus){
         }
       }
       territoryInfo += displaySingleTerriInfoWithNameFirst(t) + "\n";
+      thisRoundCanSeeOwn.put(t.getTerritoryName(), displaySingleTerriInfoWithNameFirst(t));
     }
     
     s1 += territoryInfo + "\nenemy can see:\n";
@@ -922,12 +916,27 @@ private String getSoldierNameByBonus(int Bonus){
     }
     for(Territory t : neighborSet){
       s1 += t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t) + "\n";
+      thisRoundCanSeeEnemy.put(t.getTerritoryName(), t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t));
+    }
+
+    //display previous territories info
+    s1 += "previous owned territory info:\n";
+    //if an owned territory is in lastRoundCanSee(own) but not in thisRoundCanSee(all), display its previous info
+    for(String TerrName : p.getLastRoundCanSeeOwn().keySet()){
+      if(!thisRoundCanSeeOwn.keySet().contains(TerrName) && !thisRoundCanSeeEnemy.keySet().contains(TerrName)){ 
+        s1 += p.getLastRoundCanSeeOwn().get(TerrName) + "\n";
+      }
     }
     
-    //add spy information
-    //ans += spyInfoDisplay(p) + "\n";
-    //add adjacent enemy territories info
-    //ans += adjacentEnemyTerrInfo(p);
+    s1 += "\n previous enemy territory info:\n";
+    //if an enemy's territory is in lastRoundCanSee(enemy) but not in thisRoundCanSee(all), display its previous info
+    for(String TerrName : p.getLastRoundCanSeeEnemy().keySet()){
+      if(!thisRoundCanSeeOwn.keySet().contains(TerrName) && !thisRoundCanSeeEnemy.keySet().contains(TerrName)){ 
+        s1 += p.getLastRoundCanSeeEnemy().get(TerrName) + "\n";
+      }
+    }
+    p.setLastRoundCanSeeOwn(thisRoundCanSeeOwn);
+    p.setLastRoundCanSeeEnemy(thisRoundCanSeeEnemy);
     return s1;
   }
 
@@ -984,7 +993,6 @@ private String getSoldierNameByBonus(int Bonus){
 
   public String displaySingleTerriInfoWithNameFirst(Territory t){
     String soldierNameString = "";
-      //Eg: temp = "10 Lv1 in Numbani (next to:"
       String comma = "";
       for(String s : t.getSoldiers().keySet()){
         Soldiers tempS = t.getSoldiers().get(s);
@@ -996,14 +1004,6 @@ private String getSoldierNameByBonus(int Bonus){
         comma = ",";
       }
       String temp = t.getTerritoryName() + ":" + soldierNameString;
-      // String space = " ";
-      // String tempNeighbor = "";
-      // for (Territory tNeighbor : t.getNeighbours()) {
-      //   tempNeighbor += space + tNeighbor.getTerritoryName();
-      //   space = ", ";
-      // }
-      //Eg tempNeihbor = " Elantris, Midkemia" 
-      //String out = temp + tempNeighbor + ")";
       return temp;
   }
 

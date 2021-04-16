@@ -29,6 +29,9 @@ public class Player {
   protected HashMap<String, BiFunction<String, String, BasicAction>> actionCreationFns;
   protected HashMap<String, Integer> spyLocation;
   protected boolean canCloak;
+  protected HashMap<String, String> lastRoundCanSeeOwn;
+  protected HashMap<String, String> lastRoundCanSeeEnemy;
+
 
 
   /**
@@ -51,6 +54,7 @@ public class Player {
     setUpActionCreationMap();
     spyLocation = new HashMap<>();
     canCloak = false;
+    lastRoundCanSeeOwn = new HashMap<>();
   }
     
   /**
@@ -98,12 +102,34 @@ public class Player {
     return factory.createTechUpgrade(name);
   }
 
+  public String displaySingleTerriInfoWithNameFirst(Territory t){
+    String soldierNameString = "";
+      String comma = "";
+      for(String s : t.getSoldiers().keySet()){
+        Soldiers tempS = t.getSoldiers().get(s);
+        int SoldierNum = tempS.getCount();
+        if(SoldierNum == 0){
+          continue;
+        }
+        soldierNameString += comma + SoldierNum + " " + tempS.getName();
+        comma = ",";
+      }
+      String temp = t.getTerritoryName() + ":" + soldierNameString;
+      return temp;
+  }
+
+
+
   /**
    * distribute one player's territories
    * @param territory  set for one player
    */
   public void addTerritory(LinkedHashSet<Territory> territory) {
     ownedTerritory = territory;
+    //set up origin last round can see territories
+    for(Territory t : territory){
+      lastRoundCanSeeOwn.put(t.getTerritoryName(), displaySingleTerriInfoWithNameFirst(t));
+    }
   }
 
   /**
@@ -265,6 +291,72 @@ public class Player {
   public void changeCloakState(boolean out){
     canCloak = out;
   }
+
+  /**
+   * get what territory this player can see and owned for last round
+   * @return
+   */
+  public HashMap<String, String> getLastRoundCanSeeOwn(){
+    return lastRoundCanSeeOwn;
+  }
+
+  /**
+   * get what territory this player can see and is enemy's for last round
+   * @return
+   */
+  public HashMap<String, String> getLastRoundCanSeeEnemy(){
+    return lastRoundCanSeeEnemy;
+  }
+
+  // /**
+  //  * erase all info in lastRoundCanSeeOwn
+  //  */
+  // public void cleanLastRoundCanSeeOwn(){
+  //   lastRoundCanSeeOwn.clear();
+  // }
+
+  // /**
+  //  * erase all info in lastRoundCanSeeEnemy
+  //  */
+  // public void cleanLastRoundCanSeeEnemy(){
+  //   lastRoundCanSeeEnemy.clear();
+  // }
+
+  // /**
+  //  * add info to lastRoundCanSeeOwn
+  //  * @param name
+  //  * @param info
+  //  */
+  // public void addLastRoundCanSeeOwn(String name, String info){
+  //   lastRoundCanSeeOwn.put(name, info);
+  // }
+
+  // /**
+  //  * add info to lastRoundCanSeeEnemy
+  //  * @param name
+  //  * @param info
+  //  */
+  // public void addLastRoundCanSeeEnemy(String name, String info){
+  //   lastRoundCanSeeEnemy.put(name, info);
+  // }
+
+
+  /**
+   * set the lastRoundCanSeeOwn map to a new map 
+   * @param map
+   */
+  public void setLastRoundCanSeeOwn(HashMap<String, String> map){
+    lastRoundCanSeeOwn = map;
+  }
+
+  /**
+   * set the lastRoundCanSeeEnemy map to a new map 
+   * @param map
+   */
+  public void setLastRoundCanSeeEnemy(HashMap<String, String> map){
+    lastRoundCanSeeEnemy = map;
+  }
+  
 }                     
 
 
