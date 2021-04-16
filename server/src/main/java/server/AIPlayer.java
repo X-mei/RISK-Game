@@ -51,15 +51,16 @@ public class AIPlayer implements Runnable {
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
     this.soldierBonusLevelTable = new HashMap<>();
-    soldierBonusLevelTable.put("Lv1", 0);
-    soldierBonusLevelTable.put("Lv2", 1);
-    soldierBonusLevelTable.put("Lv3", 3);
-    soldierBonusLevelTable.put("Lv4", 5);
-    soldierBonusLevelTable.put("Tel", 5);
-    soldierBonusLevelTable.put("Lv5", 8);
-    soldierBonusLevelTable.put("Lv6", 11);
-    soldierBonusLevelTable.put("Lv7", 15);
+    soldierBonusLevelTable.put("Lv1", 1);
+    soldierBonusLevelTable.put("Lv2", 2);
+    soldierBonusLevelTable.put("Lv3", 4);
+    soldierBonusLevelTable.put("Lv4", 6);
+    soldierBonusLevelTable.put("Tel", 6);
+    soldierBonusLevelTable.put("Lv5", 9);
+    soldierBonusLevelTable.put("Lv6", 12);
+    soldierBonusLevelTable.put("Lv7", 16);
     this.techLevelReqReference = new HashMap<>();
+    techLevelReqReference.put("Lv1", 1);
     techLevelReqReference.put("Lv2", 1);
     techLevelReqReference.put("Lv3", 2);
     techLevelReqReference.put("Lv4", 3);
@@ -67,7 +68,6 @@ public class AIPlayer implements Runnable {
     techLevelReqReference.put("Lv5", 4);
     techLevelReqReference.put("Lv6", 5);
     techLevelReqReference.put("Lv7", 6);
-
   }
 
   /**
@@ -362,13 +362,18 @@ public class AIPlayer implements Runnable {
    * @return the score left to close the gap
    */
   public int generateUpgradeDecisions(ArrayList<String> actions, String potentialSrc, int scoreReq){
+    
     Player p = board.getPlayerByName(playerName);
     int techLevel = p.getTechLevel();
+    
     // For each soldier in the source territory
     for (int i=0; i<soldierNames.length-1; ++i){
       // If no such type of soldier, continue
       if (board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]).equals(0)){
         continue;
+      }
+      if (scoreReq <= 0) {
+        break;
       }
       // If the current type of soldier have a higher requirement than the techLevel, break
       // Since all other level of soldier have a even higher tech requirement
@@ -378,11 +383,10 @@ public class AIPlayer implements Runnable {
       // For all the available soldier type to upgrade to
       for (int j=soldierNames.length-1; j>=0; --j){
         // If that level is not reachable then continue to next level
-        if (techLevelReqReference.get(soldierNames[j]) < techLevel){
+        if (techLevelReqReference.get(soldierNames[j]) > techLevel){
           continue;
         }
-        int cnt = 0;
-        int curScore = 0;
+        int cnt = 1;
         // Upgrade this type of soldier to the given level one at a time
         for (; cnt<board.getTerritoryUnitsCount(potentialSrc, soldierNames[i]); ++cnt){
           scoreReq -= (soldierBonusLevelTable.get(soldierNames[j]) - soldierBonusLevelTable.get(soldierNames[i]));
@@ -394,6 +398,7 @@ public class AIPlayer implements Runnable {
         board.updateTempCount(potentialSrc, soldierNames[i], cnt);
         board.updateTempCount(potentialSrc, soldierNames[j], -cnt);
         String actionStr = "U "+potentialSrc+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j];
+        UpgradeAction act = new UpgradeAction(playerName, potentialSrc+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j]);
         actions.add(actionStr);
         break;
       }
@@ -406,6 +411,7 @@ public class AIPlayer implements Runnable {
     Territory srcTerr = board.getAllTerritroy().get(potentialSrc);  //get source territory object
     LinkedHashSet<Territory> ownedTerr = p.getTerritoryList();
     ArrayList<Territory> ownedOtherTerr = new ArrayList<>(); //store all other same owner territories
+    
     for(Territory t : ownedTerr){
       if(!t.getTerritoryName().equals(srcTerr.getTerritoryName())){
         ownedOtherTerr.add(t);
@@ -429,7 +435,10 @@ public class AIPlayer implements Runnable {
             continue;
         }
         String actionStr = "M "+ t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  singleSoldierCount +" "+ singleSoldierObj.getName();
-        actions.add(actionStr); //add a move action
+        BasicAction act = new Attack(playerName, t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  singleSoldierCount +" "+ singleSoldierObj.getName());
+        if (attackRuleChecker.checkAction(act, board) == null) {
+          actions.add(actionStr);//add a move action
+        }
       }
     }
     return scoreReq;
@@ -476,6 +485,9 @@ public class AIPlayer implements Runnable {
         out.println(board.displaySinlgePlayerBoardV3(playerName));
         // send a series of actions
         ArrayList<String> actions = new ArrayList<>();
+        board.refreshTemp(playerName);
+        board.getPlayerByName(playerName).refreshTempFoodResource();
+        board.getPlayerByName(playerName).refreshTempTechResource();
         decideActionChoice(actions);
         for (String action : actions) {
           // recv "what would you like to do"
@@ -505,10 +517,10 @@ public class AIPlayer implements Runnable {
     } catch(IOException e) {
       e.printStackTrace();
     }
-    
   }
+
+  
   public void setPlayername(String PName){
     this.playerName = PName;
-
   }
 }
