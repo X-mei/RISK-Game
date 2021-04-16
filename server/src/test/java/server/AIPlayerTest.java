@@ -32,7 +32,7 @@ public class AIPlayerTest {
     board.refreshTemp("King");
     board.refreshTemp("Red");
     ArrayList<String> actions = new ArrayList<>();
-    ai.generateUpgradeDecisions(actions, "Hollywood", 3);
+    ai.generateUpgradeForOneTerritory(actions, "Hollywood", 4);
     System.out.println(actions);
   }
 
