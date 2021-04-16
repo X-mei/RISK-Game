@@ -280,6 +280,8 @@ public class AIPlayer implements Runnable {
     Player p = board.getPlayerByName(playerName);
     int resourceCost = 50+(p.getTechLevel()-1)*(p.getTechLevel())/2*25;
     p.updateTempTechResource(-resourceCost);
+    // First levelup unit utilizing a portion of resources
+    generateUpgradeActions(actions);
     // The set stores all the name of potential target to attack
     HashSet<String> set = new HashSet<>();
     int lowest_score = Integer.MAX_VALUE;
@@ -322,10 +324,6 @@ public class AIPlayer implements Runnable {
     if (scoreGap > 0){
       scoreGap = generateMoveDecisions(actions, potentialSrc, scoreGap);
     }
-    // If the score gap still exist, move unit from other territory
-    if (scoreGap > 0){
-      generateAllUpgrade(actions);
-    }
     // If the score gap still exist, unable to attack
     if (scoreGap > 0){
       return;
@@ -355,11 +353,12 @@ public class AIPlayer implements Runnable {
     }
   }
 
-  public void generateAllUpgrade(ArrayList<String> actions){
+  public void generateUpgradeActions(ArrayList<String> actions){
     Player p = board.getPlayerByName(playerName);
     int avaTechResource = p.getTechResource()*2/3;
+    
     for (Territory t: p.getTerritoryList()){
-      generateUpgradeForOneTerritory(actions, t.getTerritoryName(),avaTechResource/3);
+      generateUpgradeForOneTerritory(actions, t.getTerritoryName(), avaTechResource/3);
     }
   }
   /**
@@ -394,21 +393,33 @@ public class AIPlayer implements Runnable {
         if (endL.getTechReq() > techLevel){
           continue;
         }
-        int cnt = 1;
+        int cnt = 0;
         // Upgrade this type of soldier to the given level one at a time
-        for (; cnt<=startL.getCount(); ++cnt){
-          resource -= (endL.getCost() - startL.getCost());
-          if (resource <= 0){
+        //System.out.println("Hi");
+        for (; cnt<startL.getCount(); ++cnt){
+          //System.out.println(resource);
+          if ((endL.getCost() - startL.getCost()) > resource) {
             break;
           }
+          else {
+            resource -= (endL.getCost() - startL.getCost());
+          }
         }
-        // Update the temp soldier count, so the attack can access them
-        board.updateTempCount(toUpgrade, soldierNames[i], cnt);
-        board.updateTempCount(toUpgrade, soldierNames[j], -cnt);
+        // System.out.println(cnt);
+        if (cnt == 0) {
+          break;
+        }
+        // Generate the action string
         String actionStr = "U "+toUpgrade+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j];
+        // Use checker to do resource check, this will also update all the temp field
         UpgradeAction act = new UpgradeAction(playerName, toUpgrade+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j]);
-        if (upgradeRuleChecker.checkAction(act, board) == null) {
+        String res = upgradeRuleChecker.checkAction(act, board);
+        
+        if (res == null) {
           actions.add(actionStr);
+        }
+        else {
+          System.out.println(res);
         }
         break;
       }
@@ -432,20 +443,21 @@ public class AIPlayer implements Runnable {
       for(int count = 7; count >= 0; count --){
         String soldierName = soldierNames[count];
         Soldiers singleSoldierObj = t.getOneUnits(soldierName);
-        int singleSoldierCount = 0;
+        int cnt = 0;
         //for each kind of soldier, check how many of them can satisfy the score
-        for(int i = 1; i <= singleSoldierObj.getCount(); i ++){
-            singleSoldierCount = i;
+        for(; cnt < singleSoldierObj.getCount(); cnt++){
+          if (singleSoldierObj.getBonus() > scoreReq) {
+            break;
+          }
+          else {
             scoreReq -= singleSoldierObj.getBonus();
-            if(scoreReq < 0){
-                break;
-            }            
+          }   
         }
-        if(singleSoldierCount == 0){
+        if(cnt == 0){
             continue;
         }
-        String actionStr = "M "+ t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  singleSoldierCount +" "+ singleSoldierObj.getName();
-        BasicAction act = new Attack(playerName, t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  singleSoldierCount +" "+ singleSoldierObj.getName());
+        String actionStr = "M "+ t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  cnt +" "+ singleSoldierObj.getName();
+        BasicAction act = new Attack(playerName, t.getTerritoryName() + " " + srcTerr.getTerritoryName() +" " +  cnt +" "+ singleSoldierObj.getName());
         if (attackRuleChecker.checkAction(act, board) == null) {
           actions.add(actionStr);//add a move action
         }
