@@ -86,10 +86,11 @@ public class PlayGameView {
     Button confirm;
     Button continueWatch;
     Button exitGame;
-    ChoiceBox choicesOfLevel1;
-    ChoiceBox choicesOfLevel2;
-    ChoiceBox choicesOfDest;
-    ChoiceBox choicesOfSource;
+    ChoiceBox<String> choicesOfLevel1;
+    ChoiceBox<String> choicesOfLevel2;
+    ChoiceBox<String> attackLevel;
+    ChoiceBox<String> choicesOfDest;
+    ChoiceBox<String> choicesOfSource;
     HashMap<String, ArrayList<String>> territories;
     HashMap<String, String> units;
 
@@ -162,10 +163,11 @@ public class PlayGameView {
         this.terr5P_8 = new Button();
         this.terr5P_9 = new Button();
         this.terr5P_10 = new Button();
-        this.choicesOfLevel1 = new ChoiceBox();
-        this.choicesOfLevel2 = new ChoiceBox();
-        this.choicesOfDest = new ChoiceBox();
-        this.choicesOfSource = new ChoiceBox();
+        this.choicesOfLevel1 = new ChoiceBox<String>();
+        this.choicesOfLevel2 = new ChoiceBox<String>();
+        this.attackLevel = new ChoiceBox<String>();
+        this.choicesOfDest = new ChoiceBox<String>();
+        this.choicesOfSource = new ChoiceBox<String>();
         this.territories = new HashMap<String, ArrayList<String>>();
         this.units = new HashMap<String, String>();
     }
@@ -563,13 +565,13 @@ public class PlayGameView {
         destPrompt.setVisible(false);
         playGamePane.getChildren().add(destPrompt);
 
-        lvPrompt1.setLayoutX(215);
+        lvPrompt1.setLayoutX(210);
         lvPrompt1.setLayoutY(530);
         lvPrompt1.setText("Level");
         lvPrompt1.setVisible(false);
         playGamePane.getChildren().add(lvPrompt1);
 
-        lvPrompt2.setLayoutX(555);
+        lvPrompt2.setLayoutX(550);
         lvPrompt2.setLayoutY(530);
         lvPrompt2.setText("Level");
         lvPrompt2.setVisible(false);
@@ -740,12 +742,21 @@ public class PlayGameView {
 
         choicesOfLevel2.setItems(FXCollections.observableArrayList(
                 "Lv1", "Lv2",
-                "Lv3", "Lv4", "Lv5", "Lv6", "Lv7")
+                "Lv3", "Lv4", "Lv5", "Lv6", "Lv7", "Spy")
         );
         choicesOfLevel2.setLayoutX(590);
         choicesOfLevel2.setLayoutY(525);
         choicesOfLevel2.setPrefWidth(110);
         playGamePane.getChildren().add(choicesOfLevel2);
+
+        attackLevel.setItems(FXCollections.observableArrayList(
+                "Lv1", "Lv2",
+                "Lv3", "Lv4", "Lv5", "Lv6", "Lv7")
+        );
+        attackLevel.setLayoutX(590);
+        attackLevel.setLayoutY(525);
+        attackLevel.setPrefWidth(110);
+        playGamePane.getChildren().add(attackLevel);
 
         if(playerNum.equals("2")){
             choicesOfSource.setItems(FXCollections.observableArrayList(
@@ -800,6 +811,7 @@ public class PlayGameView {
 
         choicesOfLevel1.setVisible(false);
         choicesOfLevel2.setVisible(false);
+        attackLevel.setVisible(false);
         choicesOfDest.setVisible(false);
         choicesOfSource.setVisible(false);
 
@@ -833,12 +845,14 @@ public class PlayGameView {
         research.setLayoutY(570);
         research.setText("Research Cloak");
         research.setPrefWidth(200);
+        research.setVisible(false);
         playGamePane.getChildren().add(research);
 
         cloak.setLayoutX(300);
         cloak.setLayoutY(610);
         cloak.setText("Cloak");
         cloak.setPrefWidth(200);
+        cloak.setVisible(false);
         playGamePane.getChildren().add(cloak);
 
         done.setLayoutX(40);
@@ -857,6 +871,7 @@ public class PlayGameView {
 
         choicesOfLevel1.setVisible(false);
         choicesOfLevel2.setVisible(false);
+        attackLevel.setVisible(false);
         choicesOfDest.setVisible(false);
         choicesOfSource.setVisible(false);
         srcPrompt.setVisible(false);
@@ -865,6 +880,8 @@ public class PlayGameView {
         move.setVisible(false);
         attack.setVisible(false);
         tech.setVisible(false);
+        research.setVisible(false);
+        cloak.setVisible(false);
         done.setVisible(false);
     }
 
@@ -873,6 +890,7 @@ public class PlayGameView {
         prompt1.setText("Wait for other players to perform the action...");
         choicesOfLevel1.setVisible(false);
         choicesOfLevel2.setVisible(false);
+        attackLevel.setVisible(false);
         choicesOfDest.setVisible(false);
         choicesOfSource.setVisible(false);
         srcPrompt.setVisible(false);
@@ -902,8 +920,8 @@ public class PlayGameView {
         move.setVisible(true);
         attack.setVisible(true);
         tech.setVisible(true);
-        research.setVisible(true);
-        cloak.setVisible(true);
+        // research.setVisible(true);
+        // cloak.setVisible(true);
         done.setVisible(true);
     }
 
