@@ -658,7 +658,6 @@ private String getSoldierNameByBonus(int Bonus){
     // }    
   }
 
-  
   /**
    * Upgrade tech level, only once per round
    * Also check if the tech upgrade is valid
@@ -671,18 +670,41 @@ private String getSoldierNameByBonus(int Bonus){
     String techUpOwner = techUpAct.getActionOwner();
     Player actionPlayer = getPlayerByName(techUpOwner);
     int currTechLevel = actionPlayer.getTechLevel();
+    // if (currTechLevel >= 6) {
+    //   System.out.println("Reached Highest Tech Level 6, no more upgrade");
+    //   return;
+    // }
+    int techUpgradeCost = techUpgradetable.get(currTechLevel + 1);
+    // if (techUpgradeCost > actionPlayer.getTechResource()) {
+    //   System.out.println("Not enough tech resource to upgrade tech");
+    //   return;
+    // }
+
+    actionPlayer.updateTechResource(-techUpgradeCost);
+    actionPlayer.updateTechLevel();
+    System.out.println("in tech update");
+  }
+
+  public boolean checkUpdateTech(TechAction techUpAct){
+    if (techUpAct == null){
+      return true;
+    }
+    String techUpOwner = techUpAct.getActionOwner();
+    Player actionPlayer = getPlayerByName(techUpOwner);
+    int currTechLevel = actionPlayer.getTechLevel();
     if (currTechLevel >= 6) {
       System.out.println("Reached Highest Tech Level 6, no more upgrade");
-      return;
+      return false;
     }
     int techUpgradeCost = techUpgradetable.get(currTechLevel + 1);
     if (techUpgradeCost > actionPlayer.getTechResource()) {
       System.out.println("Not enough tech resource to upgrade tech");
-      return;
+      return false;
     }
-    actionPlayer.updateTechResource(-techUpgradeCost);
-    actionPlayer.updateTechLevel();
+    // actionPlayer.updateTechResource(-techUpgradeCost);
+    // actionPlayer.updateTechLevel();
     System.out.println("in tech update");
+    return true;
   }
 
 
@@ -697,17 +719,39 @@ private String getSoldierNameByBonus(int Bonus){
     }
     String techUpOwner = researchAct.getActionOwner();
     Player actionPlayer = getPlayerByName(techUpOwner);
+    //int currTechLevel = actionPlayer.getTechLevel();
+    // if (currTechLevel < 3) {
+    //   System.out.println("You should reach at least tech level 3 to research cloak");
+    //   return;
+    // }
+    // if (actionPlayer.getTechResource() < 100) {
+    //   System.out.println("Not enough tech resource to research cloak");
+    //   return;
+    // }
+    actionPlayer.updateTechResource(-100);
+    actionPlayer.changeCloakState(true);
+    //System.out.println("in tech update");
+  }
+
+
+  public synchronized boolean checckResearchCloak(ResearchCloak researchAct) {
+    if (researchAct == null){
+      return true;
+    }
+    String techUpOwner = researchAct.getActionOwner();
+    Player actionPlayer = getPlayerByName(techUpOwner);
     int currTechLevel = actionPlayer.getTechLevel();
     if (currTechLevel < 3) {
       System.out.println("You should reach at least tech level 3 to research cloak");
-      return;
+      return false;
     }
     if (actionPlayer.getTechResource() < 100) {
       System.out.println("Not enough tech resource to research cloak");
-      return;
+      return false;
     }
-    actionPlayer.updateTechResource(-100);
-    actionPlayer.changeCloakState(true);
+    return true;
+    // actionPlayer.updateTechResource(-100);
+    // actionPlayer.changeCloakState(true);
     //System.out.println("in tech update");
   }
 
@@ -717,20 +761,45 @@ private String getSoldierNameByBonus(int Bonus){
    * @param cloakAcion
    */
   public synchronized void processOneCloakAction(CloakAction cloakAcion){
+    if (cloakAcion == null){
+      return;
+    }
     String cloakActOwner = cloakAcion.getActionOwner();
     Player cloakActPlayer = getPlayerByName(cloakActOwner);
-    if(!cloakActPlayer.checkPlayerCanCloak()){
-      System.out.println("You cannot cloak yet, research it first!");
-      return;
-    }
-    if(cloakActPlayer.getTechResource() < 20){
-      System.out.println("Not enough tech resource to cloak a territory");
-      return;
-    }
+    // if(!cloakActPlayer.checkPlayerCanCloak()){
+    //   System.out.println("You cannot cloak yet, research it first!");
+    //   return;
+    // }
+    // if(cloakActPlayer.getTechResource() < 20){
+    //   System.out.println("Not enough tech resource to cloak a territory");
+    //   return;
+    // }
     String src = cloakAcion.getSource();
     Territory srcT = getTerritory(src);
     srcT.setCloakStatus(true); //update target terrotory cloak state
     cloakActPlayer.updateTechResource(-20);  //update tech source
+  }
+
+
+  public synchronized boolean checkOneCloakAction(CloakAction cloakAcion){
+    if (cloakAcion == null){
+      return true;
+    }
+    String cloakActOwner = cloakAcion.getActionOwner();
+    Player cloakActPlayer = getPlayerByName(cloakActOwner);
+    if(!cloakActPlayer.checkPlayerCanCloak()){
+      System.out.println("You cannot cloak yet, research it first!");
+      return false;
+    }
+    if(cloakActPlayer.getTechResource() < 20){
+      System.out.println("Not enough tech resource to cloak a territory");
+      return false;
+    }
+    //String src = cloakAcion.getSource();
+    //Territory srcT = getTerritory(src);
+    // srcT.setCloakStatus(true); //update target terrotory cloak state
+    // cloakActPlayer.updateTechResource(-20);  //update tech source
+    return true;
   }
 
 
