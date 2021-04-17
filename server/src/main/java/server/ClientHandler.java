@@ -27,6 +27,8 @@ public class ClientHandler extends Thread {
   final LinkedHashSet<BasicAction> attackHashSet;
   final LinkedHashSet<UpgradeAction> upgradeSoldierHashSet;
   private TechAction techUpgrade;
+  private ResearchCloak researchCloak;
+  private CloakAction cloak;
   final Board board;
   final String playerName;
   final Player player;
@@ -55,6 +57,8 @@ public class ClientHandler extends Thread {
     this.attackHashSet = new LinkedHashSet<BasicAction>();
     this.upgradeSoldierHashSet = new LinkedHashSet<UpgradeAction>();
     this.techUpgrade = null;
+    this.researchCloak = null;
+    this.cloak = null;
     this.board = b;
     this.playerName = name;
     this.connectFlag = true;
@@ -66,6 +70,8 @@ public class ClientHandler extends Thread {
     actionSet.add('M');
     actionSet.add('A');
     actionSet.add('U');
+    actionSet.add('R');
+    actionSet.add('C');
     actionSet.add('T');
     this.lock = lock;
     this.isReady = isReady;
@@ -203,7 +209,7 @@ public class ClientHandler extends Thread {
       }
       int j = 0;
       for(Territory t: player.getTerritoryList()) {
-        int [] unitsToAdd = new int[9];
+        int [] unitsToAdd = new int[8];
         unitsToAdd[0] = unitsAssign[j];
         board.singleTerritoryUnitSetup(t.getTerritoryName(), unitsToAdd);
         player.addPreviousRoundCanSee(t.getTerritoryName(), t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t)); //initialize origin last can see own territory
@@ -234,6 +240,8 @@ public class ClientHandler extends Thread {
       attackHashSet.clear();
       upgradeSoldierHashSet.clear();
       techUpgrade = null;
+      researchCloak = null;
+      cloak = null;
       String boardMsg = board.displaySinlgePlayerBoardV3(playerName);
       output.writeUTF(boardMsg);
       
@@ -280,7 +288,9 @@ public class ClientHandler extends Thread {
           actionPlayer.refreshTempFoodResource();
           actionPlayer.refreshTempTechResource();
           // rule checker of move and attack actions
-          if(board.checkIfUpgradeBoolean(upgradeSoldierHashSet) && board.checkIfActionBoolean(moveHashSet) && board.checkIfActionBoolean(attackHashSet)) {
+          if(board.checkIfUpgradeBoolean(upgradeSoldierHashSet) && board.checkIfActionBoolean(moveHashSet) 
+              && board.checkIfActionBoolean(attackHashSet) && board.checkResearchCloak(researchCloak)
+              && board.checkUpdateTech(techUpgrade) && board.checkOneCloakAction(cloak)) {
             output.writeUTF("Wait for other players to perform the action...");
             lock.lock();
             isReady.await();
@@ -291,6 +301,8 @@ public class ClientHandler extends Thread {
             attackHashSet.clear();
             upgradeSoldierHashSet.clear();
             techUpgrade = null;
+            researchCloak = null;
+            cloak = null;
             actionValid = false;
             continue;
           }
@@ -312,6 +324,16 @@ public class ClientHandler extends Thread {
           UpgradeAction act = player.formUpgradeAction(actionInfo);
           System.out.println(act.getfLevel() + " " + act.getsLevel() + " " + act.getCount());
           upgradeSoldierHashSet.add(act);
+        }
+        else if(chr == 'R') {
+          ResearchCloak act = player.formResearchAction();
+          researchCloak = act;
+        }
+        else if(chr == 'C') {
+          output.writeUTF("Please enter the action: destTerritory");
+          String actionInfo = input.readUTF();
+          CloakAction act = player.formCloakAction(actionInfo);
+          cloak = act;
         }
         else{
           if(techUpgradeMarker){
@@ -353,6 +375,8 @@ public class ClientHandler extends Thread {
       lock.lock();
       isReady.await();
       lock.unlock();
+      board.processResearchCloak(researchCloak);
+      board.processOneCloakAction(cloak);
       board.spawnOneUnitForPlayer(playerName);
       board.spawnResourceForPlayer(playerName);
       board.processUpdateTech(techUpgrade);

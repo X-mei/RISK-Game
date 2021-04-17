@@ -104,6 +104,26 @@ public class Player {
   }
 
   /**
+   * create a research cloak action
+   * @return the researchclock object
+   */
+  public ResearchCloak formResearchAction() {
+    return factory.createResearchCloak(name);
+  }
+
+  /**
+   * create a cloak action
+   * @return the cloakaction object
+   */
+  public CloakAction formCloakAction(String input) throws IOException, IllegalArgumentException {
+    if (input == null) {
+      throw new IOException();
+    }
+    return factory.createCloak(name, input);
+  }
+
+
+  /**
    * distribute one player's territories
    * @param territory  set for one player
    */

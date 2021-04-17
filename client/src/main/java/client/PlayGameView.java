@@ -44,6 +44,8 @@ public class PlayGameView {
     Button move;
     Button attack;
     Button tech;
+    Button research;
+    Button cloak;
     Button done;
     Button terr2P_1;
     Button terr2P_2;
@@ -118,6 +120,8 @@ public class PlayGameView {
         this.move = new Button();
         this.attack = new Button();
         this.tech = new Button();
+        this.research = new Button();
+        this.cloak = new Button();
         this.done = new Button();
         this.input = new TextField();
         this.confirm = new Button();
@@ -825,6 +829,18 @@ public class PlayGameView {
         move.setPrefWidth(200);
         playGamePane.getChildren().add(move);
 
+        research.setLayoutX(300);
+        research.setLayoutY(570);
+        research.setText("Research Cloak");
+        research.setPrefWidth(200);
+        playGamePane.getChildren().add(research);
+
+        cloak.setLayoutX(300);
+        cloak.setLayoutY(610);
+        cloak.setText("Cloak");
+        cloak.setPrefWidth(200);
+        playGamePane.getChildren().add(cloak);
+
         done.setLayoutX(40);
         done.setLayoutY(650);
         done.setText("Done");
@@ -871,6 +887,8 @@ public class PlayGameView {
         move.setVisible(false);
         attack.setVisible(false);
         tech.setVisible(false);
+        research.setVisible(false);
+        cloak.setVisible(false);
         done.setVisible(false);
         continueWatch.setVisible(false);
         exitGame.setVisible(false);
@@ -884,6 +902,8 @@ public class PlayGameView {
         move.setVisible(true);
         attack.setVisible(true);
         tech.setVisible(true);
+        research.setVisible(true);
+        cloak.setVisible(true);
         done.setVisible(true);
     }
 
