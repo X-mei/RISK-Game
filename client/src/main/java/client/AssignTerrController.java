@@ -15,6 +15,7 @@ public class AssignTerrController {
     HashMap<String, ArrayList<String>> territories;
     HashMap<String, String> units;
     HashMap<String, String> greyTerrs;
+    HashMap<String, String> greyOwners;
 
     public AssignTerrController(AssignTerrView assignTerrView, Client client, String playerNum) {
         this.assignTerrView = assignTerrView;
@@ -27,6 +28,7 @@ public class AssignTerrController {
         this.territories = new HashMap<String, ArrayList<String>>();
         this.units = new HashMap<String, String>();
         this.greyTerrs = new HashMap<String, String>();
+        this.greyOwners = new HashMap<String, String>();
         submitAction();
     }
 
@@ -112,6 +114,7 @@ public class AssignTerrController {
       i = i + 2;
       while(i < strArr.length) {
         String[] terrInfo = strArr[i].split(":");
+        greyOwners.put(terrInfo[1], terrInfo[0]);
         greyTerrs.put(terrInfo[1], terrInfo[2]);
         i++;
       }

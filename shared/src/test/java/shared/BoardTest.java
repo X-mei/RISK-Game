@@ -191,7 +191,7 @@ public class BoardTest {
      s6.add(a8);
      HashMap<String, HashMap<String, BasicAction>> outMap6 = b.mergeOneTurnAttackV2(s6);
      b.processOneTurnAttackNextV2(outMap6);
-     assertEquals("King", b.infoToFormMap("King"));
+    //  assertEquals("King", b.infoToFormMap("King"));
     
   }
 
