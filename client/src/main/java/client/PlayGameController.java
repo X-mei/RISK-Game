@@ -14,6 +14,9 @@ public class PlayGameController {
     String actionType;
     int i = 1;
     boolean press = false;
+    boolean hasResearch = false;
+    boolean cloakShow = false;
+    boolean hasCloak = false;
     HashMap<String, ArrayList<String>> territories;
     HashMap<String, String> units;
     HashMap<String, String> greyTerrs;
@@ -99,7 +102,8 @@ public class PlayGameController {
             client.sendInstruction(playGameView.attack.getText().substring(0, 1));
             String prompt = client.recvInstruction();
             actionType = "A";
-            playGameView.choicesOfLevel2.setVisible(true);
+            playGameView.choicesOfLevel2.setVisible(false);
+            playGameView.attackLevel.setVisible(true);
             playGameView.choicesOfDest.setVisible(true);
             playGameView.choicesOfSource.setVisible(true);
             playGameView.promptAM.setVisible(true);
@@ -145,15 +149,15 @@ public class PlayGameController {
             String prompt = client.recvInstruction();
             if (!prompt.contains("Invalid")) {
               playGameView.research.setVisible(false);
+              hasResearch = true;
             }
-            
-
         });
     }
 
     public void cloakAction() {
         playGameView.cloak.setOnAction(e -> {
             // disappear in one turn
+            hasCloak = true;
             actionType = "C";
             client.sendInstruction(playGameView.cloak.getText().substring(0, 1));
             String prompt = client.recvInstruction();
@@ -185,7 +189,9 @@ public class PlayGameController {
             client.sendInstruction(playGameView.done.getText().substring(0, 1));
             String prompt = client.recvInstruction();
             if (prompt.equals("Wait for other players to perform the action...")) {
-
+                if (hasResearch) {
+                  cloakShow = true;
+                }
                 // set wait scene, deactivate all buttons
                 playGameView.deactivateAll();
 
@@ -212,12 +218,26 @@ public class PlayGameController {
                         // clear the hashmap
                         territories.clear();
                         units.clear();
+                        greyTerrs.clear();
+                        greyOwners.clear();
                         parseTerritory(info);
                         promptInstruction = client.recvBoardPrompt();
                         Platform.runLater(() -> {
                             playGameView.recvTerrInfo(territories, units);
                             playGameView.recvGreyInfo(greyTerrs, greyOwners);
                             playGameView.activateAll();
+                            if (cloakShow) {
+                              playGameView.research.setVisible(false);
+                              playGameView.cloak.setVisible(true);
+                            } else {
+                              if (i >= 3) {
+                                playGameView.research.setVisible(true);
+                                playGameView.cloak.setVisible(false);
+                              } else {
+                                playGameView.research.setVisible(false);
+                                playGameView.cloak.setVisible(false);
+                              }
+                            }
                             playGameView.prompt1.setText(promptMsg);
                             playGameView.prompt2.setText(promptInstruction);
                         });
@@ -226,6 +246,18 @@ public class PlayGameController {
 
             } else {
                 playGameView.prompt2.setText(prompt);
+                if (cloakShow) {
+                  playGameView.research.setVisible(false);
+                  playGameView.cloak.setVisible(true);
+                } else {
+                  if (i >= 3) {
+                    playGameView.research.setVisible(true);
+                    playGameView.cloak.setVisible(false);
+                  } else {
+                    playGameView.research.setVisible(false);
+                    playGameView.cloak.setVisible(false);
+                  }
+                }
             }
         });
     }
@@ -233,7 +265,7 @@ public class PlayGameController {
     public void confirmAction() {
         playGameView.confirm.setOnAction(e -> {
             String str = "";
-            if(actionType.equals("A") || actionType.equals("M")){
+            if(actionType.equals("M")){
                 if(playGameView.choicesOfSource.getValue() == null ||
                         playGameView.choicesOfDest.getValue() == null ||
                         playGameView.choicesOfLevel2.getValue() == null){
@@ -248,6 +280,22 @@ public class PlayGameController {
                 System.out.println(Level);
                 str = Source + " " + Dest + " "+ playGameView.input.getText() + " " + Level;
                 System.out.println(str);
+            }
+            else if(actionType.equals("A")){
+              if(playGameView.choicesOfSource.getValue() == null ||
+              playGameView.choicesOfDest.getValue() == null ||
+              playGameView.attackLevel.getValue() == null){
+                  playGameView.error.setVisible(true);
+                  return;
+              }
+              String Source = playGameView.choicesOfSource.getValue().toString();
+              System.out.println(Source);
+              String Dest  = playGameView.choicesOfDest.getValue().toString();
+              System.out.println(Dest);
+              String Level = playGameView.attackLevel.getValue().toString();
+              System.out.println(Level);
+              str = Source + " " + Dest + " "+ playGameView.input.getText() + " " + Level;
+              System.out.println(str);
             }
             else if(actionType.equals("U")){
                 if(playGameView.choicesOfSource.getValue() == null ||
@@ -270,6 +318,7 @@ public class PlayGameController {
                 String prompt2 = client.recvInstruction();
                 playGameView.choicesOfLevel1.setVisible(false);
                 playGameView.choicesOfLevel2.setVisible(false);
+                playGameView.attackLevel.setVisible(false);
                 playGameView.choicesOfDest.setVisible(false);
                 playGameView.choicesOfSource.setVisible(false);
                 playGameView.prompt2.setText(prompt2);
@@ -293,8 +342,27 @@ public class PlayGameController {
                 playGameView.upgrade.setVisible(true);
                 playGameView.move.setVisible(true);
                 playGameView.attack.setVisible(true);
-                playGameView.research.setVisible(true);
-                playGameView.cloak.setVisible(true);
+                if (cloakShow) {
+                  playGameView.research.setVisible(false);
+                  if (hasCloak) {
+                    playGameView.cloak.setVisible(false);
+                  } else {
+                    playGameView.cloak.setVisible(true);
+                  }
+                } else {
+                  if (hasResearch) {
+                    playGameView.research.setVisible(false);
+                    playGameView.cloak.setVisible(false);
+                  } else {
+                    if (i >= 3) {
+                      playGameView.research.setVisible(true);
+                      playGameView.cloak.setVisible(false);
+                    } else {
+                      playGameView.research.setVisible(false);
+                      playGameView.cloak.setVisible(false);
+                    }
+                  }
+                }
                 playGameView.done.setVisible(true);
             }
             else{
