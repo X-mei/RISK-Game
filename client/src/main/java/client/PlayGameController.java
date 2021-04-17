@@ -165,6 +165,7 @@ public class PlayGameController {
                         promptInstruction = client.recvBoardPrompt();
                         Platform.runLater(() -> {
                             playGameView.recvTerrInfo(territories, units);
+                            playGameView.recvGreyInfo(greyTerrs, greyOwners);
                             playGameView.activateAll();
                             playGameView.prompt1.setText(promptMsg);
                             playGameView.prompt2.setText(promptInstruction);
