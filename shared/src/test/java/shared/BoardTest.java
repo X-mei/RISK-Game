@@ -306,8 +306,11 @@ public class BoardTest {
     assertEquals(750, b.getPlayerByName("King").getTechResource());
     b.processUpdateTech(a3);
     b.processUpdateTech(a3);
-    b.processUpdateTech(a3);
-    b.processUpdateTech(a3);
+    if(b.checkUpdateTech(a3)){
+      b.processUpdateTech(a3);
+    }
+    //b.processUpdateTech(a3);
+    //b.processUpdateTech(a3);
 
   }
 
