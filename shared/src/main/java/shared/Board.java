@@ -776,7 +776,7 @@ private String getSoldierNameByBonus(int Bonus){
     // }
     String src = cloakAcion.getSource();
     Territory srcT = getTerritory(src);
-    srcT.setCloakStatus(true); //update target terrotory cloak state
+    srcT.updateCloakStatus(3); //update target terrotory cloak state
     cloakActPlayer.updateTechResource(-20);  //update tech source
   }
 
@@ -968,7 +968,7 @@ private String getSoldierNameByBonus(int Bonus){
     HashSet<Territory> neighborSet = new HashSet<>(); 
     for(Territory t : terriSet){
       for(Territory temp : t.getNeighbours()){
-        if(!temp.checkIsCloaked() && !p.getTerritoryList().contains(temp)){
+        if(temp.checkIsCloaked() <= 0 && !p.getTerritoryList().contains(temp)){
           neighborSet.add(temp);
         }
       }
@@ -1032,7 +1032,8 @@ private String getSoldierNameByBonus(int Bonus){
     //add spy information
     ans += spyInfoDisplay(p) + "\n";
     //add adjacent enemy territories info
-    ans += adjacentEnemyTerrInfo(p);
+    ans += adjacentEnemyTerrInfo(p) + "\n";
+    ans += cloakInfoDisplay(p);
     return ans;
   }
 
@@ -1114,6 +1115,17 @@ private String getSoldierNameByBonus(int Bonus){
     }
   }
 
+  public String cloakInfoDisplay(Player p){
+    if(!p.checkPlayerCanCloak()){
+      return "You cannot cloak, research it first\n";
+    }
+    String out = "cloak Info:\n";
+    for(Territory t : p.getTerritoryList()){
+      out += t.getTerritoryName() + ": cloak number is " + t.checkIsCloaked() + "\n";
+    }
+    return out;
+  }
+
   /**
    * display adjacnet enemy's territory info
    * @param p is the player
@@ -1124,7 +1136,7 @@ private String getSoldierNameByBonus(int Bonus){
     HashSet<Territory> adjacentEnemyTerr = new HashSet<>();
     for(Territory t : p.getTerritoryList()){
       for(Territory terr : t.getNeighbours()){
-        if(!terr.getOwner().equals(playerName) && !terr.checkIsCloaked()){
+        if(!terr.getOwner().equals(playerName) && terr.checkIsCloaked() <= 0){
           adjacentEnemyTerr.add(terr);
         }
       }
@@ -1179,6 +1191,8 @@ private String getSoldierNameByBonus(int Bonus){
     for (Territory t : gameBoard.get(name)) {
       Soldiers temp = t.getOneUnits("Lv1");
       temp.updateCount(temp.getCount()+1);
+      //update cloak status
+      t.updateCloakStatus(t.checkIsCloaked() - 1);
     }
   }
 
