@@ -66,14 +66,14 @@ public class Board {
     }
     //Soldier Level Name-Integer reference table
     soldierBonusLevelTable = new HashMap<>();
-    soldierBonusLevelTable.put("Lv1", 0);
-    soldierBonusLevelTable.put("Lv2", 1);
-    soldierBonusLevelTable.put("Lv3", 3);
-    soldierBonusLevelTable.put("Lv4", 5);
-    soldierBonusLevelTable.put("Lv5", 8);
-    soldierBonusLevelTable.put("Lv6", 11);
-    soldierBonusLevelTable.put("Lv7", 15);
-    soldierBonusLevelTable.put("Tel", 5);
+    soldierBonusLevelTable.put("Lv1", 1);
+    soldierBonusLevelTable.put("Lv2", 2);
+    soldierBonusLevelTable.put("Lv3", 4);
+    soldierBonusLevelTable.put("Lv4", 6);
+    soldierBonusLevelTable.put("Lv5", 9);
+    soldierBonusLevelTable.put("Lv6", 12);
+    soldierBonusLevelTable.put("Lv7", 16);
+    soldierBonusLevelTable.put("Tel", 6);
 
 
     this.boardRandomGenerator = new Random();
@@ -458,6 +458,7 @@ private String getSoldierNameByBonus(int Bonus){
       if(attackRandom > defendRandom){
         defenceList.remove(defenceList.size() - 1);
         String defenderSoldierName = getSoldierNameByBonus(defender);
+        //System.out.println("defender :" + defender);
         Soldiers defenderLoseSoldier = getSoldiersByName(defenderSoldierName, TerritoryName);
         defenderLoseSoldier.updateCount(defenderLoseSoldier.getCount() - 1);
 
