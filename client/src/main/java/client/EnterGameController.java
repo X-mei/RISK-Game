@@ -22,38 +22,31 @@ public class EnterGameController {
         chooseRoomView.init();
         this.sendRoomIDView = new SendRoomIDView();
         sendRoomIDView.init();
-        chooseAction();
-        confirmAction();
+        joinAction();
+        createAction();
     }
 
-    public void chooseAction() {
-        enterGameView.tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            public void changed(ObservableValue<? extends Toggle> ob,
-                                Toggle o, Toggle n) {
-                RadioButton rb = (RadioButton)enterGameView.tg.getSelectedToggle();
-                if (rb != null) {
-                    choice = rb.getText();
-                }
-            }
-        });
+    public void joinAction() {
+      enterGameView.previousGame.setOnAction(new EventHandler<ActionEvent>() {
+          @Override
+          public void handle(ActionEvent event) {
+            client.answerInfo("p");
+            App.root.getChildren().remove(enterGameView.enterGamePane);
+            App.root.getChildren().add(sendRoomIDView.roomIDPane);
+            SendRoomIDController sendRoomIDController  = new SendRoomIDController(sendRoomIDView, client);
+          }
+      });
     }
 
-    public void confirmAction() {
-        enterGameView.confirm.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (choice.equals("Enter a Previous Game")) {
-                    client.answerInfo("p");
-                    App.root.getChildren().remove(enterGameView.enterGamePane);
-                    App.root.getChildren().add(sendRoomIDView.roomIDPane);
-                    SendRoomIDController sendRoomIDController  = new SendRoomIDController(sendRoomIDView, client);
-                } else {
-                    client.answerInfo("c");
-                    App.root.getChildren().remove(enterGameView.enterGamePane);
-                    App.root.getChildren().add(chooseRoomView.chooseRoomPane);
-                    ChooseRoomController chooseRoomController = new ChooseRoomController(chooseRoomView, client);
-                }
-            }
-        });
-    }
+    public void createAction() {
+      enterGameView.newGame.setOnAction(new EventHandler<ActionEvent>() {
+          @Override
+          public void handle(ActionEvent event) {
+            client.answerInfo("c");
+            App.root.getChildren().remove(enterGameView.enterGamePane);
+            App.root.getChildren().add(chooseRoomView.chooseRoomPane);
+            ChooseRoomController chooseRoomController = new ChooseRoomController(chooseRoomView, client);
+          }
+      });
+  }
 }
