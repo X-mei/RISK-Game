@@ -41,6 +41,24 @@ public class ActionFactory {
   public TechAction createTechUpgrade(String name) {
     return new TechAction(name);
   }
+
+  /**
+   * 
+   * @param name is the owner of the action
+   * @return a ResearchCloakAction
+   */
+  public ResearchCloak createResearchCloak(String name) {
+    return new ResearchCloak(name);
+  }
+
+  /**
+   * 
+   * @param name is the owner of the action
+   * @return a CloakAction
+   */
+  public CloakAction createCloak(String name, String s) {
+    return new CloakAction(name, s);
+  }
 }
 
 

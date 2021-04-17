@@ -33,6 +33,8 @@ public class PlayGameController {
         moveAction();
         attackAction();
         techAction();
+        researchAction();
+        cloakAction();
         doneAction();
         confirmAction();
         continueAction();
@@ -59,6 +61,8 @@ public class PlayGameController {
             playGameView.move.setVisible(false);
             playGameView.attack.setVisible(false);
             playGameView.tech.setVisible(false);
+            playGameView.research.setVisible(false);
+            playGameView.cloak.setVisible(false);
             playGameView.done.setVisible(false);
         });
     }
@@ -83,6 +87,8 @@ public class PlayGameController {
             playGameView.move.setVisible(false);
             playGameView.attack.setVisible(false);
             playGameView.tech.setVisible(false);
+            playGameView.research.setVisible(false);
+            playGameView.cloak.setVisible(false);
             playGameView.done.setVisible(false);
         });
     }
@@ -108,6 +114,8 @@ public class PlayGameController {
             playGameView.move.setVisible(false);
             playGameView.attack.setVisible(false);
             playGameView.tech.setVisible(false);
+            playGameView.research.setVisible(false);
+            playGameView.cloak.setVisible(false);
             playGameView.done.setVisible(false);
         });
     }
@@ -119,11 +127,54 @@ public class PlayGameController {
                 playGameView.errorTech.setVisible(true);
                 return;
             }
-            i++;
             client.sendInstruction(playGameView.tech.getText().substring(0, 1));
             String prompt = client.recvInstruction();
+            if (!prompt.contains("Invalid")) {
+              i++;
+              playGameView.tech.setVisible(false);
+              playGameView.errorTech.setVisible(false);
+            }
+            
+        });
+    }
+
+    public void researchAction() {
+        playGameView.research.setOnAction(e -> {
+            // disappear forever
+            client.sendInstruction(playGameView.research.getText().substring(0, 1));
+            String prompt = client.recvInstruction();
+            if (!prompt.contains("Invalid")) {
+              playGameView.research.setVisible(false);
+            }
+            
+
+        });
+    }
+
+    public void cloakAction() {
+        playGameView.cloak.setOnAction(e -> {
+            // disappear in one turn
+            actionType = "C";
+            client.sendInstruction(playGameView.cloak.getText().substring(0, 1));
+            String prompt = client.recvInstruction();
+            playGameView.choicesOfLevel2.setVisible(false);
+            playGameView.choicesOfDest.setVisible(false);
+            playGameView.choicesOfSource.setVisible(true);
+            playGameView.confirm.setVisible(true);
+            playGameView.srcPrompt.setVisible(true);
+            playGameView.promptAM.setVisible(false);
+            playGameView.input.setVisible(false);
+            playGameView.destPrompt.setVisible(false);
+            playGameView.countPrompt.setVisible(false);
+            playGameView.lvPrompt2.setVisible(false);
+            playGameView.error.setVisible(false);
+            playGameView.upgrade.setVisible(false);
+            playGameView.move.setVisible(false);
+            playGameView.attack.setVisible(false);
             playGameView.tech.setVisible(false);
-            playGameView.errorTech.setVisible(false);
+            playGameView.research.setVisible(false);
+            playGameView.cloak.setVisible(false);
+            playGameView.done.setVisible(false);
         });
     }
 
@@ -209,7 +260,11 @@ public class PlayGameController {
                 String Level2 = playGameView.choicesOfLevel2.getValue().toString();
                 str = Terri + " " + Level1 + " " + playGameView.input.getText() + " " + Level2;
             }
-            if(client.checkActionStr(str)){
+            else if(actionType.equals("C")) {
+                String src = playGameView.choicesOfSource.getValue().toString();
+                str = src;
+            }
+            if(client.checkActionStr(str) || actionType.equals("C")){
                 client.sendInstruction(str);
                 String prompt2 = client.recvInstruction();
                 playGameView.choicesOfLevel1.setVisible(false);
@@ -237,7 +292,8 @@ public class PlayGameController {
                 playGameView.upgrade.setVisible(true);
                 playGameView.move.setVisible(true);
                 playGameView.attack.setVisible(true);
-
+                playGameView.research.setVisible(true);
+                playGameView.cloak.setVisible(true);
                 playGameView.done.setVisible(true);
             }
             else{

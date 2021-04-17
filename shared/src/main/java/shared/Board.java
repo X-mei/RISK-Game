@@ -734,7 +734,7 @@ private String getSoldierNameByBonus(int Bonus){
   }
 
 
-  public synchronized boolean checckResearchCloak(ResearchCloak researchAct) {
+  public synchronized boolean checkResearchCloak(ResearchCloak researchAct) {
     if (researchAct == null){
       return true;
     }
