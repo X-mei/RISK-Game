@@ -64,7 +64,7 @@ public class AssignTerrController {
                         playGameView.addPrompt(boardMsg);
                         playGameView.addPrompt2(instructionMsg);
                         playGameView.recvTerrInfo(territories, units);
-                        playGameView.recvGreyInfo(greyTerrs, greyOwners);
+                        
                         App.root.getChildren().remove(assignTerrView.assignTerrPane);
                         App.root.getChildren().add(playGameView.playGamePane);
                         PlayGameController playGameController = new PlayGameController(playGameView, client);

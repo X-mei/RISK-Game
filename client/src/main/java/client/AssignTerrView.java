@@ -48,8 +48,18 @@ public class AssignTerrView {
     Button terr4P_6;
     Button terr4P_7;
     Button terr4P_8;
+    Button terr5P_1;
+    Button terr5P_2;
+    Button terr5P_3;
+    Button terr5P_4;
+    Button terr5P_5;
+    Button terr5P_6;
+    Button terr5P_7;
+    Button terr5P_8;
+    Button terr5P_9;
+    Button terr5P_10;
     
-  
+    
     Label error;
     TextField input1;
     TextField input2;
@@ -90,6 +100,16 @@ public class AssignTerrView {
         this.terr4P_6 = new Button();
         this.terr4P_7 = new Button();
         this.terr4P_8 = new Button();
+        this.terr5P_1 = new Button();
+        this.terr5P_2 = new Button();
+        this.terr5P_3 = new Button();
+        this.terr5P_4 = new Button();
+        this.terr5P_5 = new Button();
+        this.terr5P_6 = new Button();
+        this.terr5P_7 = new Button();
+        this.terr5P_8 = new Button();
+        this.terr5P_9 = new Button();
+        this.terr5P_10 = new Button();
         this.input1 = new TextField();
         this.input2 = new TextField();
         this.input3 = new TextField();
@@ -335,9 +355,99 @@ public class AssignTerrView {
           terr4P_7.setVisible(true);
           terr4P_8.setVisible(true);
         }
+     
+        terr5P_1.setLayoutX(45);
+        terr5P_1.setLayoutY(210);
+        terr5P_1.setText("Dorado");
+        terr5P_1.setVisible(false);
+        terr5P_1.setId("5p1");
+        assignTerrPane.getChildren().add(terr5P_1);
+
+                
+        terr5P_2.setLayoutX(90);
+        terr5P_2.setLayoutY(260);
+        terr5P_2.setText("Hanamura");
+        terr5P_2.setVisible(false);
+        terr5P_2.setId("5p2");
+        assignTerrPane.getChildren().add(terr5P_2);
+
+                
+        terr5P_3.setLayoutX(150);
+        terr5P_3.setLayoutY(300);
+        terr5P_3.setText("Anubis");
+        terr5P_3.setVisible(false);
+        terr5P_3.setId("5p3");
+        assignTerrPane.getChildren().add(terr5P_3);
+        
+                
+        terr5P_4.setLayoutX(280);
+        terr5P_4.setLayoutY(350);
+        terr5P_4.setText("Numbani");
+        terr5P_4.setVisible(false);
+        terr5P_4.setId("5p4");
+        assignTerrPane.getChildren().add(terr5P_4);
+
+                
+        terr5P_5.setLayoutX(450);
+        terr5P_5.setLayoutY(325);
+        terr5P_5.setText("Junkertown");
+        terr5P_5.setVisible(false);
+        terr5P_5.setId("5p5");
+        assignTerrPane.getChildren().add(terr5P_5);
+
+                
+        terr5P_6.setLayoutX(550);
+        terr5P_6.setLayoutY(365);
+        terr5P_6.setText("Oasis");
+        terr5P_6.setVisible(false);
+        terr5P_6.setId("5p6");
+        assignTerrPane.getChildren().add(terr5P_6);
+
+                
+        terr5P_7.setLayoutX(610);
+        terr5P_7.setLayoutY(240);
+        terr5P_7.setText("Nepal");
+        terr5P_7.setVisible(false);
+        terr5P_7.setId("5p7");
+        assignTerrPane.getChildren().add(terr5P_7);
+
+                
+        terr5P_8.setLayoutX(620);
+        terr5P_8.setLayoutY(200);
+        terr5P_8.setText("Ilios");
+        terr5P_8.setVisible(false);
+        terr5P_8.setId("5p8");
+        assignTerrPane.getChildren().add(terr5P_8);
+        
+                
+        terr5P_9.setLayoutX(345);
+        terr5P_9.setLayoutY(55);
+        terr5P_9.setText("Volskaya");
+        terr5P_9.setVisible(false);
+        terr5P_9.setId("5p9");
+        assignTerrPane.getChildren().add(terr5P_9);
+
+                        
+        terr5P_10.setLayoutX(255);
+        terr5P_10.setLayoutY(55);
+        terr5P_10.setText("Hollywood");
+        terr5P_10.setVisible(false);
+        terr5P_10.setId("5p10");
+        assignTerrPane.getChildren().add(terr5P_10);
 
         
-        
+        if(playerNum.equals("5")){
+            terr5P_1.setVisible(true);
+            terr5P_2.setVisible(true);
+            terr5P_3.setVisible(true);
+            terr5P_4.setVisible(true);
+            terr5P_5.setVisible(true);
+            terr5P_6.setVisible(true);
+            terr5P_7.setVisible(true);
+            terr5P_8.setVisible(true);
+            terr5P_9.setVisible(true);
+            terr5P_10.setVisible(true);
+        }
                                        
         // prompt: wait
         prompt1.setLayoutX(120);

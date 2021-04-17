@@ -40,76 +40,165 @@
 }
 #2p1:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
-    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
 }
 #2p2:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p3:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p4:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p5:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #2p6:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p1:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p2:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p3:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p4:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p5:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p6:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p7:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p8:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
 #3p9:hover
 {
-    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),15.0,0,0,0 );
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#4p1:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#4p2:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#4p3:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#4p4:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#4p5:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#4p6:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#4p7:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#4p8:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p1:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p2:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p3:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p4:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p5:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p6:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p7:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p8:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p9:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
+    -fx-cursor: hand;
+}
+#5p10:hover
+{
+    -fx-effect:dropshadow(three-pass-box, rgba(0,0,0,0.24),25.0,0,0,0 );
     -fx-cursor: hand;
 }
