@@ -146,7 +146,7 @@ public class BoardTest {
     s1.add(a1);
     HashMap<String, HashMap<String, BasicAction>> outMap = b.mergeOneTurnAttackV2(s1);
     b.processOneTurnAttackNextV2(outMap);
-    //assertEquals("King", b.infoToFormMap("King"));
+    //assertEquals("King", b.displaySinlgePlayerBoardV3("King"));
     b.infoToFormMap("King");
     //Round 2
     BasicAction a2 = new Attack("Red", "Ilios Volskaya 16 Lv7");
@@ -309,6 +309,11 @@ public class BoardTest {
     if(b.checkUpdateTech(a3)){
       b.processUpdateTech(a3);
     }
+    ResearchCloak r1 = new ResearchCloak("King");
+    b.processResearchCloak(r1);
+    CloakAction c1 = new CloakAction("King", "Dorado");
+    b.processOneCloakAction(c1);
+    //assertEquals("King", b.displaySinlgePlayerBoardV3("King"));
     //b.processUpdateTech(a3);
     //b.processUpdateTech(a3);
 

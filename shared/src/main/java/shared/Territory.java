@@ -14,7 +14,7 @@ public class Territory {
   private HashMap<String, Integer> spyList;
   private LinkedHashMap<String, Territory> neighbours;
   private LinkedHashMap<String, Soldiers> allUnits;
-  private boolean isCloaked;
+  private int CloakLeftTurn;
   //private String previousPlayer;
 
   /**
@@ -29,7 +29,7 @@ public class Territory {
     this.neighbours = new LinkedHashMap<String, Territory>();
     this.allUnits = new LinkedHashMap<String, Soldiers>();
     spyList = new HashMap<>();
-    isCloaked = false;
+    CloakLeftTurn = 0;
     //previousPlayer = oname;
   }
 
@@ -188,16 +188,16 @@ public class Territory {
    * @return true if it is cloaked
    * else, not cloaked
    */
-  public boolean checkIsCloaked(){
-    return isCloaked;
+  public int checkIsCloaked(){
+    return CloakLeftTurn;
   }
 
   /**
    * set the territory cloak state
    * @param b is to set whether this territory should be cloaked
    */
-  public void setCloakStatus(boolean b){
-    isCloaked = true;
+  public void updateCloakStatus(int i){
+    CloakLeftTurn = i;
   }
 
   public int calculateUnitsPower(){
