@@ -825,7 +825,12 @@ private String getSoldierNameByBonus(int Bonus){
     for (BasicAction action : actions) {
       String output;
       if (action.getActionName().equals("M")) {
-        output = moveRuleChecker.checkAction(action, this);
+        if (action.getLevelName().equals("Spy")){
+          output = spyRuleChecker.checkAction(action, this);
+        }
+        else {
+          output = moveRuleChecker.checkAction(action, this);
+        }
         if (output == null) {
           continue;
         } else {
@@ -839,14 +844,7 @@ private String getSoldierNameByBonus(int Bonus){
           return false;
         }
       }
-      else if (action.getActionName().equals("S")){
-        output = spyRuleChecker.checkAction(action, this);
-        if (output == null) {
-          continue;
-        } else {
-          return false;
-        }
-      }
+
     }
     return true;
   }
