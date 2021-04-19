@@ -21,7 +21,6 @@ public class UpgradeChecker extends SpecialRuleChecker{
     if (startL == null || endL == null) {
       return "Invalid starting or ending level.";
     }
-    
     if (cnt < thisAct.getCount()) {
       return "You do not have enough soldier to upgrade.";
     }
