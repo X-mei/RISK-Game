@@ -17,6 +17,7 @@ public class Board {
   private final RuleChecker teleportAttackRuleChecker;
   private final RuleChecker attackRuleChecker;
   private final SpecialRuleChecker upgradeRuleChecker;
+  private final SpecialRuleChecker spyUpgradeChecker;
   private HashMap<String, HashMap<String, Integer>> tempCount;
   private LinkedHashSet<String> UnitName;
   private ArrayList<Player> playerList;
@@ -58,6 +59,7 @@ public class Board {
     this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
+    this.spyUpgradeChecker = new SpyUpgradeChecker(null);
     this.tempCount = new HashMap<String, HashMap<String, Integer>>();
     //create a tech upgrade reference table
     techUpgradetable = new HashMap<>();
@@ -854,7 +856,12 @@ private String getSoldierNameByBonus(int Bonus){
   public Boolean checkIfUpgradeBoolean(LinkedHashSet<UpgradeAction> actions) {
     String output;
     for (UpgradeAction action : actions) {
-      output = upgradeRuleChecker.checkAction(action, this);
+      if (action.getfLevel().equals("Spy")){
+        output = spyUpgradeChecker.checkAction(action, this);
+      }
+      else {
+        output = upgradeRuleChecker.checkAction(action, this);
+      }
       if (output == null) {
         continue;
       } else {

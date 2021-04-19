@@ -194,7 +194,7 @@ public class Territory {
 
   /**
    * set the territory cloak state
-   * @param b is to set whether this territory should be cloaked
+   * @param i is to set whether this territory should be cloaked
    */
   public void updateCloakStatus(int i){
     CloakLeftTurn = i;
