@@ -119,6 +119,10 @@ public class AssignTerrView {
     public void init(String playerNum) {
         // show img
         this.playerNum = playerNum;
+        if (playerNum.equals("1")) {
+          this.playerNum = "2";
+        }
+        
         try {
             String path = null;
             if (playerNum.equals("2")) {

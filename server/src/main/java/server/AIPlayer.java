@@ -492,21 +492,26 @@ public class AIPlayer implements Runnable {
       this.playerName = playerInfo;
       String playerNum = dataIn.readUTF();
       String info = dataIn.readUTF();
+      out.println("********");
       out.println(info);
+      out.println("********");
       String status = dataIn.readUTF();
       // game starts
+      out.println("game starts");
       String promptAssign = recvAssignPrompt();
       String[] prompts = recvPrompts();
       // assign Territory
       String[] inputs = new String[3];
-      inputs[0] = "1";
-      inputs[1] = "2";
-      inputs[2] = "3";
+      inputs[0] = "6";
+      inputs[1] = "6";
+      inputs[2] = "8";
       sendAssignTerritory(inputs);
       // start to play turns 
       while (true) {
         String boardMsg = recvBoardPrompt();
+        out.println(boardMsg);
         String promptInfo = recvBoardPrompt();
+        out.println(promptInfo);
         // The game ends
         if (boardMsg.equals("You lost all your territories!")) {
           break;
@@ -514,7 +519,7 @@ public class AIPlayer implements Runnable {
         if (boardMsg.equals("The game ends.")) {
           break;
         }
-        out.println(board.displaySinlgePlayerBoardV3(playerName));
+        // out.println(board.displaySinlgePlayerBoardV3(playerName));
         // send a series of actions
         ArrayList<String> actions = new ArrayList<>();
         board.refreshTemp(playerName);
@@ -535,7 +540,7 @@ public class AIPlayer implements Runnable {
               String prompt = dataIn.readUTF();
 
               // send action string
-              dataOut.writeUTF(temp.substring(2));
+              dataOut.writeUTF(action.substring(2));
             }
           } else {
             // recv "wait for other players to perform action"

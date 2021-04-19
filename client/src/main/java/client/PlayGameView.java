@@ -253,7 +253,7 @@ public class PlayGameView {
         playGamePane.getChildren().add(terr2P_6);
         terrs2P.put("Volskaya", terr2P_6);
         
-        if(playerNum.equals("2")){
+        if(playerNum.equals("2") || playerNum.equals("1")){
             terr2P_1.setVisible(true);
             terr2P_2.setVisible(true);
             terr2P_3.setVisible(true);
