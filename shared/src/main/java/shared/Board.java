@@ -54,7 +54,7 @@ public class Board {
     this.UnitName = new LinkedHashSet<>();
     unitNameSetup();
     this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null))))));
-    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(null));//new SpyUnitMovingChecker(null)));
+    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(new SpyUnitMovingChecker(null)));
     this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
@@ -243,10 +243,10 @@ public class Board {
    * @param TName the name of the territory
    * @return the count of spy by the given name on a given territory
    */
-  //public int getSpyCountByName(String OName, String TName){
-  //  Territory t = allTerritory.get(TName);
-  //  return t.checkSpyCount(OName);
-  //}
+  public int getSpyCountByName(String OName, String TName){
+    Territory t = allTerritory.get(TName);
+    return t.checkSpyCount(OName);
+  }
   
   
 
