@@ -31,8 +31,6 @@ public class UnitsFactory {
     return new Level7Soldiers(count);
   }
 
-  public Soldiers createSpySoldiers(int count) { return new SpySoldiers(count); }
-
   public Soldiers createTeleportSoldiers(int count) { return new TeleportSoldiers(count); }
 
 }

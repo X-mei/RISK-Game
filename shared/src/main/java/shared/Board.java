@@ -17,6 +17,7 @@ public class Board {
   private final RuleChecker teleportAttackRuleChecker;
   private final RuleChecker attackRuleChecker;
   private final SpecialRuleChecker upgradeRuleChecker;
+  private final SpecialRuleChecker spyUpgradeChecker;
   private HashMap<String, HashMap<String, Integer>> tempCount;
   private LinkedHashSet<String> UnitName;
   private ArrayList<Player> playerList;
@@ -54,10 +55,11 @@ public class Board {
     this.UnitName = new LinkedHashSet<>();
     unitNameSetup();
     this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null))))));
-    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(null));//new SpyUnitMovingChecker(null)));
+    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(new SpyUnitMovingChecker(null)));
     this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
+    this.spyUpgradeChecker = new SpyUpgradeChecker(null);
     this.tempCount = new HashMap<String, HashMap<String, Integer>>();
     //create a tech upgrade reference table
     techUpgradetable = new HashMap<>();
@@ -243,10 +245,10 @@ public class Board {
    * @param TName the name of the territory
    * @return the count of spy by the given name on a given territory
    */
-  //public int getSpyCountByName(String OName, String TName){
-  //  Territory t = allTerritory.get(TName);
-  //  return t.checkSpyCount(OName);
-  //}
+  public int getSpyCountByName(String OName, String TName){
+    Territory t = allTerritory.get(TName);
+    return t.checkSpyCount(OName);
+  }
   
   
 
@@ -852,7 +854,12 @@ private String getSoldierNameByBonus(int Bonus){
   public Boolean checkIfUpgradeBoolean(LinkedHashSet<UpgradeAction> actions) {
     String output;
     for (UpgradeAction action : actions) {
-      output = upgradeRuleChecker.checkAction(action, this);
+      if (action.getfLevel().equals("Spy")){
+        output = spyUpgradeChecker.checkAction(action, this);
+      }
+      else {
+        output = upgradeRuleChecker.checkAction(action, this);
+      }
       if (output == null) {
         continue;
       } else {
