@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -454,11 +455,16 @@ public class AssignTerrView {
         }
                                        
         // prompt: wait
+        DropShadow ds = new DropShadow();
+        ds.setOffsetY(3.0f);
+        ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
         prompt1.setLayoutX(120);
         prompt1.setLayoutY(500);
+        prompt1.setEffect(ds);
+        prompt1.setCache(true);
         prompt1.setText("Wait for other players to join...");
         prompt1.setFont(new Font("Arial", 20));
-        prompt1.setTextFill(Color.web("#a0522d", 1.0));
+        prompt1.setTextFill(Color.web("#1d195e", 1.0));
         assignTerrPane.getChildren().add(prompt1);
 
         // animation

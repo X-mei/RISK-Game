@@ -56,6 +56,7 @@ public class SendRoomIDView {
         roomID.setLayoutX(600);
         roomID.setLayoutY(550);
         roomID.setPromptText("room id");
+        roomID.setStyle("-fx-background-color:Wheat; -fx-text-fill:Black; -fx-font-size:16"); 
         roomID.setFocusTraversable(false);
         roomIDPane.getChildren().add(roomID);
 

@@ -13,14 +13,12 @@ import javafx.scene.text.Font;
 
 public class EnterGameView {
     AnchorPane enterGamePane;
-    Label prompt;
     Button previousGame;
     Button newGame;
     Label error;
 
     public EnterGameView() {
         this.enterGamePane = new AnchorPane();
-        this.prompt = new Label();
         this.previousGame = new Button();
         this.newGame = new Button();
     }
@@ -41,26 +39,18 @@ public class EnterGameView {
         e.printStackTrace();
       }
 
-        // prompt label
-        prompt.setLayoutX(480);
-        prompt.setLayoutY(350);
-        prompt.setText("Do you want to enter a previous game or enter a new game?");
-        prompt.setFont(new Font("Arial", 15));
-        prompt.setTextFill(Color.web("#a0522d", 1.0));
-        enterGamePane.getChildren().add(prompt);
-
         // choice button
         previousGame.setLayoutX(620);
-        previousGame.setLayoutY(400);
+        previousGame.setLayoutY(450);
+        previousGame.setId("previousgame");
         previousGame.setText("JOIN BEFORE!");
-        previousGame.setStyle("-fx-background-color: #8FBC8F;");
         previousGame.setPrefSize(150, 80);
         enterGamePane.getChildren().add(previousGame);
 
         newGame.setLayoutX(620);
-        newGame.setLayoutY(500);
+        newGame.setLayoutY(600);
+        newGame.setId("newgame");
         newGame.setText("CREATE NEW!");
-        newGame.setStyle("-fx-background-color: #8FBC8F;");
         newGame.setPrefSize(150, 80);
         enterGamePane.getChildren().add(newGame);
 

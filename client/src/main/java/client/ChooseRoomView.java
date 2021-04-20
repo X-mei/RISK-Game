@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class ChooseRoomView {
     AnchorPane chooseRoomPane;
-    Label prompt;
+    // Label prompt;
     RadioButton r1;
     RadioButton r2;
     RadioButton r3;
@@ -28,7 +28,7 @@ public class ChooseRoomView {
 
     public ChooseRoomView() {
         this.chooseRoomPane = new AnchorPane();
-        this.prompt = new Label();
+        // this.prompt = new Label();
         this.r1 = new RadioButton("2 human players");
         this.r2 = new RadioButton("3 human players");
         this.r3 = new RadioButton("4 human players");
@@ -58,12 +58,12 @@ public class ChooseRoomView {
 
 
         // prompt label
-        prompt.setLayoutX(500);
-        prompt.setLayoutY(350);
-        prompt.setText("Which game room do you want to enter?");
-        prompt.setFont(new Font("Arial", 15));
-        prompt.setTextFill(Color.web("#a0522d", 1.0));
-        chooseRoomPane.getChildren().add(prompt);
+        // prompt.setLayoutX(500);
+        // prompt.setLayoutY(350);
+        // prompt.setText("Which game room do you want to enter?");
+        // prompt.setFont(new Font("Arial", 15));
+        // prompt.setTextFill(Color.web("#a0522d", 1.0));
+        // chooseRoomPane.getChildren().add(prompt);
 
         // input radio button
         r1.setToggleGroup(tg);
@@ -84,6 +84,31 @@ public class ChooseRoomView {
         r6.setToggleGroup(tg);
         r6.setLayoutX(550);
         r6.setLayoutY(650);
+        
+        r1.setFont(new Font("Arial", 15));
+        r1.setTextFill(Color.web("#1d195e", 1.0));
+        r1.setStyle("-fx-font-weight: bold;");
+
+        r2.setFont(new Font("Arial", 15));
+        r2.setTextFill(Color.web("#1d195e", 1.0));
+        r2.setStyle("-fx-font-weight: bold;");
+
+        r3.setFont(new Font("Arial", 15));
+        r3.setTextFill(Color.web("#1d195e", 1.0));
+        r3.setStyle("-fx-font-weight: bold;");
+
+        r4.setFont(new Font("Arial", 15));
+        r4.setTextFill(Color.web("#1d195e", 1.0));
+        r4.setStyle("-fx-font-weight: bold;");
+
+        r5.setFont(new Font("Arial", 15));
+        r5.setTextFill(Color.web("#1d195e", 1.0));
+        r5.setStyle("-fx-font-weight: bold;");
+
+        r6.setFont(new Font("Arial", 15));
+        r6.setTextFill(Color.web("#1d195e", 1.0));
+        r6.setStyle("-fx-font-weight: bold;");
+
         chooseRoomPane.getChildren().add(r1);
         chooseRoomPane.getChildren().add(r2);
         chooseRoomPane.getChildren().add(r3);
@@ -94,6 +119,7 @@ public class ChooseRoomView {
         // confirm button
         confirm.setLayoutX(650);
         confirm.setLayoutY(700);
+        confirm.setId("confirmRoom");
         confirm.setText("confirm");
         confirm.setStyle("-fx-background-color: #8FBC8F;");
         chooseRoomPane.getChildren().add(confirm);
