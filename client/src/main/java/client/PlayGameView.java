@@ -742,7 +742,7 @@ public class PlayGameView {
 
         choicesOfLevel2.setItems(FXCollections.observableArrayList(
                 "Lv1", "Lv2",
-                "Lv3", "Lv4", "Lv5", "Lv6", "Lv7", "Spy")
+                "Lv3", "Lv4", "Lv5", "Lv6", "Lv7", "Spy", "Tel")
         );
         choicesOfLevel2.setLayoutX(590);
         choicesOfLevel2.setLayoutY(525);
@@ -751,7 +751,7 @@ public class PlayGameView {
 
         attackLevel.setItems(FXCollections.observableArrayList(
                 "Lv1", "Lv2",
-                "Lv3", "Lv4", "Lv5", "Lv6", "Lv7")
+                "Lv3", "Lv4", "Lv5", "Lv6", "Lv7", "Tel")
         );
         attackLevel.setLayoutX(590);
         attackLevel.setLayoutY(525);
