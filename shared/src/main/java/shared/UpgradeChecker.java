@@ -9,10 +9,12 @@ public class UpgradeChecker extends SpecialRuleChecker{
 
   @Override
   public String checkMyRule(UpgradeAction thisAct, Board theBoard){
+    // System.out.println(thisAct.getActionOwner());
+    // System.out.println(theBoard.getTerritory(thisAct.getSource()).getOwner());
     if (theBoard.getTerritory(thisAct.getSource()) == null) {
       return "The selected source do not exist.";
     }
-    if (thisAct.getActionOwner() != theBoard.getTerritory(thisAct.getSource()).getOwner()) {
+    if (!thisAct.getActionOwner().equals(theBoard.getTerritory(thisAct.getSource()).getOwner())) {
       return "You do not own the source territory.";
     }
     Soldiers startL = theBoard.getTerritory(thisAct.getSource()).getOneUnits(thisAct.getsLevel());

@@ -303,7 +303,7 @@ public class AIPlayer implements Runnable {
           continue;
         }
         // If already calculated the power score then pass
-        if (set.contains(t.getTerritoryName())){
+        if (set.contains(neighbor.getTerritoryName())){
           continue;
         }
         else {
@@ -425,6 +425,7 @@ public class AIPlayer implements Runnable {
         String actionStr = "U "+toUpgrade+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j];
         // Use checker to do resource check, this will also update all the temp field
         UpgradeAction act = new UpgradeAction(playerName, toUpgrade+" "+soldierNames[i]+" "+cnt+" "+soldierNames[j]);
+        System.out.println("upgrade actionStr: " + actionStr);
         String res = upgradeRuleChecker.checkAction(act, board);
         
         if (res == null) {
@@ -496,6 +497,7 @@ public class AIPlayer implements Runnable {
       answerInfo();
       String playerInfo = dataIn.readUTF();
       this.playerName = playerInfo;
+      System.out.println("AI player's playerName is " + playerName);
       String playerNum = dataIn.readUTF();
       String info = dataIn.readUTF();
       out.println("********");
@@ -514,6 +516,7 @@ public class AIPlayer implements Runnable {
       sendAssignTerritory(inputs);
       // start to play turns 
       while (true) {
+        out.println("One round starts. ");
         String boardMsg = recvBoardPrompt();
         out.println(boardMsg);
         String promptInfo = recvBoardPrompt();
@@ -532,6 +535,8 @@ public class AIPlayer implements Runnable {
         board.getPlayerByName(playerName).refreshTempFoodResource();
         board.getPlayerByName(playerName).refreshTempTechResource();
         decideActionChoice(actions);
+        System.out.println("AI player's action list: ");
+        System.out.println(actions);
         for (String action : actions) {
           // recv "what would you like to do"
           String instructionMsg = recvInstruction();
