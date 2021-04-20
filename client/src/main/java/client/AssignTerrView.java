@@ -468,20 +468,20 @@ public class AssignTerrView {
         assignTerrPane.getChildren().add(prompt1);
 
         // animation
-        try {
-          // add image
-          String path = "src/main/resources/loading.gif";
-          FileInputStream imageStream = new FileInputStream(path);
-          Image image1 = new Image(imageStream);
-          imageView1 = new ImageView(image1);
-          imageView1.setX(100);
-          imageView1.setY(600);
-          imageView1.setFitHeight(200);
-          imageView1.setFitWidth(250);
-          assignTerrPane.getChildren().add(imageView1);
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+        // try {
+        //   // add image
+        //   String path = "src/main/resources/loading.gif";
+        //   FileInputStream imageStream = new FileInputStream(path);
+        //   Image image1 = new Image(imageStream);
+        //   imageView1 = new ImageView(image1);
+        //   imageView1.setX(100);
+        //   imageView1.setY(600);
+        //   imageView1.setFitHeight(200);
+        //   imageView1.setFitWidth(250);
+        //   assignTerrPane.getChildren().add(imageView1);
+        // } catch (IOException e) {
+        //   e.printStackTrace();
+        // }
 
         // error
         error.setLayoutX(750);
