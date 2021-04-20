@@ -56,7 +56,7 @@ public class Board {
     unitNameSetup();
     this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null))))));
     this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(new SpyUnitMovingChecker(null)));
-    this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
+    this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new TelUnitMoveChecker(new ResourceChecker(null))))));
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
     this.spyUpgradeChecker = new SpyUpgradeChecker(null);
@@ -846,9 +846,13 @@ private String getSoldierNameByBonus(int Bonus){
         } else {
           return false;
         }
-      } //else if (action.getActionName().equals("A")) {
+      } else if (action.getActionName().equals("A")) {
+        if (action.getLevelName().equals("Tel")){
+          output = teleportAttackRuleChecker.checkAction(action, this);
+        }
         else {
-        output = attackRuleChecker.checkAction(action, this);
+          output = attackRuleChecker.checkAction(action, this);
+        }
         if (output == null) {
           continue;
         } else {
