@@ -15,6 +15,8 @@ public class SpyUpgradeChecker extends SpecialRuleChecker{
         }
         Soldiers startL = theBoard.getTerritory(thisAct.getSource()).getOneUnits(thisAct.getsLevel());
         Integer cnt = theBoard.getTerritoryUnitsCount(thisAct.getSource(), thisAct.getsLevel());
+        System.out.println(thisAct.getSource());
+        System.out.println(thisAct.getsLevel());
         if (startL == null) {
             return "Invalid starting level.";
         }

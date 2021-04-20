@@ -148,9 +148,9 @@ public class Territory {
   /**
    * clear all units on the territory
    */
-  public void clearAllUnits(){
-    allUnits.clear();
-  }
+  // public void clearAllUnits(){
+  //   allUnits.clear();
+  // }
 
   /**
    * check if one's spy is at this territory
