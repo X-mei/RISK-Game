@@ -70,6 +70,13 @@ public class BoardTest {
         b.processSingleUpdateUnit(spyCreate);
         b.processSingleUpdateUnit(spyCreate1);
         b.processSingleUpdateUnit(spyCreate2);
+        LinkedHashSet<UpgradeAction> spySet = new LinkedHashSet<>();
+        spySet.add(spyCreate);
+        b.refreshTemp("King");
+        assertEquals(true, b.checkIfUpgradeBoolean(spySet));
+        b.getSpyCountByName(p.getName(), "Dorado");
+        b.createDiffSoldiersByName("Tel");
+        b.getTerritoryUnitsCount("haha", "haha");
         HashMap<String, Integer> KingSpyMap =p.getSpyLocation();
 
         BasicAction ms1 = new Move("King", "Hanamura Ilios 1 Spy");
@@ -95,6 +102,8 @@ public class BoardTest {
         UpgradeAction a10 = new UpgradeAction("Red", "Junkertown Lv1 1 Lv7");
         UpgradeAction a11 = new UpgradeAction("Red", "Volskaya Lv1 1 Lv2");
         UpgradeAction a12 = new UpgradeAction("Red", "Volskaya Lv1 1 Lv5");
+        Territory temp = b.getTerritory("Dorado");
+        temp.getOneUnits("Lv1").randomNum();
         b.processSingleUpdateUnit(a3);
         b.processSingleUpdateUnit(a4);
         b.processSingleUpdateUnit(a5);
@@ -113,23 +122,69 @@ public class BoardTest {
 
 
   @Test 
+  public void test_updateTech(){
+    Board b = getTestBoard();
+    for(String s : b.getAllTerritroy().keySet()){
+      b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
+    }
+    Player King = b.getPlayerByName("King");
+    TechAction t0 = new TechAction("King");
+    ResearchCloak c1 = new ResearchCloak("King");
+    CloakAction c2 = new CloakAction("King", "Dorado");
+    // UpgradeAction u1 = new UpgradeAction("King", "Dorado Lv1 1 Spy");
+    // LinkedHashSet<UpgradeAction> uset1 = new LinkedHashSet<>();
+    // uset1.add(u1);
+    // assertEquals(true, b.checkIfUpgradeBoolean(uset1));
+    assertEquals(false, b.checkOneCloakAction(c2));
+    assertEquals(false, b.checkResearchCloak(c1));
+    b.processResearchCloak(c1);
+    assertEquals(true, b.checkUpdateTech(t0));
+    b.processUpdateTech(t0);
+    b.processUpdateTech(t0);
+    b.processUpdateTech(t0);
+    b.processUpdateTech(t0);
+    b.processResearchCloak(null);
+    assertEquals(true, b.checkResearchCloak(null));
+    
+    assertEquals(true, b.checkResearchCloak(c1));
+    b.processResearchCloak(c1);
+    b.processOneCloakAction(c2);
+    b.processOneCloakAction(null);
+    assertEquals(true, b.checkOneCloakAction(null));
+    assertEquals(true, b.checkOneCloakAction(c2));
+
+    King.updateTechResource(-999);
+    TechAction t1 = new TechAction("King");
+    assertEquals(true, b.checkUpdateTech(null));
+    assertEquals(false, b.checkUpdateTech(t1));
+    assertEquals(false, b.checkResearchCloak(c1));
+    assertEquals(false, b.checkOneCloakAction(c2));
+    
+  }
+
+
+  @Test 
   public void test_processPreviousFunctionDisplay(){
     Board b = getTestBoard();
     for(String s : b.getAllTerritroy().keySet()){
       b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
     }
-     b.infoToFormMap("King");
+    b.displayAllPlayerAllBoard();
+    b.infoToFormMap("King");
     TechAction t1 = new TechAction("Red");
+    b.processUpdateTech(null);
     b.processUpdateTech(t1);
     b.processUpdateTech(t1);
     b.processUpdateTech(t1);
     b.processUpdateTech(t1);
+
     ResearchCloak r1 = new ResearchCloak("Red");
     b.processResearchCloak(r1);
     CloakAction c1 = new CloakAction("Red", "Ilios");
     CloakAction c2 = new CloakAction("Red", "Volskaya");
     CloakAction c3 = new CloakAction("Red", "Junkertown");
-    //b.processOneCloakAction(c2);
+    b.processOneCloakAction(c2);
+    b.displaySinlgePlayerBoardV3("Red");
     //assertEquals("King", b.infoToFormMap("King"));
     UpgradeAction u1 = new UpgradeAction("Red", "Volskaya Lv1 1 Lv5");
     b.processSingleUpdateUnit(u1);
@@ -150,29 +205,57 @@ public class BoardTest {
     b.infoToFormMap("King");
     //Round 2
     BasicAction a2 = new Attack("Red", "Ilios Volskaya 16 Lv7");
+    BasicAction spy1 = new Move("Red", "Ilios Volskaya 16 Spy");
+    LinkedHashSet<BasicAction> spy2 = new LinkedHashSet<>();
+    spy2.add(spy1);
+    assertEquals(false, b.checkIfActionBoolean(spy2));
     LinkedHashSet<BasicAction> s2 = new LinkedHashSet<>();
     s2.add(a2);
     HashMap<String, HashMap<String, BasicAction>> outMap2 = b.mergeOneTurnAttackV2(s2);
     b.processOneTurnAttackNextV2(outMap2);
     //assertEquals("King", b.infoToFormMap("King"));
     b.infoToFormMap("King");
+
     //Round 3
     BasicAction a3 = new Attack("King", "Hanamura Volskaya 26 Lv7");   
     LinkedHashSet<BasicAction> s3 = new LinkedHashSet<>();
     s3.add(a3);
     HashMap<String, HashMap<String, BasicAction>> outMap3 = b.mergeOneTurnAttackV2(s3);
     b.processOneTurnAttackNextV2(outMap3);
+    b.displaySinlgePlayerBoardV3("King");
     //assertEquals("King", b.infoToFormMap("King"));
     b.infoToFormMap("King");
-
+    UpgradeAction spyCreate2 = new UpgradeAction("King", "Hanamura Lv1 2 Spy");
+    b.processSingleUpdateUnit(spyCreate2);
+    BasicAction spy3 = new Move("King", "Hanamura Volskaya 1 Spy");
+    BasicAction spy4 = new Move("King", "Hanamura Volskaya 1 Spy");
+    BasicAction spy5 = new Move("King", "Volskaya Junkertown 1 Spy");
+    b.processSingleBasicMove(spy3);
+    b.processSingleBasicMove(spy4);  
+    b.processSingleBasicMove(spy5);     
+    b.infoToFormMap("King");
+    b.displaySinlgePlayerBoardV3("King");
     //Round 4
+    BasicAction aTemp = new Attack("King", "Volskaya Junkertown 1 Lv1");
     BasicAction a4 = new Attack("King", "Volskaya Junkertown 36 Lv7");
     LinkedHashSet<BasicAction> s4 = new LinkedHashSet<>();
     s4.add(a4);
+    s4.add(aTemp);
     HashMap<String, HashMap<String, BasicAction>> outMap4 = b.mergeOneTurnAttackV2(s4);
     b.processOneTurnAttackNextV2(outMap4);
     //assertEquals("King", b.infoToFormMap("King"));
     b.infoToFormMap("King");
+    b.displaySinlgePlayerBoardV3("King");
+    CloakAction k1 = new CloakAction("King", "Hollywood");
+    CloakAction k2 = new CloakAction("King", "Hanamura");
+    CloakAction k3 = new CloakAction("King", "Volskaya");
+    CloakAction k4 = new CloakAction("King", "Junkertown");
+    b.processOneCloakAction(k1);
+    b.processOneCloakAction(k2);
+    b.processOneCloakAction(k3);
+    b.processOneCloakAction(k4);
+    b.displaySinlgePlayerBoardV3("Red");
+
      //Round 5
      BasicAction a5 = new Attack("Red", "Ilios Junkertown 66 Lv7");
      BasicAction a6 = new Attack("Red", "Ilios Volskaya 46 Lv7");
@@ -306,9 +389,11 @@ public class BoardTest {
     assertEquals(750, b.getPlayerByName("King").getTechResource());
     b.processUpdateTech(a3);
     b.processUpdateTech(a3);
-    if(b.checkUpdateTech(a3)){
-      b.processUpdateTech(a3);
-    }
+    //b.processUpdateTech(a3);
+    b.checkUpdateTech(a3);
+    // if(b.checkUpdateTech(a3)){
+    //   b.processUpdateTech(a3);
+    // }
     ResearchCloak r1 = new ResearchCloak("King");
     b.processResearchCloak(r1);
     CloakAction c1 = new CloakAction("King", "Dorado");
@@ -599,10 +684,7 @@ public class BoardTest {
     assertEquals(false, b.checkIfUpgradeBoolean(testup3));
   }
   
-  @Test
-  public void test_tempTest(){
-    
-  }
+
   /*
   @Test
   public void test_getTerritory() {

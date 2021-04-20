@@ -491,13 +491,13 @@ private String getSoldierNameByBonus(int Bonus){
       attackerName = oneTerritoryAttackMap.get(s).getActionOwner();
       break;
     }
-    if(attackerName != null){ //update owner
+    //if(attackerName != null){ //update owner
       destTerri.updateOwner(attackerName);
       LinkedHashSet<Territory> attackerTerriSet = gameBoard.get(attackerName);
       LinkedHashSet<Territory> defenderTerriSet = gameBoard.get(defenderName);
       attackerTerriSet.add(destTerri);
       defenderTerriSet.remove(destTerri);
-    }
+    //}
     //update soldier
     for(String s : oneTerritoryAttackMap.keySet()){
       BasicAction bTemp = oneTerritoryAttackMap.get(s);
