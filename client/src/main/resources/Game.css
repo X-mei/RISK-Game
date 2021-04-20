@@ -233,12 +233,14 @@
     -fx-background-color: #707db3;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-background-radius: 16px;
 }
 #newgame
 {
     -fx-background-color: #8FBC8F;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-background-radius: 16px;
 }
 #previousgame:hover
 {
@@ -266,6 +268,21 @@
     -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);
     -fx-cursor: hand;
 }
+
+#submit
+{
+    -fx-background-color: #8FBC8F;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 16px;
+}
+#submit:hover
+{
+    -fx-background-color: #6b966b;
+    -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);
+    -fx-cursor: hand;
+}
+
 .radio-button .radio {
   -fx-border-width: 1px;
   -fx-border-color: #000;
@@ -300,3 +317,147 @@
   -fx-background-insets: 0;
 }
 
+#tech
+{
+  -fx-background-color: #707db3;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+#upgrade
+{
+  -fx-background-color: #707db3;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+#attack
+{
+  -fx-background-color: #707db3;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+#move
+{
+  -fx-background-color: #707db3;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+#research
+{
+  -fx-background-color: #707db3;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+#cloak
+{
+  -fx-background-color: #707db3;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+#done
+{
+  -fx-background-color: #d4b331;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 16px;
+}
+
+#tech:hover
+{
+  -fx-background-color: #5a6db8;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;
+}
+#upgrade:hover
+{
+  -fx-background-color: #5a6db8;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;
+}
+#attack:hover
+{
+  -fx-background-color: #5a6db8;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;
+}
+#move:hover
+{
+  -fx-background-color: #5a6db8;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;
+}
+#research:hover
+{
+  -fx-background-color: #5a6db8;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;
+}
+#cloak:hover
+{
+  -fx-background-color: #5a6db8;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;
+}
+#done:hover
+{
+  -fx-background-color: #a67503;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;  
+}
+
+#continue
+{
+  -fx-background-color: #d4b331;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 16px;
+}
+#exit
+{
+  -fx-background-color: #707db3;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+
+#continue:hover
+{
+  -fx-background-color: #a67503;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;  
+}
+#exit:hover
+{
+  -fx-background-color: #5a6db8;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;
+}
+
+#confirm
+{
+  -fx-background-color: #d4b331;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 16px;
+}
+#confirm:hover
+{
+  -fx-background-color: #a67503;
+  -fx-effect:dropshadow(one-pass-box,black,8,0.0,2,0);  
+  -fx-cursor: hand;  
+}
+
+/* // Background color of the whole context menu */
+.choice-box .context-menu { -fx-background-color: #b1d171; }
+/* // Focused item background color in the list */
+.choice-box .menu-item:focused { -fx-background-color: #e3c491; }
+/* // Text color of non-focused items in the list */
+.choice-box .menu-item > .label { -fx-text-fill: white; }
+/* // Text color of focused item in the list */
+.choice-box .menu-item:focused > .label { -fx-text-fill: black; }
+/* // Background color of the control itself */
+.choice-box {
+  -fx-background-color: #b1d171;
+  -fx-mark-color: #faf8f5; 
+  /* // arrow color */
+}
+/* // Selected item text color on the control itself */
+.choice-box > .label { -fx-text-fill: white; }

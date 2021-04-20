@@ -121,6 +121,7 @@ public class ChooseRoomView {
         confirm.setLayoutY(700);
         confirm.setId("confirmRoom");
         confirm.setText("confirm");
+        confirm.setPrefSize(80, 50);
         confirm.setStyle("-fx-background-color: #8FBC8F;");
         chooseRoomPane.getChildren().add(confirm);
 

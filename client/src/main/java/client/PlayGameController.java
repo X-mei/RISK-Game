@@ -93,6 +93,8 @@ public class PlayGameController {
             playGameView.research.setVisible(false);
             playGameView.cloak.setVisible(false);
             playGameView.done.setVisible(false);
+
+            playGameView.moveView.setVisible(true);
         });
     }
 
@@ -121,6 +123,8 @@ public class PlayGameController {
             playGameView.research.setVisible(false);
             playGameView.cloak.setVisible(false);
             playGameView.done.setVisible(false);
+
+            playGameView.attackView.setVisible(true);
         });
     }
 
@@ -265,6 +269,7 @@ public class PlayGameController {
     public void confirmAction() {
         playGameView.confirm.setOnAction(e -> {
             String str = "";
+
             if(actionType.equals("M")){
                 if(playGameView.choicesOfSource.getValue() == null ||
                         playGameView.choicesOfDest.getValue() == null ||
@@ -280,6 +285,7 @@ public class PlayGameController {
                 System.out.println(Level);
                 str = Source + " " + Dest + " "+ playGameView.input.getText() + " " + Level;
                 System.out.println(str);
+                playGameView.moveView.setVisible(false);
             }
             else if(actionType.equals("A")){
               if(playGameView.choicesOfSource.getValue() == null ||
@@ -296,6 +302,7 @@ public class PlayGameController {
               System.out.println(Level);
               str = Source + " " + Dest + " "+ playGameView.input.getText() + " " + Level;
               System.out.println(str);
+              playGameView.attackView.setVisible(false);
             }
             else if(actionType.equals("U")){
                 if(playGameView.choicesOfSource.getValue() == null ||
