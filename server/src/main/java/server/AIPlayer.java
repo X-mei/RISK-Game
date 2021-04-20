@@ -39,6 +39,7 @@ public class AIPlayer implements Runnable {
   private final String [] soldierNames = {"Lv1","Lv2","Lv3","Lv4","Tel","Lv5","Lv6","Lv7"};
   private final HashMap<String, Integer> soldierBonusLevelTable;
   private final HashMap<String, Integer> techLevelReqReference;
+  private int techCount;
 
 
   public AIPlayer(String ip, int port, PrintStream out, int playerNum, String username) {
@@ -71,6 +72,7 @@ public class AIPlayer implements Runnable {
     techLevelReqReference.put("Lv5", 4);
     techLevelReqReference.put("Lv6", 5);
     techLevelReqReference.put("Lv7", 6);
+    this.techCount = 1;
   }
 
   /**
@@ -268,7 +270,10 @@ public class AIPlayer implements Runnable {
    */
   public void decideActionChoice(ArrayList<String> actions) {
     generateAttackDecisions(actions);
-    actions.add("T");
+    if (techCount < 6) {
+      actions.add("T");
+      techCount += 1;
+    }
     actions.add("D");
   }
 
@@ -347,7 +352,8 @@ public class AIPlayer implements Runnable {
         continue;
       }
       // Generate action string for this type of soldier
-      String actionStr = "A "+potentialSrc+" "+cnt+" "+potentialTarget+" "+soldierNames[i];
+      // String actionStr = "A "+potentialSrc+" "+cnt+" "+potentialTarget+" "+soldierNames[i];
+      String actionStr = "A "+potentialSrc+" "+potentialTarget+" "+cnt+" "+soldierNames[i];
       actions.add(actionStr);
       // If we already have enough score, break
       if (curScore >= lowest_score){
@@ -531,6 +537,7 @@ public class AIPlayer implements Runnable {
           String instructionMsg = recvInstruction();
           // send action choice
           String temp = ""+action.charAt(0);
+          System.out.println("action choice: " + temp);
           dataOut.writeUTF(temp);
           if (!temp.equals("D")) {
             if (temp.equals("T")) {
@@ -538,8 +545,9 @@ public class AIPlayer implements Runnable {
             } else {
               // recv "input str format"
               String prompt = dataIn.readUTF();
-
+              System.out.println(prompt);
               // send action string
+              System.out.println("action string: " + action.substring(2));
               dataOut.writeUTF(action.substring(2));
             }
           } else {
