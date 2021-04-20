@@ -75,7 +75,7 @@ public class Board {
     soldierBonusLevelTable.put("Lv5", 9);
     soldierBonusLevelTable.put("Lv6", 12);
     soldierBonusLevelTable.put("Lv7", 16);
-    soldierBonusLevelTable.put("Tel", 6);
+    soldierBonusLevelTable.put("Tel", 7);
 
 
     this.boardRandomGenerator = new Random();
@@ -440,13 +440,17 @@ private String getSoldierNameByBonus(int Bonus){
       if(attackRandom > defendRandom){
         defenceList.remove(0);
         String defenderSoldierName = getSoldierNameByBonus(defender);
+        // System.out.println(attack);
+        // System.out.println("lv4: " + defenderSoldierName);
         Soldiers defenderLoseSoldier = getSoldiersByName(defenderSoldierName, TerritoryName);
         defenderLoseSoldier.updateCount(defenderLoseSoldier.getCount() - 1);
         marker = 0;
       }
       else if(attackRandom < defendRandom){
         attackList.remove(attackList.size() - 1);
+        // System.out.println(attack);
         String attackSoldierName = getSoldierNameByBonus(attack);
+        // System.out.println("lv4: " + attackSoldierName);
         BasicAction attackLoseAction = oneTerritoryAttackMap.get(attackSoldierName);
         attackLoseAction.modifyCount(-1);
       }
@@ -460,6 +464,8 @@ private String getSoldierNameByBonus(int Bonus){
       if(attackRandom > defendRandom){
         defenceList.remove(defenceList.size() - 1);
         String defenderSoldierName = getSoldierNameByBonus(defender);
+        // System.out.println(attack);
+        // System.out.println("lv4: " + defenderSoldierName);
         //System.out.println("defender :" + defender);
         Soldiers defenderLoseSoldier = getSoldiersByName(defenderSoldierName, TerritoryName);
         defenderLoseSoldier.updateCount(defenderLoseSoldier.getCount() - 1);
@@ -468,6 +474,8 @@ private String getSoldierNameByBonus(int Bonus){
       else if(attackRandom < defendRandom){
         attackList.remove(0);
         String attackSoldierName = getSoldierNameByBonus(attack);
+        // System.out.println(attack);
+        // System.out.println("lv4: " + attackSoldierName);
         BasicAction attackLoseAction = oneTerritoryAttackMap.get(attackSoldierName);
         attackLoseAction.modifyCount(-1);
         marker = 1;
@@ -705,7 +713,7 @@ private String getSoldierNameByBonus(int Bonus){
     }
     // actionPlayer.updateTechResource(-techUpgradeCost);
     // actionPlayer.updateTechLevel();
-    System.out.println("in tech update");
+    System.out.println("checking tech update");
     return true;
   }
 
