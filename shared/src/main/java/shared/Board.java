@@ -1035,22 +1035,25 @@ private String getSoldierNameByBonus(int Bonus){
     int pTechResource = p.getTechResource();
     int pTechLevel = p.getTechLevel();
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
-    String s1 = "You are " + playerName + " player\n";
-    String s2 = "Tech Level: " + pTechLevel + "\nFood: " + pFoodResource + "\nTech: " + pTechResource + "\n";
+    //String s1 = "You are " + playerName + " player\n";
+    String s2 = "Tech Level: " + pTechLevel + "\nFood Resource: " + pFoodResource + "\nTech Resource: " + pTechResource + "\n";
     // Eg: ans = "King player:
     //            ------------
     //           "
     //String ans = s1 + createDottedLine(s1.length()) + s2 + "\n";
-    String ans = s1 + s2 + "\n";
-    String territoryInfo = "";  
+    String ans = s2 + "\nYour territories:\n";
+    String territoryInfo = "";
+    String tempComma = "";  
     for(Territory t : terriSet){
-      territoryInfo += displaySingleTerriInfo(t) + "\n";
+      //territoryInfo += displaySingleTerriInfo(t) + "\n";
+      territoryInfo += tempComma + t.getTerritoryName();
+      tempComma = ", ";
     }
-    ans += territoryInfo + "\n";
+    ans += territoryInfo + "\n\n";
     //add spy information
     ans += spyInfoDisplay(p) + "\n";
     //add adjacent enemy territories info
-    ans += adjacentEnemyTerrInfo(p) + "\n";
+    //ans += adjacentEnemyTerrInfo(p) + "\n";
     ans += cloakInfoDisplay(p);
     return ans;
   }
@@ -1068,15 +1071,16 @@ private String getSoldierNameByBonus(int Bonus){
         soldierNameString += comma + SoldierNum + " " + tempS.getName();
         comma = ", ";
       }
-      String temp = soldierNameString +  " Soldiers in " + t.getTerritoryName() + " (next to:";
-      String space = " ";
-      String tempNeighbor = "";
-      for (Territory tNeighbor : t.getNeighbours()) {
-        tempNeighbor += space + tNeighbor.getTerritoryName();
-        space = ", ";
-      }
+      String temp = soldierNameString +  " Soldiers in " + t.getTerritoryName();
+      // String space = " ";
+      // String tempNeighbor = "";
+      // for (Territory tNeighbor : t.getNeighbours()) {
+      //   tempNeighbor += space + tNeighbor.getTerritoryName();
+      //   space = ", ";
+      // }
       //Eg tempNeihbor = " Elantris, Midkemia" 
-      String out = temp + tempNeighbor + ")";
+      String out = temp;
+      // + tempNeighbor + ")";
       return out;
   }
 
@@ -1108,18 +1112,21 @@ private String getSoldierNameByBonus(int Bonus){
     HashMap<String, Integer> spyLocation = p.getSpyLocation();  
     String has = "Your spies are at:\n";
     String temp1 = "";
+    String comma = "";
     //String temp2 = "";  
     for(String s : spyLocation.keySet()){
       if(spyLocation.get(s) > 0){
         hasSpy = true;
         if(!p.getTerritoryList().contains(allTerritory.get(s))){      
-          Territory sT = allTerritory.get(s);
-          temp1 +=  s + "(" + spyLocation.get(s) + "): " + displaySingleTerriInfo(sT) + "(owned by " + sT.getOwner() + ")"+ "\n";
+          //Territory sT = allTerritory.get(s);
+          temp1 +=  comma + s + "(" + spyLocation.get(s) + ")";
+          //temp1 +=  s + "(" + spyLocation.get(s) + "): " + displaySingleTerriInfo(sT) + "(owned by " + sT.getOwner() + ")"+ "\n";
         //temp2 = ", ";
         }
         else{
-          temp1 += s + "(" + spyLocation.get(s) + "): Your own\n";
+          temp1 += comma + s + "(" + spyLocation.get(s) + ")";
         }
+        comma = ", ";
       }
       else{
         continue;
@@ -1129,7 +1136,7 @@ private String getSoldierNameByBonus(int Bonus){
       return "You have no Spy, try to create one!\n";
     }
     else{
-      return has + temp1;
+      return has + temp1 + "\n";
     }
   }
 
@@ -1137,9 +1144,13 @@ private String getSoldierNameByBonus(int Bonus){
     if(!p.checkPlayerCanCloak()){
       return "You cannot cloak, research it first\n";
     }
+    String temp = "";
     String out = "cloak Info:\n";
     for(Territory t : p.getTerritoryList()){
-      out += t.getTerritoryName() + ": cloak number is " + t.checkIsCloaked() + "\n";
+      if( t.checkIsCloaked() > 0){
+        out += temp + t.getTerritoryName() + "(" + t.checkIsCloaked() + ")";
+        temp = ", ";
+      }
     }
     return out;
   }
