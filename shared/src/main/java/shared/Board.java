@@ -1036,7 +1036,7 @@ private String getSoldierNameByBonus(int Bonus){
     int pTechLevel = p.getTechLevel();
     LinkedHashSet<Territory> terriSet = gameBoard.get(playerName);
     //String s1 = "You are " + playerName + " player\n";
-    String s2 = "Tech Level: " + pTechLevel + "\nFood Resource: " + pFoodResource + "\nTech Resource: " + pTechResource + "\n";
+    String s2 = "Tech Level: " + pTechLevel + "\n\nFood Resource: " + pFoodResource + "\nTech Resource: " + pTechResource + "\n";
     // Eg: ans = "King player:
     //            ------------
     //           "
