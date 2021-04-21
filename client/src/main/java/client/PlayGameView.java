@@ -12,6 +12,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -792,12 +793,17 @@ public class PlayGameView {
         prompt0.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(prompt0);
 
-        prompt1.setLayoutX(40);
+        prompt1.setLayoutX(200);
         prompt1.setLayoutY(450);
         prompt1.setText(prompt);
-        prompt1.setFont(new Font("Arial", 15));
-        prompt1.setTextFill(Color.web("#382d61", 1.0));
+        prompt1.setFont(new Font("Arial", 16));
+        prompt1.setTextFill(Color.web("#2d4769", 1.0));
         prompt1.setStyle("-fx-font-weight: bold;");
+        DropShadow ds = new DropShadow();
+        ds.setOffsetY(3.0f);
+        ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
+        prompt1.setEffect(ds);
+        prompt1.setCache(true);
         playGamePane.getChildren().add(prompt1);
     }
 
