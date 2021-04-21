@@ -286,8 +286,6 @@ public class AIPlayer implements Runnable {
     Player p = board.getPlayerByName(playerName);
     int resourceCost = 50+(p.getTechLevel()-1)*(p.getTechLevel())/2*25;
     p.updateTempTechResource(-resourceCost);
-    // First levelup unit utilizing a portion of resources
-    generateUpgradeActions(actions);
     // The set stores all the name of potential target to attack
     HashSet<String> set = new HashSet<>();
     int lowest_score = Integer.MAX_VALUE;
@@ -322,6 +320,8 @@ public class AIPlayer implements Runnable {
     }
     generateSpyUpgradeDecision(actions, potentialSrc);
     generateSpyDecision(actions);
+    // First levelup unit utilizing a portion of resources
+    generateUpgradeActions(actions);
     // If no lowest score are found, then no adjacent hostile territory to attack
     if (lowest_score == Integer.MAX_VALUE){
       return;
