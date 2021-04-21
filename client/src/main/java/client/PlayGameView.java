@@ -18,7 +18,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 
 public class PlayGameView {
     HashMap<String, HashMap<String, Button> > playerTerrs;
@@ -98,6 +100,10 @@ public class PlayGameView {
     Label errorTech;
 
     ImageView imageView2;
+
+    ImageView moveView;
+    ImageView attackView;
+    ImageView upgradeView;
 
     public PlayGameView(String userInfo) {
         this.terrs2P = new HashMap<>();
@@ -194,6 +200,33 @@ public class PlayGameView {
             imageView.setFitWidth(680);
             this.playerNum = playerNum;
             playGamePane.getChildren().add(imageView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String path = "src/main/resources/move.gif";
+            FileInputStream imageStream = new FileInputStream(path);
+            Image image = new Image(imageStream);
+            moveView = new ImageView(image);
+            moveView.setX(900);
+            moveView.setY(450);
+            moveView.setFitHeight(300);
+            moveView.setFitWidth(300);
+            moveView.setVisible(false);
+            playGamePane.getChildren().add(moveView);
+
+            path = "src/main/resources/combat.gif";
+            imageStream = new FileInputStream(path);
+            image = new Image(imageStream);
+            attackView = new ImageView(image);
+            attackView.setX(900);
+            attackView.setY(550);
+            attackView.setFitHeight(150);
+            attackView.setFitWidth(300);
+            attackView.setVisible(false);
+            playGamePane.getChildren().add(attackView);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -541,91 +574,128 @@ public class PlayGameView {
             terr5P_10.setVisible(true);
         }
                                        
-        promptAM.setLayoutX(40);
-        promptAM.setLayoutY(495);
+        promptAM.setLayoutX(750);
+        promptAM.setLayoutY(150);
         promptAM.setText("Please enter the action: src dest count Level.");
         promptAM.setVisible(false);
+        promptAM.setFont(new Font("Arial", 14));
+        promptAM.setTextFill(Color.web("#4f1e47", 1.0));
+        promptAM.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(promptAM);
 
-        srcPrompt.setLayoutX(45);
-        srcPrompt.setLayoutY(530);
+        srcPrompt.setLayoutX(800);
+        srcPrompt.setLayoutY(200);
         srcPrompt.setText("Src");
         srcPrompt.setVisible(false);
+        srcPrompt.setFont(new Font("Arial", 12));
+        srcPrompt.setTextFill(Color.web("#574a78", 1.0));
+        srcPrompt.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(srcPrompt);
 
-        terrPrompt.setLayoutX(45);
-        terrPrompt.setLayoutY(530);
+        terrPrompt.setLayoutX(800);
+        terrPrompt.setLayoutY(200);
         terrPrompt.setText("Terri");
         terrPrompt.setVisible(false);
+        terrPrompt.setFont(new Font("Arial", 12));
+        terrPrompt.setTextFill(Color.web("#574a78", 1.0));
+        terrPrompt.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(terrPrompt);
 
-        destPrompt.setLayoutX(215);
-        destPrompt.setLayoutY(530);
+        destPrompt.setLayoutX(800);
+        destPrompt.setLayoutY(250);
         destPrompt.setText("Dest");
         destPrompt.setVisible(false);
+        destPrompt.setFont(new Font("Arial", 12));
+        destPrompt.setTextFill(Color.web("#574a78", 1.0));
+        destPrompt.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(destPrompt);
 
-        lvPrompt1.setLayoutX(210);
-        lvPrompt1.setLayoutY(530);
+        lvPrompt1.setLayoutX(800);
+        lvPrompt1.setLayoutY(250);
         lvPrompt1.setText("Level");
         lvPrompt1.setVisible(false);
+        lvPrompt1.setFont(new Font("Arial", 12));
+        lvPrompt1.setTextFill(Color.web("#574a78", 1.0));
+        lvPrompt1.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(lvPrompt1);
 
-        lvPrompt2.setLayoutX(550);
-        lvPrompt2.setLayoutY(530);
+        lvPrompt2.setLayoutX(800);
+        lvPrompt2.setLayoutY(350);
         lvPrompt2.setText("Level");
         lvPrompt2.setVisible(false);
+        lvPrompt2.setFont(new Font("Arial", 12));
+        lvPrompt2.setTextFill(Color.web("#574a78", 1.0));
+        lvPrompt2.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(lvPrompt2);
 
-        countPrompt.setLayoutX(375);
-        countPrompt.setLayoutY(530);
+        countPrompt.setLayoutX(800);
+        countPrompt.setLayoutY(300);
         countPrompt.setText("Count");
         countPrompt.setVisible(false);
+        countPrompt.setFont(new Font("Arial", 12));
+        countPrompt.setTextFill(Color.web("#574a78", 1.0));
+        countPrompt.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(countPrompt);
 
-        promptUpdate.setLayoutX(40);
-        promptUpdate.setLayoutY(495);
+        promptUpdate.setLayoutX(750);
+        promptUpdate.setLayoutY(150);
         promptUpdate.setText("Please enter the action: Territory start-level count final-level.");
         promptUpdate.setVisible(false);
+        promptUpdate.setFont(new Font("Arial", 14));
+        promptUpdate.setTextFill(Color.web("#4f1e47", 1.0));
+        promptUpdate.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(promptUpdate);
 
-        input.setLayoutX(420);
-        input.setLayoutY(525);
+        input.setLayoutX(940);
+        input.setLayoutY(300);
         input.setPrefWidth(110);
         input.setVisible(false);
+        input.setStyle("-fx-background-color:#e9edc5; -fx-text-fill:Black; -fx-font-size:16");
         playGamePane.getChildren().add(input);
 
-        confirm.setLayoutX(40);
-        confirm.setLayoutY(565);
+        confirm.setLayoutX(940);
+        confirm.setLayoutY(400);
         confirm.setVisible(false);
+        confirm.setId("confirm");
         confirm.setText("confirm");
+        confirm.setPrefSize(80, 50);
         playGamePane.getChildren().add(confirm);
 
 
-        continueWatch.setLayoutX(40);
-        continueWatch.setLayoutY(490);
+        continueWatch.setLayoutX(920);
+        continueWatch.setLayoutY(400);
         continueWatch.setText("continue");
         continueWatch.setPrefWidth(80);
         continueWatch.setVisible(false);
+        continueWatch.setId("continue");
+        continueWatch.setPrefSize(80, 50);
         playGamePane.getChildren().add(continueWatch);
 
-        exitGame.setLayoutX(40);
-        exitGame.setLayoutY(530);
+        exitGame.setLayoutX(920);
+        exitGame.setLayoutY(600);
         exitGame.setText("exit");
         exitGame.setVisible(false);
         exitGame.setPrefWidth(80);
+        exitGame.setId("exit");
+        exitGame.setPrefSize(80, 50);
         playGamePane.getChildren().add(exitGame);
 
-        error.setLayoutX(40);
-        error.setLayoutY(615);
+        error.setLayoutX(800);
+        error.setLayoutY(750);
         error.setText("Error! Please enter again.");
         error.setVisible(false);
+        error.setFont(new Font("Arial", 15));
+        error.setTextFill(Color.web("#692327", 1.0));
+        error.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(error);
 
-        errorTech.setLayoutX(40);
-        errorTech.setLayoutY(690);
+        errorTech.setLayoutX(800);
+        errorTech.setLayoutY(750);
         errorTech.setText("Error! You have reached the highest tech level.");
         errorTech.setVisible(false);
+        errorTech.setFont(new Font("Arial", 15));
+        errorTech.setTextFill(Color.web("#692327", 1.0));
+        errorTech.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(errorTech);
 
         try {
@@ -717,26 +787,35 @@ public class PlayGameView {
     public void addPrompt(String prompt) {
         prompt0.setLayoutX(750);
         prompt0.setLayoutY(60);
+        prompt0.setFont(new Font("Georgia", 16));
+        prompt0.setTextFill(Color.web("#2d135e", 1.0));
+        prompt0.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(prompt0);
 
-        prompt1.setLayoutX(750);
-        prompt1.setLayoutY(80);
+        prompt1.setLayoutX(40);
+        prompt1.setLayoutY(450);
         prompt1.setText(prompt);
+        prompt1.setFont(new Font("Arial", 15));
+        prompt1.setTextFill(Color.web("#382d61", 1.0));
+        prompt1.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(prompt1);
     }
 
     public void addPrompt2(String prompt) {
-        prompt2.setLayoutX(40);
-        prompt2.setLayoutY(450);
+        prompt2.setLayoutX(750);
+        prompt2.setLayoutY(100);
         prompt2.setText(prompt);
+        prompt2.setFont(new Font("Arial", 15));
+        prompt2.setTextFill(Color.web("#382d61", 1.0));
+        prompt2.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(prompt2);
 
         choicesOfLevel1.setItems(FXCollections.observableArrayList(
                 "Lv1", "Lv2",
                 "Lv3", "Lv4", "Lv5", "Lv6", "Lv7")
         );
-        choicesOfLevel1.setLayoutX(250);
-        choicesOfLevel1.setLayoutY(525);
+        choicesOfLevel1.setLayoutX(940);
+        choicesOfLevel1.setLayoutY(250);
         choicesOfLevel1.setPrefWidth(110);
         playGamePane.getChildren().add(choicesOfLevel1);
 
@@ -744,8 +823,8 @@ public class PlayGameView {
                 "Lv1", "Lv2",
                 "Lv3", "Lv4", "Lv5", "Lv6", "Lv7", "Spy", "Tel")
         );
-        choicesOfLevel2.setLayoutX(590);
-        choicesOfLevel2.setLayoutY(525);
+        choicesOfLevel2.setLayoutX(940);
+        choicesOfLevel2.setLayoutY(350);
         choicesOfLevel2.setPrefWidth(110);
         playGamePane.getChildren().add(choicesOfLevel2);
 
@@ -753,8 +832,8 @@ public class PlayGameView {
                 "Lv1", "Lv2",
                 "Lv3", "Lv4", "Lv5", "Lv6", "Lv7", "Tel")
         );
-        attackLevel.setLayoutX(590);
-        attackLevel.setLayoutY(525);
+        attackLevel.setLayoutX(940);
+        attackLevel.setLayoutY(350);
         attackLevel.setPrefWidth(110);
         playGamePane.getChildren().add(attackLevel);
 
@@ -799,13 +878,13 @@ public class PlayGameView {
             );
         }
 
-        choicesOfSource.setLayoutX(80);
-        choicesOfSource.setLayoutY(525);
+        choicesOfSource.setLayoutX(940);
+        choicesOfSource.setLayoutY(200);
         choicesOfSource.setPrefWidth(110);
         playGamePane.getChildren().add(choicesOfSource);
 
-        choicesOfDest.setLayoutX(250);
-        choicesOfDest.setLayoutY(525);
+        choicesOfDest.setLayoutX(940);
+        choicesOfDest.setLayoutY(250);
         choicesOfDest.setPrefWidth(110);
         playGamePane.getChildren().add(choicesOfDest);
 
@@ -815,50 +894,57 @@ public class PlayGameView {
         choicesOfDest.setVisible(false);
         choicesOfSource.setVisible(false);
 
-        tech.setLayoutX(40);
-        tech.setLayoutY(490);
+        tech.setLayoutX(920);
+        tech.setLayoutY(200);
         tech.setText("Technical Upgrade");
-        tech.setPrefWidth(200);
+        tech.setPrefSize(200, 50);
+        tech.setId("tech");
         playGamePane.getChildren().add(tech);
 
-        upgrade.setLayoutX(40);
-        upgrade.setLayoutY(530);
+        upgrade.setLayoutX(920);
+        upgrade.setLayoutY(280);
         upgrade.setText("Upgrade Soldiers");
-        upgrade.setPrefWidth(200);
+        upgrade.setPrefSize(200, 50);
+        upgrade.setId("upgrade");
         playGamePane.getChildren().add(upgrade);
-        String str = "to upgrade";
-        Tooltip.install(upgrade, new Tooltip(str));
+        // String str = "to upgrade";
+        // Tooltip.install(upgrade, new Tooltip(str));
 
-        attack.setLayoutX(40);
-        attack.setLayoutY(570);
+        attack.setLayoutX(920);
+        attack.setLayoutY(360);
         attack.setText("Attack");
-        attack.setPrefWidth(200);
+        attack.setPrefSize(200, 50);
+        attack.setId("attack");
         playGamePane.getChildren().add(attack);
 
-        move.setLayoutX(40);
-        move.setLayoutY(610);
+        move.setLayoutX(920);
+        move.setLayoutY(440);
         move.setText("Move");
-        move.setPrefWidth(200);
+        move.setPrefSize(200, 50);
+        move.setId("move");
         playGamePane.getChildren().add(move);
 
-        research.setLayoutX(300);
-        research.setLayoutY(570);
+        research.setLayoutX(920);
+        research.setLayoutY(520);
         research.setText("Research Cloak");
-        research.setPrefWidth(200);
+        research.setPrefSize(200, 50);
         research.setVisible(false);
+        research.setId("research");
         playGamePane.getChildren().add(research);
 
-        cloak.setLayoutX(300);
-        cloak.setLayoutY(610);
+        cloak.setLayoutX(920);
+        cloak.setLayoutY(600);
         cloak.setText("Cloak");
-        cloak.setPrefWidth(200);
+        cloak.setPrefSize(200, 50);
         cloak.setVisible(false);
+        cloak.setId("cloak");
         playGamePane.getChildren().add(cloak);
 
-        done.setLayoutX(40);
-        done.setLayoutY(650);
+        done.setLayoutX(920);
+        done.setLayoutY(680);
         done.setText("Done");
-        done.setPrefWidth(200);
+        done.setPrefSize(200, 50);
+        done.setId("done");
         playGamePane.getChildren().add(done);
 
     }

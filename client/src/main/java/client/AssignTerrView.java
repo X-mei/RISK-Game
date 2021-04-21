@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -16,6 +17,9 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class AssignTerrView {
     AnchorPane assignTerrPane;
@@ -67,6 +71,9 @@ public class AssignTerrView {
     Button submit;
     String playerNum;
     ImageView imageView1;
+
+    Text ruleTitle;
+    Text gameRule;
 
     public AssignTerrView() {
         this.assignTerrPane = new AnchorPane();
@@ -454,28 +461,54 @@ public class AssignTerrView {
         }
                                        
         // prompt: wait
+        DropShadow ds = new DropShadow();
+        ds.setOffsetY(3.0f);
+        ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
         prompt1.setLayoutX(120);
         prompt1.setLayoutY(500);
+        prompt1.setEffect(ds);
+        prompt1.setCache(true);
         prompt1.setText("Wait for other players to join...");
         prompt1.setFont(new Font("Arial", 20));
-        prompt1.setTextFill(Color.web("#a0522d", 1.0));
+        prompt1.setTextFill(Color.web("#1d195e", 1.0));
         assignTerrPane.getChildren().add(prompt1);
 
         // animation
-        try {
-          // add image
-          String path = "src/main/resources/loading.gif";
-          FileInputStream imageStream = new FileInputStream(path);
-          Image image1 = new Image(imageStream);
-          imageView1 = new ImageView(image1);
-          imageView1.setX(100);
-          imageView1.setY(600);
-          imageView1.setFitHeight(200);
-          imageView1.setFitWidth(350);
-          assignTerrPane.getChildren().add(imageView1);
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+        // try {
+        //   // add image
+        //   String path = "src/main/resources/loading.gif";
+        //   FileInputStream imageStream = new FileInputStream(path);
+        //   Image image1 = new Image(imageStream);
+        //   imageView1 = new ImageView(image1);
+        //   imageView1.setX(100);
+        //   imageView1.setY(600);
+        //   imageView1.setFitHeight(200);
+        //   imageView1.setFitWidth(250);
+        //   assignTerrPane.getChildren().add(imageView1);
+        // } catch (IOException e) {
+        //   e.printStackTrace();
+        // }
+
+        // title of the rules
+        String title = "Welcome to RISC\nGame Rule:\n";
+        ruleTitle = new Text(750, 100, title);
+        Font font = Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC, 35);
+        ruleTitle.setFont(font);
+        ruleTitle.setFill(Color.web("#3c3154", 1.0));
+        assignTerrPane.getChildren().add(ruleTitle);
+
+        // content of the rules
+        String rules = "Actions:\n\n->Technical Upgrade\nIncrease the maximum level of your soldiers.\nConsumes techinical resources.\n\n";
+        rules += "->Upgrade\nUpgrade your soldiers to a higher level.\nConsumes techinical resources.\n\n";
+        rules += "->Move\nMove your soldiers among your owned territories.\nMove your spy to enemy's territory.\nConsumes food resources.\n\n";
+        rules += "->Attack\nLead your soldiers to combat with enemy's.\nConsumes food resources.\n\n";
+        rules += "->Research Cloak\nCloaking can be researched once you are at level3.\nConsumes technical resources.\n\n";
+        rules += "->Cloak\nHide one of your territory from enemy's view for 3 rounds.\nConsumes techinical resources.\n\n";
+        gameRule = new Text(750, 200, rules);
+        font = Font.font("Verdana", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 16);
+        gameRule.setFont(font);
+        gameRule.setFill(Color.web("#6d4391", 1.0));
+        assignTerrPane.getChildren().add(gameRule);
 
         // error
         error.setLayoutX(750);
@@ -489,17 +522,26 @@ public class AssignTerrView {
         promptTerri1.setLayoutX(750);
         promptTerri1.setLayoutY(200);
         promptTerri1.setText(prompts[0]);
+        promptTerri1.setFont(new Font("Arial", 15));
+        promptTerri1.setTextFill(Color.web("#a0522d", 1.0));
+        promptTerri1.setStyle("-fx-font-weight: bold;");
         assignTerrPane.getChildren().add(promptTerri1);
 
         promptTerri2.setLayoutX(750);
         promptTerri2.setLayoutY(300);
         promptTerri2.setText(prompts[1]);
+        promptTerri2.setFont(new Font("Arial", 15));
+        promptTerri2.setTextFill(Color.web("#a0522d", 1.0));
+        promptTerri2.setStyle("-fx-font-weight: bold;");
         assignTerrPane.getChildren().add(promptTerri2);
 
         if(prompts.length == 3){
             promptTerri3.setLayoutX(750);
             promptTerri3.setLayoutY(400);
             promptTerri3.setText(prompts[2]);
+            promptTerri3.setFont(new Font("Arial", 15));
+            promptTerri3.setTextFill(Color.web("#a0522d", 1.0));
+            promptTerri3.setStyle("-fx-font-weight: bold;");
             assignTerrPane.getChildren().add(promptTerri3);
         }
     }
@@ -510,6 +552,9 @@ public class AssignTerrView {
         prompt2.setLayoutX(750);
         prompt2.setLayoutY(75);
         prompt2.setText(prompt);
+        prompt2.setFont(new Font("Georgia", 16));
+        prompt2.setTextFill(Color.web("#2d135e", 1.0));
+        prompt2.setStyle("-fx-font-weight: bold;");
         assignTerrPane.getChildren().add(prompt2);
     }
 
@@ -517,19 +562,25 @@ public class AssignTerrView {
         prompt3.setLayoutX(750);
         prompt3.setLayoutY(150);
         prompt3.setText(prompt);
+        prompt3.setFont(new Font("Arial", 15));
+        prompt3.setTextFill(Color.web("#382d61", 1.0));
+        prompt3.setStyle("-fx-font-weight: bold;");
         assignTerrPane.getChildren().add(prompt3);
 
 
         input1.setLayoutX(750);
         input1.setLayoutY(250);
+        input1.setStyle("-fx-background-color:#e9edc5; -fx-text-fill:Black; -fx-font-size:16"); 
         assignTerrPane.getChildren().add(input1);
 
         input2.setLayoutX(750);
         input2.setLayoutY(350);
+        input2.setStyle("-fx-background-color:#e9edc5; -fx-text-fill:Black; -fx-font-size:16"); 
         assignTerrPane.getChildren().add(input2);
 
         input3.setLayoutX(750);
         input3.setLayoutY(450);
+        input3.setStyle("-fx-background-color:#e9edc5; -fx-text-fill:Black; -fx-font-size:16"); 
         assignTerrPane.getChildren().add(input3);
 
         if (playerNum.equals("4") || playerNum.equals("5")) {
@@ -538,7 +589,9 @@ public class AssignTerrView {
 
         submit.setLayoutX(750);
         submit.setLayoutY(550);
+        submit.setId("submit");
         submit.setText("submit");
+        submit.setPrefSize(80, 50);
         assignTerrPane.getChildren().add(submit);
     }
 

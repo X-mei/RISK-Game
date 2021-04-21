@@ -58,7 +58,7 @@ public class LoginView {
         Image image2 = new Image(imageStream);
         ImageView imageView2 = new ImageView(image2);
         imageView2.setX(300);
-        imageView2.setY(500);
+        imageView2.setY(600);
         imageView2.setFitHeight(200);
         imageView2.setFitWidth(800);
         loginPane.getChildren().add(imageView2);
@@ -68,32 +68,36 @@ public class LoginView {
 
       
         // username Label
-        username.setLayoutX(550);
+        username.setLayoutX(530);
         username.setLayoutY(400);
         username.setText("username: ");
         // username.setPrefSize(100, 50);
         username.setFont(new Font("Arial", 15));
         username.setTextFill(Color.web("#a0522d", 1.0));
+        username.setStyle("-fx-font-weight: bold;");
         loginPane.getChildren().add(username);
 
         // username textField
-        text.setLayoutX(650);
+        text.setLayoutX(630);
         text.setLayoutY(400);
         text.setPromptText("please input username");
+        text.setStyle("-fx-background-color:Wheat; -fx-text-fill:Black; -fx-font-size:16"); 
         text.setFocusTraversable(false);
         loginPane.getChildren().add(text);
 
         // password label
-        pwd.setLayoutX(550);
+        pwd.setLayoutX(530);
         pwd.setLayoutY(450);
         pwd.setText("password: ");
         pwd.setFont(new Font("Arial", 15));
         pwd.setTextFill(Color.web("#a0522d", 1.0));
+        pwd.setStyle("-fx-font-weight: bold;");
         loginPane.getChildren().add(pwd);
 
         // password passwordField
-        password.setLayoutX(650);
+        password.setLayoutX(630);
         password.setLayoutY(450);
+        password.setStyle("-fx-background-color:Wheat; -fx-text-fill:Black; -fx-font-size:16"); 
         loginPane.getChildren().add(password);
 
         // button register
@@ -101,8 +105,7 @@ public class LoginView {
         register.setLayoutY(550);
         register.setText("register");
         register.setId("register");
-        register.setStyle("-fx-background-color: #8FBC8F;");
-        register.setPrefWidth(80);
+        register.setPrefSize(80, 50);
         loginPane.getChildren().add(register);
         
 
@@ -111,8 +114,7 @@ public class LoginView {
         login.setLayoutY(550);
         login.setText("login");
         login.setId("login");
-        login.setStyle("-fx-background-color: #CDCDB4;");
-        login.setPrefWidth(80);
+        login.setPrefSize(80, 50);
         loginPane.getChildren().add(login);
 
         // error
