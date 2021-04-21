@@ -680,8 +680,8 @@ public class PlayGameView {
         exitGame.setPrefSize(80, 50);
         playGamePane.getChildren().add(exitGame);
 
-        error.setLayoutX(750);
-        error.setLayoutY(730);
+        error.setLayoutX(800);
+        error.setLayoutY(750);
         error.setText("Error! Please enter again.");
         error.setVisible(false);
         error.setFont(new Font("Arial", 15));
@@ -689,8 +689,8 @@ public class PlayGameView {
         error.setStyle("-fx-font-weight: bold;");
         playGamePane.getChildren().add(error);
 
-        errorTech.setLayoutX(750);
-        errorTech.setLayoutY(730);
+        errorTech.setLayoutX(800);
+        errorTech.setLayoutY(750);
         errorTech.setText("Error! You have reached the highest tech level.");
         errorTech.setVisible(false);
         errorTech.setFont(new Font("Arial", 15));

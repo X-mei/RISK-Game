@@ -131,7 +131,7 @@ public class PlayGameController {
     public void techAction() {
         playGameView.tech.setOnAction(e -> {
             press = true;
-            if(i > 5){
+            if(i > 6){
                 playGameView.errorTech.setVisible(true);
                 return;
             }
