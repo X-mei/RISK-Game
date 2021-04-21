@@ -846,7 +846,8 @@ private String getSoldierNameByBonus(int Bonus){
         } else {
           return false;
         }
-      } else if (action.getActionName().equals("A")) {
+      //} else if (action.getActionName().equals("A")) {
+      } else {
         if (action.getLevelName().equals("Tel")){
           output = teleportAttackRuleChecker.checkAction(action, this);
         }
@@ -1160,25 +1161,25 @@ private String getSoldierNameByBonus(int Bonus){
    * @param p is the player
    * @return enemy territory information
    */
-  public String adjacentEnemyTerrInfo(Player p){
-    String playerName= p.getName();
-    HashSet<Territory> adjacentEnemyTerr = new HashSet<>();
-    for(Territory t : p.getTerritoryList()){
-      for(Territory terr : t.getNeighbours()){
-        if(!terr.getOwner().equals(playerName) && terr.checkIsCloaked() <= 0){
-          adjacentEnemyTerr.add(terr);
-        }
-      }
-    }
-    String space = "Adjacent Enemy Territories:\n";
-    if(adjacentEnemyTerr.size() == 0){
-      return space + "No territory Visible\n";
-    }
-    for(Territory t : adjacentEnemyTerr){
-      space += displaySingleTerriInfo(t) + "(owned by " + t.getOwner() + ")\n";
-    }
-    return space;
-  }
+  // public String adjacentEnemyTerrInfo(Player p){
+  //   String playerName= p.getName();
+  //   HashSet<Territory> adjacentEnemyTerr = new HashSet<>();
+  //   for(Territory t : p.getTerritoryList()){
+  //     for(Territory terr : t.getNeighbours()){
+  //       if(!terr.getOwner().equals(playerName) && terr.checkIsCloaked() <= 0){
+  //         adjacentEnemyTerr.add(terr);
+  //       }
+  //     }
+  //   }
+  //   String space = "Adjacent Enemy Territories:\n";
+  //   if(adjacentEnemyTerr.size() == 0){
+  //     return space + "No territory Visible\n";
+  //   }
+  //   for(Territory t : adjacentEnemyTerr){
+  //     space += displaySingleTerriInfo(t) + "(owned by " + t.getOwner() + ")\n";
+  //   }
+  //   return space;
+  // }
 
   /**
   * check if a specific player lose

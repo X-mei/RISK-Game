@@ -55,6 +55,7 @@ public class BoardTest {
     b.processUpdateTech(t1);
     b.processUpdateTech(t1);
     ResearchCloak r1 = new ResearchCloak("Red");
+    assertEquals("R", r1.getActionName());
     b.processResearchCloak(r1);
     CloakAction c1 = new CloakAction("Red", "Ilios");
     CloakAction c2 = new CloakAction("Red", "Volskaya");
@@ -196,6 +197,13 @@ public class BoardTest {
     //System.out.println();
     //assertEquals("King", b.infoToFormMap("King"));
     //Round 1
+    UpgradeAction tel = new UpgradeAction("King", "Dorado Lv1 1 Tel");
+    BasicAction telA1 = new Attack("King", "Dorado Volskaya 1 Tel");
+    b.processSingleUpdateUnit(tel);
+    LinkedHashSet<BasicAction> tempTel = new LinkedHashSet<>();
+    tempTel.add(telA1);
+    b.refreshTemp("King");
+    assertEquals(true, b.checkIfActionBoolean(tempTel));
     BasicAction a1 = new Attack("King", "Hanamura Volskaya 6 Lv7");
     LinkedHashSet<BasicAction> s1 = new LinkedHashSet<>();
     s1.add(a1);
@@ -231,9 +239,13 @@ public class BoardTest {
     BasicAction spy3 = new Move("King", "Hanamura Volskaya 1 Spy");
     BasicAction spy4 = new Move("King", "Hanamura Volskaya 1 Spy");
     BasicAction spy5 = new Move("King", "Volskaya Junkertown 1 Spy");
+    BasicAction spy6 = new Move("King", "Volskaya Junkertown 1 Spy");
     b.processSingleBasicMove(spy3);
     b.processSingleBasicMove(spy4);  
-    b.processSingleBasicMove(spy5);     
+    b.processSingleBasicMove(spy5);   
+    b.processSingleBasicMove(spy6);
+    Territory tV = b.getTerritory("Volskaya"); 
+    assertEquals(0, tV.checkSpyCount("King"));
     b.infoToFormMap("King");
     b.displaySinlgePlayerBoardV3("King");
     //Round 4
@@ -263,7 +275,15 @@ public class BoardTest {
     b.processOneCloakAction(k3);
     b.processOneCloakAction(k4);
     b.displaySinlgePlayerBoardV3("Red");
+    Territory t = b.getTerritory("Dorado");   
+    assertEquals(0, tV.checkSpyCount("Red"));
+    tV.updateCloakStatus(-10);
+    //assertEquals(-10, tV.checkSpyCount("King"));
+    tV.calculateUnitsPower();
+
+    b.displaySingleTerriInfo(t);
     //assertEquals("King", b.displaySinlgePlayerBoardV3("King"));
+    Player tempKing = b.getPlayerByName("King");
      //Round 5
     BasicAction a5 = new Attack("Red", "Ilios Junkertown 66 Lv7");
     BasicAction a6 = new Attack("Red", "Ilios Volskaya 46 Lv7");
@@ -283,7 +303,6 @@ public class BoardTest {
     HashMap<String, HashMap<String, BasicAction>> outMap6 = b.mergeOneTurnAttackV2(s6);
     b.processOneTurnAttackNextV2(outMap6);
     //assertEquals("King", b.displaySinlgePlayerBoardV3("King"));
-    
   }
 
   @Test
@@ -465,6 +484,7 @@ public class BoardTest {
       b.singleTerritoryUnitSetup(s, new int[]{10,0,0,0,0,0,0,0});
     }
     Player King = b.getPlayerByName("King");
+    //b.adjacentEnemyTerrInfo(King);
     King.updateTechResource(100000);
     //LinkedHashSet<BasicAction> testSet = new LinkedHashSet<>();
     UpgradeAction u1 = new UpgradeAction("King", "Hanamura Lv1 4 Lv7");
