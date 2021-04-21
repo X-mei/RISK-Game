@@ -34,13 +34,9 @@ public class FakeClient extends Thread {
   }
 
   public void run() {
-    try {
-      dataOut.writeUTF("1");
-    } catch(IOException e) {
-      e.printStackTrace();
-    } 
     
     connectToServer();
+    sendPlayerIdentity(false);
     loginOrReg("r");
     login(username, "111");
     answerInfo("c");
@@ -151,6 +147,18 @@ public class FakeClient extends Thread {
       
     } catch(IOException e) {
       out.println("Cannot connect to host " + serverIPAddr + " :" + portNum);
+    }
+  }
+
+  public void sendPlayerIdentity(boolean aiPlayer) {
+    try {
+      if (aiPlayer) {
+        dataOut.writeUTF("0");
+      } else {
+        dataOut.writeUTF("1");
+      }
+    } catch(IOException e) {
+      out.println("send failed");
     }
   }
 
