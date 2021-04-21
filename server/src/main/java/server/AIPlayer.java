@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.util.*;
 
 import shared.*;
-import sun.security.krb5.internal.crypto.Des;
 
 import javax.swing.text.html.HTMLDocument;
 
