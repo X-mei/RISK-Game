@@ -1,7 +1,7 @@
 package shared;
 
 public class SpyUnitMovingChecker extends RuleChecker{
-    SpyUnitMovingChecker(RuleChecker next){
+    public SpyUnitMovingChecker(RuleChecker next){
         super(next);
     }
 

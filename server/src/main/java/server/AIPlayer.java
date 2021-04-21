@@ -6,11 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 import shared.*;
 
@@ -36,10 +32,12 @@ public class AIPlayer implements Runnable {
   private final RuleChecker teleportAttackRuleChecker;
   private final RuleChecker attackRuleChecker;
   private final SpecialRuleChecker upgradeRuleChecker;
+  private final SpecialRuleChecker spyUpgradeChecker;
   private final String [] soldierNames = {"Lv1","Lv2","Lv3","Lv4","Tel","Lv5","Lv6","Lv7"};
   private final HashMap<String, Integer> soldierBonusLevelTable;
   private final HashMap<String, Integer> techLevelReqReference;
   private int techCount;
+  private Random r;
 
 
   public AIPlayer(String ip, int port, PrintStream out, int playerNum, String username) {
@@ -49,11 +47,12 @@ public class AIPlayer implements Runnable {
     this.playerNumber = playerNum;
     this.username = username;
     this.attackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new NeighborChecker(new UnitMovingChecker(new ResourceChecker(null))))));
-    
-    this.spyRuleChecker = new NeighborChecker(null);//new SpyUnitMovingChecker(null)));
+
+    this.spyRuleChecker = new ExistanceChecker(new NeighborChecker(new SpyUnitMovingChecker(null)));
     this.teleportAttackRuleChecker = new ExistanceChecker(new OwnerChecker(new AttackSelfChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.moveRuleChecker = new ExistanceChecker(new OwnerChecker(new RouteChecker(new UnitMovingChecker(new ResourceChecker(null)))));
     this.upgradeRuleChecker = new UpgradeChecker(null);
+    this.spyUpgradeChecker = new SpyUpgradeChecker(null);
     this.soldierBonusLevelTable = new HashMap<>();
     soldierBonusLevelTable.put("Lv1", 1);
     soldierBonusLevelTable.put("Lv2", 2);
@@ -73,6 +72,7 @@ public class AIPlayer implements Runnable {
     techLevelReqReference.put("Lv6", 5);
     techLevelReqReference.put("Lv7", 6);
     this.techCount = 1;
+    this.r = new Random();
   }
 
   /**
@@ -320,7 +320,8 @@ public class AIPlayer implements Runnable {
         }
       }
     }
-
+    generateSpyUpgradeDecision(actions, potentialSrc);
+    generateSpyDecision(actions);
     // If no lowest score are found, then no adjacent hostile territory to attack
     if (lowest_score == Integer.MAX_VALUE){
       return;
@@ -437,7 +438,6 @@ public class AIPlayer implements Runnable {
         break;
       }
     }
-
   }
 
   public int generateMoveDecisions(ArrayList<String> actions, String potentialSrc, int scoreReq){
@@ -481,6 +481,58 @@ public class AIPlayer implements Runnable {
       }
     }
     return scoreReq;
+  }
+
+  void generateSpyUpgradeDecision(ArrayList<String> actions, String potentialSrc){
+    Player p = board.getPlayerByName(playerName);
+    int spyB = r.nextInt(2);
+    if (spyB == 1){
+      return;
+    }
+    Soldiers startL = board.getTerritory(potentialSrc).getOneUnits("Lv1");
+    if (startL.getCount().equals(0)){
+      return;
+    }
+    String actionStr = "U "+ potentialSrc + " " + "Lv1" +" " +  1 +" "+ "Spy";
+    UpgradeAction act = new UpgradeAction(playerName, potentialSrc + " " + "Lv1" +" " +  1 +" "+ "Spy");
+    if (spyUpgradeChecker.checkAction(act, board) == null) {
+      actions.add(actionStr);//add a move action
+    }
+  }
+
+  void generateSpyDecision(ArrayList<String> actions){
+    Player p = board.getPlayerByName(playerName);
+    int spyB = r.nextInt(2);
+    if (spyB == 1){
+      return;
+    }
+    HashMap<String, Integer> locs = p.getSpyLocation();
+    if (locs.size() == 0){
+      return;
+    }
+    String [] keys = locs.keySet().toArray(new String[0]);
+    String SrcT = keys[r.nextInt(keys.length)];
+    String DestT = "";
+    Territory t = board.getTerritory(SrcT);
+    int moveTo = r.nextInt(t.getNeighbours().size());
+    int ind = 0;
+    for (Territory neighbor: t.getNeighbours()){
+      if (neighbor.getOwner().equals(t.getOwner())){
+        ind++;
+        continue;
+      }
+      if (ind == moveTo){
+        DestT = neighbor.getTerritoryName();
+      }
+    }
+    if (DestT.equals("")){
+      return;
+    }
+    String actionStr = "M "+ SrcT + " " + DestT +" " +  1 +" "+ "Spy";
+    BasicAction act = new Move(playerName, SrcT + " " + DestT +" " +  1 +" "+ "Spy");
+    if (spyRuleChecker.checkAction(act, board) == null) {
+      actions.add(actionStr);
+    }
   }
 
   /**
