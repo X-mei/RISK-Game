@@ -22,4 +22,15 @@ public class SendRoomIDControllerTest {
         Client client = new Client("127.0.0.1", 1234,  new BufferedReader(new InputStreamReader(System.in)), System.out);
         cont = new SendRoomIDController(sendRoomIDView, client);
     }
+
+  @Test
+  public void test_parseTerritory() {
+    sendRoomIDView = new SendRoomIDView();
+    sendRoomIDView.init();
+    Client client = new Client("127.0.0.1", 1234,  new BufferedReader(new InputStreamReader(System.in)), System.out);
+    cont = new SendRoomIDController(sendRoomIDView, client);
+    String info = "King\nDorado:10 Lv1\n\nenemy can see:\nRed:Hanamura:6 Lv7\nRed:Hollywood:5:Lv7\n\n";
+    info += "previous can see territory info:\nRed:Volskaya:27 Lv7\nKing:Junkertown:35 Lv7\nRed:Ilios:10 Lv1\n";
+    cont.parseTerritory(info);
+  }
 }

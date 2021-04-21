@@ -44,6 +44,15 @@ public class FakeServer extends Thread {
         System.out.println("One player is connected.");
         DataInputStream input = new DataInputStream(clientSocket.getInputStream());
         DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
+        String info = input.readUTF();
+        boolean aiPlayer;
+        if (info.equals("0")) {
+          aiPlayer = true;
+          System.out.println("One ai player is connected.");
+        } else {
+          aiPlayer = false;
+          System.out.println("One human player is connected.");
+        }
         FakeServerHandler server = new FakeServerHandler(input, output, clientSocket, portNum, 
                                                   gameRooms, userLogInfo, currentGames, 
                                                   gameIDs, gameBoards, disconnectedUsers,

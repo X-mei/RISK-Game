@@ -19,10 +19,12 @@ public class ClientTest {
       server.start();
       Client client1 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client1.connectToServer();
+      client1.sendPlayerIdentity(true);
       client1.loginOrReg("r");
       assertEquals(true, client1.login("aa", "aa"));
       Client client2 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client2.connectToServer();
+      client2.sendPlayerIdentity(true);
       client2.loginOrReg("r");
       assertEquals(false, client2.login("aa", "11"));
       client2.loginOrReg("r");
@@ -59,14 +61,17 @@ public class ClientTest {
       // three players
       Client client3 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client3.connectToServer();
+      client3.sendPlayerIdentity(false);
       client3.loginOrReg("r");
       assertEquals(true, client3.login("11", "aa"));
       Client client4 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client4.connectToServer();
+      client4.sendPlayerIdentity(false);
       client4.loginOrReg("r");
       assertEquals(true, client4.login("22", "11"));
       Client client5 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client5.connectToServer();
+      client5.sendPlayerIdentity(false);
       client5.loginOrReg("r");
       assertEquals(true, client5.login("33", "11"));
       client3.answerInfo("c");
@@ -106,18 +111,22 @@ public class ClientTest {
       // four players
       Client client6 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client6.connectToServer();
+      client6.sendPlayerIdentity(false);
       client6.loginOrReg("l");
       assertEquals(true, client6.login("11", "aa"));
       Client client7 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client7.connectToServer();
+      client7.sendPlayerIdentity(false);
       client7.loginOrReg("r");
       assertEquals(true, client7.login("44", "11"));
       Client client8 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client8.connectToServer();
+      client8.sendPlayerIdentity(false);
       client8.loginOrReg("r");
       assertEquals(true, client8.login("55", "11"));
       Client client9 = new Client("127.0.0.1", 1234, new BufferedReader(new InputStreamReader(System.in)), System.out);
       client9.connectToServer();
+      client9.sendPlayerIdentity(false);
       client9.loginOrReg("r");
       assertEquals(true, client9.login("66", "11"));
       client6.answerInfo("c");
