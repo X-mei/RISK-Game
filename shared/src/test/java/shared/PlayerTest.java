@@ -66,6 +66,18 @@ public class PlayerTest {
     assertEquals("T", b1.getActionName());
     assertEquals("player1", b1.getActionOwner());
   }
+
+  @Test
+  public void test_formCloak()throws IOException {
+    ActionFactory f = new ActionFactory();
+    Player player = new Player("player1", 1, f);
+    ResearchCloak r1 = player.formResearchAction();
+    assertEquals("R", r1.getActionName());
+    assertThrows(IOException.class, ()->player.formCloakAction(null));
+
+    CloakAction c1 =player.formCloakAction("B");
+    assertEquals("C", c1.getActionName());
+  }
 }
 
 
