@@ -203,6 +203,7 @@ public class BoardTest {
     b.processOneTurnAttackNextV2(outMap);
     //assertEquals("King", b.displaySinlgePlayerBoardV3("King"));
     b.infoToFormMap("King");
+    //assertEquals("King", b.displaySinlgePlayerBoardV3("King"));
     //Round 2
     BasicAction a2 = new Attack("Red", "Ilios Volskaya 16 Lv7");
     BasicAction spy1 = new Move("Red", "Ilios Volskaya 16 Spy");
@@ -250,31 +251,38 @@ public class BoardTest {
     CloakAction k2 = new CloakAction("King", "Hanamura");
     CloakAction k3 = new CloakAction("King", "Volskaya");
     CloakAction k4 = new CloakAction("King", "Junkertown");
+    TechAction temp1 = new TechAction("King");
+    b.processUpdateTech(temp1);
+    b.processUpdateTech(temp1);
+    b.processUpdateTech(temp1);
+    b.processUpdateTech(temp1);
+    ResearchCloak tempR = new ResearchCloak("King");
+    b.processResearchCloak(tempR);
     b.processOneCloakAction(k1);
     b.processOneCloakAction(k2);
     b.processOneCloakAction(k3);
     b.processOneCloakAction(k4);
     b.displaySinlgePlayerBoardV3("Red");
-
+    //assertEquals("King", b.displaySinlgePlayerBoardV3("King"));
      //Round 5
-     BasicAction a5 = new Attack("Red", "Ilios Junkertown 66 Lv7");
-     BasicAction a6 = new Attack("Red", "Ilios Volskaya 46 Lv7");
-     LinkedHashSet<BasicAction> s5 = new LinkedHashSet<>();
-     s5.add(a5);
-     s5.add(a6);
-     HashMap<String, HashMap<String, BasicAction>> outMap5 = b.mergeOneTurnAttackV2(s5);
-     b.processOneTurnAttackNextV2(outMap5);
-     b.infoToFormMap("King");
-     //assertEquals("King", b.infoToFormMap("King"));
-     //Round 6
-     BasicAction a7 = new Attack("Red", "Ilios Hanamura 6 Lv7");
-     BasicAction a8 = new Attack("Red", "Ilios Hollywood 6 Lv7");
-     LinkedHashSet<BasicAction> s6 = new LinkedHashSet<>();
-     s6.add(a7);
-     s6.add(a8);
-     HashMap<String, HashMap<String, BasicAction>> outMap6 = b.mergeOneTurnAttackV2(s6);
-     b.processOneTurnAttackNextV2(outMap6);
-    //  assertEquals("King", b.infoToFormMap("King"));
+    BasicAction a5 = new Attack("Red", "Ilios Junkertown 66 Lv7");
+    BasicAction a6 = new Attack("Red", "Ilios Volskaya 46 Lv7");
+    LinkedHashSet<BasicAction> s5 = new LinkedHashSet<>();
+    s5.add(a5);
+    s5.add(a6);
+    HashMap<String, HashMap<String, BasicAction>> outMap5 = b.mergeOneTurnAttackV2(s5);
+    b.processOneTurnAttackNextV2(outMap5);
+    b.infoToFormMap("King");
+    //assertEquals("King", b.infoToFormMap("King"));
+    //Round 6
+    BasicAction a7 = new Attack("Red", "Ilios Hanamura 6 Lv7");
+    BasicAction a8 = new Attack("Red", "Ilios Hollywood 6 Lv7");
+    LinkedHashSet<BasicAction> s6 = new LinkedHashSet<>();
+    s6.add(a7);
+    s6.add(a8);
+    HashMap<String, HashMap<String, BasicAction>> outMap6 = b.mergeOneTurnAttackV2(s6);
+    b.processOneTurnAttackNextV2(outMap6);
+    //assertEquals("King", b.displaySinlgePlayerBoardV3("King"));
     
   }
 
