@@ -17,6 +17,9 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 public class AssignTerrView {
     AnchorPane assignTerrPane;
@@ -68,6 +71,9 @@ public class AssignTerrView {
     Button submit;
     String playerNum;
     ImageView imageView1;
+
+    Text ruleTitle;
+    Text gameRule;
 
     public AssignTerrView() {
         this.assignTerrPane = new AnchorPane();
@@ -482,6 +488,27 @@ public class AssignTerrView {
         // } catch (IOException e) {
         //   e.printStackTrace();
         // }
+
+        // title of the rules
+        String title = "Welcome to RISC\nGame Rule:\n";
+        ruleTitle = new Text(750, 100, title);
+        Font font = Font.font("Verdana", FontWeight.BOLD, FontPosture.ITALIC, 35);
+        ruleTitle.setFont(font);
+        ruleTitle.setFill(Color.web("#3c3154", 1.0));
+        assignTerrPane.getChildren().add(ruleTitle);
+
+        // content of the rules
+        String rules = "Actions:\n\n->Technical Upgrade\nIncrease the maximum level of your soldiers.\nConsumes techinical resources.\n\n";
+        rules += "->Upgrade\nUpgrade your soldiers to a higher level.\nConsumes techinical resources.\n\n";
+        rules += "->Move\nMove your soldiers among your owned territories.\nMove your spy to enemy's territory.\nConsumes food resources.\n\n";
+        rules += "->Attack\nLead your soldiers to combat with enemy's.\nConsumes food resources.\n\n";
+        rules += "->Research Cloak\nCloaking can be researched once you are at level3.\nConsumes technical resources.\n\n";
+        rules += "->Cloak\nHide one of your territory from enemy's view for 3 rounds.\nConsumes techinical resources.\n\n";
+        gameRule = new Text(750, 200, rules);
+        font = Font.font("Verdana", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 16);
+        gameRule.setFont(font);
+        gameRule.setFill(Color.web("#6d4391", 1.0));
+        assignTerrPane.getChildren().add(gameRule);
 
         // error
         error.setLayoutX(750);

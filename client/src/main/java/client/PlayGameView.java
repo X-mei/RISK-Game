@@ -221,7 +221,7 @@ public class PlayGameView {
             image = new Image(imageStream);
             attackView = new ImageView(image);
             attackView.setX(900);
-            attackView.setY(500);
+            attackView.setY(550);
             attackView.setFitHeight(150);
             attackView.setFitWidth(300);
             attackView.setVisible(false);
@@ -907,8 +907,8 @@ public class PlayGameView {
         upgrade.setPrefSize(200, 50);
         upgrade.setId("upgrade");
         playGamePane.getChildren().add(upgrade);
-        String str = "to upgrade";
-        Tooltip.install(upgrade, new Tooltip(str));
+        // String str = "to upgrade";
+        // Tooltip.install(upgrade, new Tooltip(str));
 
         attack.setLayoutX(920);
         attack.setLayoutY(360);
