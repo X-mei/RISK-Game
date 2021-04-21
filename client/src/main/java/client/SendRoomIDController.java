@@ -13,6 +13,8 @@ public class SendRoomIDController {
     String choice;
     HashMap<String, ArrayList<String>> territories;
     HashMap<String, String> units;
+    HashMap<String, String> greyTerrs;
+    HashMap<String, String> greyOwners;
 
     public SendRoomIDController(SendRoomIDView sendRoomIDView, Client client) {
         this.sendRoomIDView = sendRoomIDView;
@@ -20,6 +22,8 @@ public class SendRoomIDController {
         this.client = client;
         this.territories = new HashMap<String, ArrayList<String>>();
         this.units = new HashMap<String, String>();
+        this.greyTerrs = new HashMap<String, String>();
+        this.greyOwners = new HashMap<String, String>();
         confirmAction();
     }
 
@@ -88,7 +92,7 @@ public class SendRoomIDController {
       territories.put(pName, terrs);
       i = i + 2;
       // add enemy's territory
-      while(i < strArr.length) {
+      while(!strArr[i].equals("")) {
         String[] terrInfo = strArr[i].split(":");
         if (territories.containsKey(terrInfo[0])) {
           ArrayList<String> enemyTerrs = territories.get(terrInfo[0]);
@@ -102,7 +106,15 @@ public class SendRoomIDController {
         units.put(terrInfo[1], terrInfo[2]);
         i++;
       }
+      i = i + 2;
+      while(i < strArr.length) {
+        String[] terrInfo = strArr[i].split(":");
+        greyOwners.put(terrInfo[1], terrInfo[0]);
+        greyTerrs.put(terrInfo[1], terrInfo[2]);
+        i++;
+      }
       System.out.println(territories.entrySet());
       System.out.println(units.entrySet());
+      System.out.println(greyTerrs.entrySet());
     }
 }

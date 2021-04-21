@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.io.*;
 
 
-public class FakeClient2 extends Thread {
+public class FakeClient3 extends Thread {
   private Socket clientSocket;
   private String serverIPAddr;
   private int portNum;
@@ -24,7 +24,7 @@ public class FakeClient2 extends Thread {
   private String username;
   private boolean newFlag;
 
-  public FakeClient2(String ip, int port, BufferedReader inputSource, PrintStream out, String username, boolean newFlag) {
+  public FakeClient3(String ip, int port, BufferedReader inputSource, PrintStream out, String username, boolean newFlag) {
     this.serverIPAddr = ip;
     this.portNum = port;
     this.inputReader = inputSource;
@@ -36,7 +36,6 @@ public class FakeClient2 extends Thread {
   }
 
   public void run() {
-    if (newFlag) {
       connectToServer();
       sendPlayerIdentity(false);
       loginOrReg("r");
@@ -134,18 +133,6 @@ public class FakeClient2 extends Thread {
         sendInstruction("D");
       }
       
-    } else {
-      connectToServer();
-      sendPlayerIdentity(false);
-      loginOrReg("l");
-      login("wrong", "111");
-      loginOrReg("l");
-      login(username, "wrong");
-      loginOrReg("l");
-      login(username, "111");
-      answerInfo("p");
-      sendRoomID("1000");
-    }
     
   }
 
@@ -456,6 +443,7 @@ public class FakeClient2 extends Thread {
   }
 
 }
+
 
 
 
