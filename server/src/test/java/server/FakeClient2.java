@@ -51,10 +51,17 @@ public class FakeClient2 extends Thread {
       String[] assign1 = new String[3];
       
       if (playerName.equals("Red")) {
+        assign1[0] = "10";
+        assign1[1] = "10";
+        assign1[2] = "10";
+        sendAssignTerritory(assign1);
+        prompts = recvPrompts();
+        
         assign1[0] = "3";
         assign1[1] = "3";
         assign1[2] = "3";
         sendAssignTerritory(assign1);
+        
         recvBoardPrompt();
         recvBoardPrompt();
         recvInstruction();
@@ -78,6 +85,8 @@ public class FakeClient2 extends Thread {
         recvInstruction();
         sendInstruction("Volskaya Hanamura 3 Lv1");
         recvInstruction();
+        sendInstruction("T");
+        recvInstruction();
         sendInstruction("D");
         recvBoardPrompt();
         recvBoardPrompt();
@@ -86,6 +95,8 @@ public class FakeClient2 extends Thread {
         recvInstruction();
         sendInstruction("Ilios Hollywood 2 Lv2");
         recvInstruction();
+        sendInstruction("T");
+        recvInstruction();
         sendInstruction("D");
         recvBoardPrompt();
         recvBoardPrompt();
@@ -93,6 +104,8 @@ public class FakeClient2 extends Thread {
         sendInstruction("M");
         recvInstruction();
         sendInstruction("Junkertown Ilios 3 Lv1");
+        recvInstruction();
+        sendInstruction("R");
         recvInstruction();
         sendInstruction("D");
         recvBoardPrompt();
@@ -105,6 +118,14 @@ public class FakeClient2 extends Thread {
         sendInstruction("A");
         recvInstruction();
         sendInstruction("Hollywood Dorado 3 Lv1");
+        recvInstruction();
+        sendInstruction("C");
+        recvInstruction();
+        sendInstruction("Ilios");
+        recvInstruction();
+        sendInstruction("AB");
+        recvInstruction();
+        sendInstruction("F");
         recvInstruction();
         sendInstruction("D");
       }else {
