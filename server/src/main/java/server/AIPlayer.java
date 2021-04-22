@@ -98,14 +98,6 @@ public class AIPlayer implements Runnable {
   }
 
   /**
-   * This function returns the aiPlayer socket
-   * @return Socket
-   */
-  public Socket getSocket() {
-    return aiPlayerSocket;
-  }
-
-  /**
    * This function sends whether the client is AI player or not
    * @param
    */
