@@ -46,7 +46,7 @@ public class ServerTest {
     server.assignRoom();
 
     // wait for the game ends
-    Thread.sleep(10000);
+    Thread.sleep(8000);
 
     client1.join();
     client2.join();
