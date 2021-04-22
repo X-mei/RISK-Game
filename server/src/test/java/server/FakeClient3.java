@@ -22,8 +22,9 @@ public class FakeClient3 extends Thread {
   private int playerNumber;
   private int terriNum;
   private String username;
+  private boolean isOneAI;
 
-  public FakeClient3(String ip, int port, BufferedReader inputSource, PrintStream out, String username) {
+  public FakeClient3(String ip, int port, BufferedReader inputSource, PrintStream out, String username, boolean isOneAI) {
     this.serverIPAddr = ip;
     this.portNum = port;
     this.inputReader = inputSource;
@@ -31,6 +32,7 @@ public class FakeClient3 extends Thread {
     this.reconnected = false;
     this.startStatus = 1;
     this.username = username;
+    this.isOneAI = isOneAI;
   }
 
   public void run() {
@@ -41,14 +43,14 @@ public class FakeClient3 extends Thread {
       loginOrReg("r");
       login(username, "111");
       answerInfo("c");
-      sendGameRoom("1");
-      String info = recvNameAndNum();
-      String prompt = recvPrompt();
-      int status = recvStartStatus();
-      prompt = recvAssignPrompt();
-      String[] prompts = recvPrompts();
-      String[] assign1 = new String[3];
-      
+      if (isOneAI){
+        sendGameRoom("1");
+        String info = recvNameAndNum();
+        String prompt = recvPrompt();
+        int status = recvStartStatus();
+        prompt = recvAssignPrompt();
+        String[] prompts = recvPrompts();
+        String[] assign1 = new String[3];
       
         assign1[0] = "1";
         assign1[1] = "1";
@@ -74,6 +76,11 @@ public class FakeClient3 extends Thread {
         recvBoardPrompt();
         recvInstruction();
         sendInstruction("D");
+      } else {
+        sendGameRoom("0");
+      }
+      
+      
       
     
   }

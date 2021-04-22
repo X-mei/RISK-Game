@@ -78,6 +78,8 @@ public class FakeClient2 extends Thread {
         recvInstruction();
         sendInstruction("Volskaya Hanamura 3 Lv1");
         recvInstruction();
+        sendInstruction("T");
+        recvInstruction();
         sendInstruction("D");
         recvBoardPrompt();
         recvBoardPrompt();
@@ -86,6 +88,8 @@ public class FakeClient2 extends Thread {
         recvInstruction();
         sendInstruction("Ilios Hollywood 2 Lv2");
         recvInstruction();
+        sendInstruction("T");
+        recvInstruction();
         sendInstruction("D");
         recvBoardPrompt();
         recvBoardPrompt();
@@ -93,6 +97,10 @@ public class FakeClient2 extends Thread {
         sendInstruction("M");
         recvInstruction();
         sendInstruction("Junkertown Ilios 3 Lv1");
+        recvInstruction();
+        sendInstruction("R");
+        recvInstruction();
+        sendInstruction("Ilios");
         recvInstruction();
         sendInstruction("D");
         recvBoardPrompt();
