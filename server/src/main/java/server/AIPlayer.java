@@ -310,8 +310,8 @@ public class AIPlayer implements Runnable {
         }
       }
     }
-    generateSpyUpgradeDecision(actions, potentialSrc);
-    generateSpyDecision(actions);
+    //generateSpyUpgradeDecision(actions, potentialSrc);
+    //generateSpyDecision(actions);
     // First levelup unit utilizing a portion of resources
     generateUpgradeActions(actions);
     // If no lowest score are found, then no adjacent hostile territory to attack
