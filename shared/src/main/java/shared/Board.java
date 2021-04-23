@@ -1091,7 +1091,7 @@ private String getSoldierNameByBonus(int Bonus){
       for(String s : t.getSoldiers().keySet()){
         Soldiers tempS = t.getSoldiers().get(s);
         int SoldierNum = tempS.getCount();
-        if(SoldierNum == 0){
+        if(SoldierNum == 0 && !tempS.getName().equals("Lv1")){
           continue;
         }
         soldierNameString += comma + SoldierNum + " " + tempS.getName();

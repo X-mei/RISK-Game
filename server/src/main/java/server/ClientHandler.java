@@ -211,6 +211,7 @@ public class ClientHandler extends Thread {
       for(Territory t: player.getTerritoryList()) {
         int [] unitsToAdd = new int[8];
         unitsToAdd[0] = unitsAssign[j];
+        //System.out.println(unitsToAdd);
         board.singleTerritoryUnitSetup(t.getTerritoryName(), unitsToAdd);
         player.addPreviousRoundCanSee(t.getTerritoryName(), t.getOwner() + ":" + displaySingleTerriInfoWithNameFirst(t)); //initialize origin last can see own territory
         for(Territory tEnemy : t.getNeighbours()){  //initialize origin last can see enemy territory
