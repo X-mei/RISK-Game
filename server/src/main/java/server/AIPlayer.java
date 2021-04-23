@@ -475,6 +475,7 @@ public class AIPlayer implements Runnable {
     return scoreReq;
   }
 
+  /*
   void generateSpyUpgradeDecision(ArrayList<String> actions, String potentialSrc){
     Player p = board.getPlayerByName(playerName);
     int spyB = r.nextInt(2);
@@ -526,6 +527,7 @@ public class AIPlayer implements Runnable {
       actions.add(actionStr);
     }
   }
+  */
 
   /**
    * This function lets the AI player starts the game

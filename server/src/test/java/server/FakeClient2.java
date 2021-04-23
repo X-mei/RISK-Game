@@ -57,9 +57,9 @@ public class FakeClient2 extends Thread {
         sendAssignTerritory(assign1);
         prompts = recvPrompts();
         
-        assign1[0] = "3";
-        assign1[1] = "3";
-        assign1[2] = "3";
+        assign1[0] = "6";
+        assign1[1] = "6";
+        assign1[2] = "6";
         sendAssignTerritory(assign1);
         
         recvBoardPrompt();
@@ -97,6 +97,8 @@ public class FakeClient2 extends Thread {
         recvInstruction();
         sendInstruction("T");
         recvInstruction();
+        sendInstruction("T");
+        recvInstruction();
         sendInstruction("D");
         recvBoardPrompt();
         recvBoardPrompt();
@@ -129,9 +131,9 @@ public class FakeClient2 extends Thread {
         recvInstruction();
         sendInstruction("D");
       }else {
-        assign1[0] = "1";
-        assign1[1] = "1";
-        assign1[2] = "1";
+        assign1[0] = "0";
+        assign1[1] = "0";
+        assign1[2] = "0";
         sendAssignTerritory(assign1);
         recvBoardPrompt();
         recvBoardPrompt();
