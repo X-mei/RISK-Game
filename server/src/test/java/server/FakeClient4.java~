@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.io.*;
 
 
-public class FakeClient extends Thread {
+public class FakeClient4 extends Thread {
   private Socket clientSocket;
   private String serverIPAddr;
   private int portNum;
@@ -23,7 +23,7 @@ public class FakeClient extends Thread {
   private int terriNum;
   private String username;
 
-  public FakeClient(String ip, int port, BufferedReader inputSource, PrintStream out, String username) {
+  public FakeClient4(String ip, int port, BufferedReader inputSource, PrintStream out, String username) {
     this.serverIPAddr = ip;
     this.portNum = port;
     this.inputReader = inputSource;
@@ -463,6 +463,7 @@ public class FakeClient extends Thread {
   }
 
 }
+
 
 
 

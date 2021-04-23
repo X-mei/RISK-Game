@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.io.*;
 
 
-public class FakeClient extends Thread {
+public class FakeClient4 extends Thread {
   private Socket clientSocket;
   private String serverIPAddr;
   private int portNum;
@@ -23,7 +23,7 @@ public class FakeClient extends Thread {
   private int terriNum;
   private String username;
 
-  public FakeClient(String ip, int port, BufferedReader inputSource, PrintStream out, String username) {
+  public FakeClient4(String ip, int port, BufferedReader inputSource, PrintStream out, String username) {
     this.serverIPAddr = ip;
     this.portNum = port;
     this.inputReader = inputSource;
@@ -40,7 +40,7 @@ public class FakeClient extends Thread {
     loginOrReg("r");
     login(username, "111");
     answerInfo("c");
-    sendGameRoom("2");
+    sendGameRoom("3");
     String info = recvNameAndNum();
     String prompt = recvPrompt();
     int status = recvStartStatus();
@@ -48,7 +48,7 @@ public class FakeClient extends Thread {
     String[] prompts = recvPrompts();
     String[] assign1 = new String[3];
     
-    if (playerName.equals("King")) {
+    if (playerName.equals("Pink")) {
       assign1[0] = "0";
       assign1[1] = "0";
       assign1[2] = "0";
@@ -61,19 +61,10 @@ public class FakeClient extends Thread {
       recvBoardPrompt();
       recvInstruction();
       sendInstruction("D");
+      // the game ends
       recvBoardPrompt();
       recvBoardPrompt();
-      recvInstruction();
-      sendInstruction("D");
-      recvBoardPrompt();
-      recvBoardPrompt();
-      recvInstruction();
-      sendInstruction("D");
-      recvBoardPrompt();
-      recvBoardPrompt();
-      recvInstruction();
-      sendInstruction("D");
-    }else {
+    }else if (playerName.equals("King")){
       assign1[0] = "10";
       assign1[1] = "10";
       assign1[2] = "10";
@@ -83,75 +74,61 @@ public class FakeClient extends Thread {
       assign1[1] = "6";
       assign1[2] = "6";
       sendAssignTerritory(assign1);
-      
-      recvBoardPrompt();
-      recvBoardPrompt();
-      recvInstruction();
-      sendInstruction("T");
-      recvInstruction();
-      sendInstruction("U");
-      recvInstruction();
-      sendInstruction("Ilios Lv1 2 Lv2");
-      recvInstruction();
-      sendInstruction("D");
+
+      // combat with red
       recvBoardPrompt();
       recvBoardPrompt();
       recvInstruction();
       sendInstruction("A");
       recvInstruction();
-      sendInstruction("Volskaya Ilios 1 Lv1");
-      recvInstruction();
-      sendInstruction("D");
+      sendInstruction("Hollywood Ilios 1 Lv1");
       recvInstruction();
       sendInstruction("A");
       recvInstruction();
-      sendInstruction("Volskaya Hanamura 3 Lv1");
+      sendInstruction("Hollywood Junkertown 1 Lv1");
       recvInstruction();
-      sendInstruction("T");
+      sendInstruction("A");
+      recvInstruction();
+      sendInstruction("Dorado Volskaya 1 Lv1");
       recvInstruction();
       sendInstruction("D");
+      // red loses
+      // combat with pink
       recvBoardPrompt();
       recvBoardPrompt();
       recvInstruction();
       sendInstruction("A");
       recvInstruction();
-      sendInstruction("Ilios Hollywood 2 Lv2");
-      recvInstruction();
-      sendInstruction("T");
-      recvInstruction();
-      sendInstruction("T");
-      recvInstruction();
-      sendInstruction("D");
-      recvBoardPrompt();
-      recvBoardPrompt();
-      recvInstruction();
-      sendInstruction("M");
-      recvInstruction();
-      sendInstruction("Junkertown Ilios 3 Lv1");
-      recvInstruction();
-      sendInstruction("R");
-      recvInstruction();
-      sendInstruction("D");
-      recvBoardPrompt();
-      recvBoardPrompt();
-      recvInstruction();
-      sendInstruction("M");
-      recvInstruction();
-      sendInstruction("Ilios Hollywood 3 Lv1");
+      sendInstruction("Hanamura Nepal 1 Lv1");
       recvInstruction();
       sendInstruction("A");
       recvInstruction();
-      sendInstruction("Hollywood Dorado 3 Lv1");
+      sendInstruction("Hanamura Oasis 1 Lv1");
       recvInstruction();
-      sendInstruction("C");
+      sendInstruction("A");
       recvInstruction();
-      sendInstruction("Ilios");
-      recvInstruction();
-      sendInstruction("AB");
-      recvInstruction();
-      sendInstruction("F");
+      sendInstruction("Ilios Numbani 1 Lv1");
       recvInstruction();
       sendInstruction("D");
+      //game ends
+      recvBoardPrompt();
+      recvBoardPrompt();
+    }else {
+      assign1[0] = "0";
+      assign1[1] = "0";
+      assign1[2] = "0";
+      sendAssignTerritory(assign1);
+      recvBoardPrompt();
+      recvBoardPrompt();
+      recvInstruction();
+      sendInstruction("D");
+      recvBoardPrompt();
+      recvBoardPrompt();
+      sendInstruction("c");
+      recvBoardPrompt();
+      // the game ends
+      recvBoardPrompt();
+      recvBoardPrompt();
     }
     
   }
@@ -463,6 +440,7 @@ public class FakeClient extends Thread {
   }
 
 }
+
 
 
 

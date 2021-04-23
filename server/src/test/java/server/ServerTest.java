@@ -27,9 +27,7 @@ public class ServerTest {
     server.assignRoom();
 
     Thread.sleep(3000);
-    Thread client3 = new Thread(new FakeClient2("127.0.0.1", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out, "aa", false));
-    client3.start();
-    server.assignRoom();
+    
 
     
     // one ai player
@@ -45,8 +43,22 @@ public class ServerTest {
     server.assignRoom();
     server.assignRoom();
 
+    // three players
+    Thread client8 = new Thread(new FakeClient4("127.0.0.1", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out, "client8"));
+    Thread client9 = new Thread(new FakeClient4("127.0.0.1", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out, "client9"));
+    Thread client10 = new Thread(new FakeClient4("127.0.0.1", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out, "client10"));
+    client8.start();
+    client9.start();
+    client10.start();
+    server.assignRoom();
+    server.assignRoom();
+    server.assignRoom();
+
     // wait for the game ends
     Thread.sleep(8000);
+    Thread client3 = new Thread(new FakeClient2("127.0.0.1", 12345, new BufferedReader(new InputStreamReader(System.in)), System.out, "aa", false));
+    client3.start();
+    server.assignRoom();
 
     client1.join();
     client2.join();
@@ -55,6 +67,9 @@ public class ServerTest {
     client5.join();
     client6.join();
     client7.join();
+    client8.join();
+    client9.join();
+    client10.join();
   }
 
 
